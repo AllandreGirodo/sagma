@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:agenda/core/services/firestore_service.dart';
 import 'package:agenda/features/admin/view/admin_ferramentas_database_setup_view.dart';
+import 'package:agenda/core/utils/app_strings.dart';
 
 class AdminFerramentasSenhaSetupView extends StatefulWidget {
   final VoidCallback? onConfirmed;
@@ -78,7 +79,7 @@ class _AdminFerramentasSenhaSetupViewState
       });
 
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Senha configurada com sucesso!')),
+        SnackBar(content: Text(AppStrings.senhaConfiguradaSucesso)),
       );
 
       widget.onConfirmed?.call();
@@ -115,7 +116,7 @@ class _AdminFerramentasSenhaSetupViewState
     if (_senhaConfigurada && !_mostraFormulario) {
       return Scaffold(
         appBar: AppBar(
-          title: const Text('Configuração de Ferramentas'),
+          title: Text(AppStrings.configuracaoFerramentas),
           backgroundColor: Colors.green,
         ),
         body: Center(
@@ -141,7 +142,7 @@ class _AdminFerramentasSenhaSetupViewState
               const SizedBox(height: 30),
               ElevatedButton.icon(
                 icon: const Icon(Icons.storage),
-                label: const Text('Database Setup'),
+                label: Text(AppStrings.databaseSetup),
                 style: ElevatedButton.styleFrom(
                   backgroundColor: Colors.deepPurple,
                   foregroundColor: Colors.white,
@@ -159,7 +160,7 @@ class _AdminFerramentasSenhaSetupViewState
               const SizedBox(height: 16),
               ElevatedButton.icon(
                 icon: const Icon(Icons.edit),
-                label: const Text('Alterar Senha'),
+                label: Text(AppStrings.alterarSenha),
                 style: ElevatedButton.styleFrom(
                   backgroundColor: Colors.orange,
                   foregroundColor: Colors.white,
@@ -170,7 +171,7 @@ class _AdminFerramentasSenhaSetupViewState
               const SizedBox(height: 10),
               OutlinedButton(
                 onPressed: () => Navigator.pop(context),
-                child: const Text('Voltar'),
+                child: Text(AppStrings.voltar),
               ),
             ],
           ),
@@ -180,7 +181,7 @@ class _AdminFerramentasSenhaSetupViewState
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Configuração de Ferramentas'),
+        title: Text(AppStrings.configuracaoFerramentas),
         backgroundColor: Colors.orange,
       ),
       body: Center(
@@ -274,14 +275,14 @@ class _AdminFerramentasSenhaSetupViewState
                           onPressed: () {
                             setState(() => _mostraFormulario = false);
                           },
-                          child: const Text('Cancelar'),
+                          child: Text(AppStrings.cancelButton),
                         ),
                       ),
                       const SizedBox(width: 12),
                       Expanded(
                         child: ElevatedButton(
                           onPressed: _salvarNovaSenha,
-                          child: const Text('Salvar'),
+                          child: Text(AppStrings.salvar),
                         ),
                       ),
                     ],

@@ -165,4 +165,199 @@ Service and package prices are subject to change. Payment must be made as agreed
   static String get cancellationReasonLabel => _isPt ? 'Motivo do Cancelamento' : 'Reason for Cancellation';
   static String get confirmCancellationButton => _isPt ? 'Confirmar Cancelamento' : 'Confirm Cancellation';
   static String get requiredField => _isPt ? 'Campo obrigatório' : 'Required field';
+  static String get birthDateNotInformed => _isPt ? 'Não informada' : 'Not informed';
+  static String get birthDateRequired => _isPt ? 'Por favor, informe a Data de Nascimento.' : 'Please inform the Date of Birth.';
+  static String get saveProfile => _isPt ? 'SALVAR PERFIL' : 'SAVE PROFILE';
+  static String get deleteMyAccount => _isPt ? 'EXCLUIR MINHA CONTA' : 'DELETE MY ACCOUNT';
+  static String get loginAgainToDelete => _isPt ? 'Por segurança, faça login novamente para excluir a conta.' : 'For security, please log in again to delete your account.';
+  static String get invalidCep => _isPt ? 'Por favor, digite um CEP válido com 8 números.' : 'Please enter a valid ZIP code with 8 digits.';
+  static String get cepNotFound => _isPt ? 'CEP não encontrado. Por favor, digite o endereço manualmente.' : 'ZIP code not found. Please enter the address manually.';
+  static String get cepError => _isPt ? 'Erro ao buscar CEP. Verifique sua conexão ou digite manualmente.' : 'Error fetching ZIP code. Check your connection or enter manually.';
+
+  // Agendamento - Estoque
+  static String get estoqueControle => _isPt ? 'Controle de Estoque' : 'Inventory Control';
+  static String get estoqueVazio => _isPt ? 'Nenhum item no estoque.' : 'No items in stock.';
+  static String get estoqueBaixaAuto => _isPt ? 'Baixa automática por sessão' : 'Auto-deduction per session';
+  static String get estoqueControleManual => _isPt ? 'Controle manual' : 'Manual control';
+  static String get estoqueNovoItem => _isPt ? 'Novo Item' : 'New Item';
+  static String get estoqueEditarItem => _isPt ? 'Editar Item' : 'Edit Item';
+  static String get estoqueNomeProduto => _isPt ? 'Nome do Produto' : 'Product Name';
+  static String get estoqueQuantidade => _isPt ? 'Quantidade (Doses/Unidades)' : 'Quantity (Doses/Units)';
+  static String get estoqueBaixaAutomatica => _isPt ? 'Baixa Automática' : 'Auto Deduction';
+  static String get estoqueDescontarAprovacao => _isPt ? 'Descontar ao aprovar agendamento?' : 'Deduct on appointment approval?';
+
+  // Agendamento - Geral
+  static String get buscarPorTipo => _isPt ? 'Buscar por tipo...' : 'Search by type...';
+  static String get cupomDesconto => _isPt ? 'Cupom de Desconto' : 'Discount Coupon';
+  static String get cupomAplicado => _isPt ? 'Cupom aplicado!' : 'Coupon applied!';
+  static String get cupomInvalido => _isPt ? 'Cupom inválido ou expirado.' : 'Invalid or expired coupon.';
+  static String get avaliarSessao => _isPt ? 'Avaliar Sessão' : 'Rate Session';
+  static String get comoFoiExperiencia => _isPt ? 'Como foi sua experiência?' : 'How was your experience?';
+  static String get deixeComentario => _isPt ? 'Deixe um comentário (opcional)' : 'Leave a comment (optional)';
+  static String get obrigadoAvaliacao => _isPt ? 'Obrigado pela avaliação!' : 'Thanks for your rating!';
+  static String get enviar => _isPt ? 'Enviar' : 'Send';
+  static String get erroUsuarioNaoAutenticado => _isPt ? 'Erro: Usuário não autenticado.' : 'Error: User not authenticated.';
+  static String get naoPodeCancelarPassado => _isPt ? 'Não é possível cancelar agendamentos passados.' : 'Cannot cancel past appointments.';
+  static String get cancelamentoTardio => _isPt ? 'Cancelamento Tardio' : 'Late Cancellation';
+  static String get cancelarAgendamento => _isPt ? 'Cancelar Agendamento' : 'Cancel Appointment';
+  static String get informeMotivoCancelamento => _isPt ? 'Por favor, informe o motivo do cancelamento:' : 'Please inform the reason for cancellation:';
+  static String get exemploMotivo => _isPt ? 'Ex: Imprevisto de saúde' : 'E.g.: Health emergency';
+  static String get voltar => _isPt ? 'Voltar' : 'Back';
+  static String get detalhesAgendamento => _isPt ? 'Detalhes do Agendamento' : 'Appointment Details';
+  static String get motivoCancelamento => _isPt ? 'Motivo do Cancelamento:' : 'Cancellation Reason:';
+
+  // Admin Agendamentos
+  static String get administracao => _isPt ? 'Administração' : 'Administration';
+  static String get relatorios => _isPt ? 'Relatórios' : 'Reports';
+  static String get configuracoes => _isPt ? 'Configurações' : 'Settings';
+  static String get dash => _isPt ? 'Dash' : 'Dash';
+  static String get agenda => _isPt ? 'Agenda' : 'Schedule';
+  static String get clientes => _isPt ? 'Clientes' : 'Clients';
+  static String get pendentes => _isPt ? 'Pendentes' : 'Pending';
+  static String get statusDoDia => _isPt ? 'Status do Dia' : 'Daily Status';
+  static String get taxaCancelamento => _isPt ? 'Taxa de Cancelamento' : 'Cancellation Rate';
+  static String get mes => _isPt ? 'Mês' : 'Month';
+  static String get tiposMaisAgendados => _isPt ? 'Tipos Mais Agendados (Mês)' : 'Most Scheduled Types (Month)';
+  static String get semDadosGrafico => _isPt ? 'Sem dados para gráfico.' : 'No data for chart.';
+  static String get ativarGravacaoHistorico => _isPt ? 'Dev: Ativar Gravação de Histórico' : 'Dev: Enable History Logging';
+  static String get permiteSalvarMetricas => _isPt ? 'Permite salvar as métricas de hoje no banco de dados.' : 'Allows saving today\'s metrics to the database.';
+  static String get gravarSnapshot => _isPt ? 'Gravar Snapshot do Dia (metricas_diarias)' : 'Save Daily Snapshot (daily_metrics)';
+  static String get metricasSalvasSucesso => _isPt ? 'Métricas do dia salvas com sucesso!' : 'Daily metrics saved successfully!';
+  static String erroSalvarMetricas(String erro) => _isPt ? 'Erro ao salvar métricas: $erro' : 'Error saving metrics: $erro';
+  static String get nenhumAgendamentoPendente => _isPt ? 'Nenhum agendamento pendente.' : 'No pending appointments.';
+  static String get pesquisarCliente => _isPt ? 'Pesquisar Cliente' : 'Search Client';
+  static String get nenhumClienteEncontrado => _isPt ? 'Nenhum cliente encontrado.' : 'No clients found.';
+  static String get permitirVerTodosHorarios => _isPt ? 'Permitir ver todos os horários' : 'Allow viewing all times';
+  static String get alterarTemaUsuario => _isPt ? 'Alterar Tema do Usuário' : 'Change User Theme';
+  static String get pacote => _isPt ? 'Pacote' : 'Package';
+  static String temaDe(String nome) => _isPt ? 'Tema de $nome' : '$nome\'s Theme';
+  static String temaAlteradoPara(String labelTema) => _isPt ? 'Tema alterado para $labelTema' : 'Theme changed to $labelTema';
+  static String pacoteAdicionadoPara(String nome) => _isPt ? 'Pacote de 10 sessões adicionado para $nome!' : '10-session package added for $nome!';
+  static String agendamentoStatusSucesso(String status) => _isPt ? 'Agendamento $status com sucesso!' : 'Appointment $status successfully!';
+  static String usuarioAprovadoSucesso(String nome) => _isPt ? 'Usuário $nome aprovado com sucesso!' : 'User $nome approved successfully!';
+
+  // Chat Agendamento
+  static String erroEnvio(String erro) => _isPt ? 'Erro no envio: $erro' : 'Send error: $erro';
+  static String get galeriaImagens => _isPt ? 'Galeria de Imagens' : 'Image Gallery';
+  static String get arquivoAudio => _isPt ? 'Arquivo de Áudio' : 'Audio File';
+
+  // Admin - Senha Setup
+  static String get senhaAdminConfigurada => _isPt ? 'Senha de admin configurada com sucesso!' : 'Admin password configured successfully!';
+  static String erroSalvarSenha(String erro) => _isPt ? 'Erro ao salvar senha: $erro' : 'Error saving password: $erro';
+  static String get configuracaoInicial => _isPt ? 'Configuração Inicial' : 'Initial Setup';
+  static String get salvarContinuar => _isPt ? 'Salvar e Continuar' : 'Save and Continue';
+
+  // Admin - Ferramentas Senha Setup
+  static String get senhaConfiguradaSucesso => _isPt ? 'Senha configurada com sucesso!' : 'Password configured successfully!';
+  static String get configuracaoFerramentas => _isPt ? 'Configuração de Ferramentas' : 'Tools Configuration';
+  static String get databaseSetup => _isPt ? 'Database Setup' : 'Database Setup';
+  static String get alterarSenha => _isPt ? 'Alterar Senha' : 'Change Password';
+  static String get salvar => _isPt ? 'Salvar' : 'Save';
+
+  // Admin - Database Setup
+  static String erroCarregar(String erro) => _isPt ? 'Erro ao carregar: $erro' : 'Error loading: $erro';
+  static String get alteracoesSalvasSucesso => _isPt ? 'Alterações salvas com sucesso!' : 'Changes saved successfully!';
+  static String erroSalvar(String erro) => _isPt ? 'Erro ao salvar: $erro' : 'Error saving: $erro';
+  static String get ferramentasDatabaseSetup => _isPt ? 'Ferramentas - Database Setup' : 'Tools - Database Setup';
+  static String get salvarAlteracoes => _isPt ? 'Salvar Alterações' : 'Save Changes';
+
+  // Admin - Config
+  static String erroExportar(String erro) => _isPt ? 'Erro ao exportar: $erro' : 'Error exporting: $erro';
+  static String get backupRestauradoSucesso => _isPt ? 'Backup restaurado com sucesso!' : 'Backup restored successfully!';
+  static String erroImportar(String erro) => _isPt ? 'Erro ao importar: $erro' : 'Error importing: $erro';
+  static String get configurarSenhaAdmin => _isPt ? 'Configurar Senha Admin' : 'Configure Admin Password';
+  static String get alterarSenhaAdmin => _isPt ? 'Alterar Senha Admin' : 'Change Admin Password';
+  static String get senhaSalvaSucesso => _isPt ? 'Senha salva com sucesso!' : 'Password saved successfully!';
+  static String get segurancaSenhaAdmin => _isPt ? 'Segurança - Senha Admin' : 'Security - Admin Password';
+  static String get ativarBiometria => _isPt ? 'Ativar FaceID/TouchID' : 'Enable FaceID/TouchID';
+  static String get exibirIconesLido => _isPt ? 'Exibir ícones de "Lido" nas mensagens' : 'Show "Read" icons in messages';
+
+  // Admin - Relatórios
+  static String get relatoriosGerenciais => _isPt ? 'Relatórios Gerenciais' : 'Management Reports';
+  static String get semDadosMes => _isPt ? 'Sem dados para este mês.' : 'No data for this month.';
+  static String get detalhamentoCancelamentos => _isPt ? 'Detalhamento de Cancelamentos' : 'Cancellation Details';
+  static String get tardio => _isPt ? 'Tardio' : 'Late';
+  static String get normal => _isPt ? 'Normal' : 'Normal';
+  static String get gerandoPdf => _isPt ? 'Gerando PDF...' : 'Generating PDF...';
+  static String get relatorioMensalTitulo => _isPt ? 'Relatório Mensal - Agenda Massoterapia' : 'Monthly Report - Massage Therapy Agenda';
+  static String get resumoFinanceiro => _isPt ? 'Resumo Financeiro' : 'Financial Summary';
+  static String totalAgendamentos(int total) => _isPt ? 'Total de Agendamentos: $total' : 'Total Appointments: $total';
+  static String sessoesRealizadas(int total) => _isPt ? 'Sessões Realizadas/Aprovadas: $total' : 'Sessions Completed/Approved: $total';
+  static String receitaBruta(String valor) => _isPt ? 'Receita Bruta Estimada: $valor' : 'Estimated Gross Revenue: $valor';
+  static String get detalhamento => _isPt ? 'Detalhamento' : 'Details';
+  static String erroGerarPdf(String erro) => _isPt ? 'Erro ao gerar PDF: $erro' : 'Error generating PDF: $erro';
+
+  // Admin - Logs
+  static String get logsSistema => _isPt ? 'Logs do Sistema' : 'System Logs';
+  static String get nenhumLogEncontrado => _isPt ? 'Nenhum log encontrado.' : 'No logs found.';
+
+  // Admin - LGPD Logs
+  static String get auditoriaLgpd => _isPt ? 'Auditoria LGPD' : 'LGPD Audit';
+  static String get nenhumRegistroLgpd => _isPt ? 'Nenhum registro de auditoria LGPD encontrado.' : 'No LGPD audit records found.';
+  static String get acaoDesconhecida => _isPt ? 'Ação Desconhecida' : 'Unknown Action';
+
+  // Financeiro
+  static String get semDadosFinanceiros => _isPt ? 'Sem dados financeiros.' : 'No financial data.';
+  static String get selecioneCliente => _isPt ? 'Selecione um cliente' : 'Select a client';
+  static String get transacaoRegistradaSucesso => _isPt ? 'Transação registrada com sucesso!' : 'Transaction registered successfully!';
+  static String erro(String erro) => _isPt ? 'Erro: $erro' : 'Error: $erro';
+  static String get novaTransacao => _isPt ? 'Nova Transação' : 'New Transaction';
+  static String get pix => _isPt ? 'Pix' : 'Pix';
+  static String get dinheiro => _isPt ? 'Dinheiro' : 'Cash';
+  static String get cartao => _isPt ? 'Cartão' : 'Card';
+  static String get pendente => _isPt ? 'Pendente' : 'Pending';
+  static String get pago => _isPt ? 'Pago' : 'Paid';
+  static String get estornado => _isPt ? 'Estornado' : 'Refunded';
+  static String get registrarTransacao => _isPt ? 'Registrar Transação' : 'Register Transaction';
+
+  // Dashboard
+  static String get acessoNegado => _isPt ? 'Acesso negado.' : 'Access denied.';
+  static String get dashboardAdministrativo => _isPt ? 'Dashboard Administrativo' : 'Administrative Dashboard';
+  static String get resumoDoDia => _isPt ? 'Resumo do Dia' : 'Daily Summary';
+  static String get estoqueBaixo => _isPt ? 'Estoque Baixo' : 'Low Stock';
+  static String get estoqueEmDia => _isPt ? 'Estoque em dia!' : 'Stock is up to date!';
+  static String restamApenas(int quantidade) => _isPt ? 'Restam apenas $quantidade unidades' : 'Only $quantidade units remaining';
+  static String get desativarManutencao => _isPt ? 'Desativar Manutenção' : 'Disable Maintenance';
+  static String get ativarManutencao => _isPt ? 'Ativar Manutenção' : 'Enable Maintenance';
+  static String get nenhumDadoExportar => _isPt ? 'Nenhum dado para exportar.' : 'No data to export.';
+  static String get ativarModoManutencao => _isPt ? 'Ativar Modo Manutenção?' : 'Enable Maintenance Mode?';
+  static String get desativarModoManutencao => _isPt ? 'Desativar Modo Manutenção?' : 'Disable Maintenance Mode?';
+  static String get confirmar => _isPt ? 'Confirmar' : 'Confirm';
+
+  // Dev Tools
+  static String get reinicieApp => _isPt ? 'Reinicie o app para aplicar a alteração.' : 'Restart the app to apply the change.';
+  static String get naoValidarSenhaCollection => _isPt ? 'Nao foi possivel validar a senha da collection.' : 'Could not validate collection password.';
+  static String get senhaCollectionIncorreta => _isPt ? 'Senha da collection incorreta.' : 'Incorrect collection password.';
+  static String get senhaDevIncorreta => _isPt ? 'Senha dev incorreta.' : 'Incorrect dev password.';
+  static String semScriptSeed(String collection) => _isPt ? 'Sem script de seed para $collection' : 'No seed script for $collection';
+  static String tabelaPopulada(String collection) => _isPt ? 'Tabela $collection populada (Merge/Ignore se existe).' : 'Table $collection populated (Merge/Ignore if exists).';
+  static String truncateTable(String collection) => _isPt ? 'TRUNCATE TABLE $collection?' : 'TRUNCATE TABLE $collection?';
+  static String truncateConfirmacao(String collection) => _isPt 
+    ? 'Tem certeza que deseja apagar TODOS os dados de $collection? Esta ação é irreversível.' 
+    : 'Are you sure you want to delete ALL data from $collection? This action is irreversible.';
+  static String get apagarTudo => _isPt ? 'APAGAR TUDO' : 'DELETE EVERYTHING';
+  static String collectionLimpa(String collection) => _isPt ? 'Collection $collection limpa com sucesso.' : 'Collection $collection cleared successfully.';
+  static String get gerandoArquivo => _isPt ? 'Gerando arquivo...' : 'Generating file...';
+  static String get colecaoVazia => _isPt ? 'Coleção vazia.' : 'Empty collection.';
+  static String get excelApenasAgendamentos => _isPt ? 'Excel disponível apenas para Agendamentos.' : 'Excel available only for Appointments.';
+  static String get enviandoParaJsonBin => _isPt ? 'Enviando para JSONBin...' : 'Uploading to JSONBin...';
+  static String get exportacaoConcluida => _isPt ? 'Exportação Concluída ☁️' : 'Export Completed ☁️';
+  static String get dadosSalvosNuvem => _isPt ? 'Dados salvos na nuvem com sucesso!' : 'Data saved to cloud successfully!';
+  static String binId(String id) => _isPt ? 'Bin ID: $id' : 'Bin ID: $id';
+  static String get urlApi => _isPt ? 'URL API:' : 'API URL:';
+  static String get copiarUrl => _isPt ? 'Copiar URL' : 'Copy URL';
+  static String get urlCopiada => _isPt ? 'URL copiada!' : 'URL copied!';
+  static String get fechar => _isPt ? 'Fechar' : 'Close';
+  static String erroExportarWeb(String erro) => _isPt ? 'Erro ao exportar para web: $erro' : 'Error exporting to web: $erro';
+
+  // Login/Auth
+  static String get erroLogin => _isPt ? 'Erro ao fazer login' : 'Login error';
+  static String get erroCadastro => _isPt ? 'Erro ao cadastrar' : 'Registration error';
+  static String erroGoogleLogin(String erro) => _isPt ? 'Erro no Google Login: $erro' : 'Google Login error: $erro';
+  static String get biometriaLoginMsg => _isPt ? 'Faça login com senha uma vez para habilitar o acesso rápido.' : 'Log in with password once to enable quick access.';
+
+  // Geral
+  static String erroGenerico(String erro) => _isPt ? 'Erro: $erro' : 'Error: $erro';
+  static String get administracaoAgendamentos => _isPt ? 'Administração de Agendamentos' : 'Appointment Administration';
+  static String get telaAdministracao => _isPt ? 'Tela de Administração' : 'Administration Screen';
 }

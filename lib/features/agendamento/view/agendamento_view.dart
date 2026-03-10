@@ -15,6 +15,7 @@ import 'package:agenda/core/models/usuario_model.dart';
 import 'package:agenda/core/widgets/language_selector.dart';
 import 'package:agenda/app_localizations.dart';
 import 'package:agenda/core/models/cliente_model.dart';
+import 'package:agenda/core/utils/app_strings.dart';
 
 class AgendamentoView extends StatefulWidget {
   const AgendamentoView({super.key});
@@ -255,7 +256,7 @@ class _AgendamentoViewState extends State<AgendamentoView> {
             child: TextField(
               controller: _searchController,
               decoration: InputDecoration(
-                hintText: 'Buscar por tipo...',
+                hintText: AppStrings.buscarPorTipo,
                 prefixIcon: const Icon(Icons.search, size: 20),
                 border: OutlineInputBorder(borderRadius: BorderRadius.circular(8), borderSide: BorderSide.none),
                 contentPadding: const EdgeInsets.symmetric(vertical: 0, horizontal: 10),
@@ -421,8 +422,8 @@ class _AgendamentoViewState extends State<AgendamentoView> {
                       Expanded(
                         child: TextField(
                           controller: cupomController,
-                          decoration: const InputDecoration(
-                            labelText: 'Cupom de Desconto',
+                          decoration: InputDecoration(
+                            labelText: AppStrings.cupomDesconto,
                             isDense: true,
                             prefixIcon: Icon(Icons.local_offer, size: 18),
                           ),
@@ -438,10 +439,10 @@ class _AgendamentoViewState extends State<AgendamentoView> {
                           setStateDialog(() {
                             if (cupom != null) {
                               _cupomAplicado = cupom;
-                              messenger.showSnackBar(const SnackBar(content: Text('Cupom aplicado!')));
+                              messenger.showSnackBar(SnackBar(content: Text(AppStrings.cupomAplicado)));
                             } else {
                               _cupomAplicado = null;
-                              messenger.showSnackBar(const SnackBar(content: Text('Cupom inválido ou expirado.')));
+                              messenger.showSnackBar(SnackBar(content: Text(AppStrings.cupomInvalido)));
                             }
                           });
                         },
@@ -517,11 +518,11 @@ class _AgendamentoViewState extends State<AgendamentoView> {
         return StatefulBuilder(
           builder: (context, setStateDialog) {
             return AlertDialog(
-              title: const Text('Avaliar Sessão'),
+              title: Text(AppStrings.avaliarSessao),
               content: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  const Text('Como foi sua experiência?'),
+                  Text(AppStrings.comoFoiExperiencia),
                   const SizedBox(height: 10),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
@@ -538,13 +539,13 @@ class _AgendamentoViewState extends State<AgendamentoView> {
                   ),
                   TextField(
                     controller: comentarioController,
-                    decoration: const InputDecoration(hintText: 'Deixe um comentário (opcional)'),
+                    decoration: InputDecoration(hintText: AppStrings.deixeComentario),
                     maxLines: 2,
                   ),
                 ],
               ),
               actions: [
-                TextButton(onPressed: () => Navigator.pop(context), child: const Text('Cancelar')),
+                TextButton(onPressed: () => Navigator.pop(context), child: Text(AppStrings.cancelButton)),
                 ElevatedButton(
                   onPressed: () async {
                     final nav = Navigator.of(context);
@@ -552,10 +553,10 @@ class _AgendamentoViewState extends State<AgendamentoView> {
                     await _firestoreService.avaliarAgendamento(agendamento.id!, notaSelecionada, comentarioController.text);
                     if (mounted) {
                       nav.pop();
-                      messenger.showSnackBar(const SnackBar(content: Text('Obrigado pela avaliação!')));
+                      messenger.showSnackBar(SnackBar(content: Text(AppStrings.obrigadoAvaliacao)));
                     }
                   },
-                  child: const Text('Enviar'),
+                  child: Text(AppStrings.enviar),
                 ),
               ],
             );
@@ -583,7 +584,7 @@ class _AgendamentoViewState extends State<AgendamentoView> {
 
     if (user == null) {
       messenger.showSnackBar(
-        const SnackBar(content: Text('Erro: Usuário não autenticado.')),
+        SnackBar(content: Text(AppStrings.erroUsuarioNaoAutenticado)),
       );
       return;
     }
@@ -632,7 +633,7 @@ class _AgendamentoViewState extends State<AgendamentoView> {
     if (dataAgendamento.isBefore(agora)) {
       if (mounted) {
         messenger.showSnackBar(
-          const SnackBar(content: Text('Não é possível cancelar agendamentos passados.')),
+          SnackBar(content: Text(AppStrings.naoPodeCancelarPassado)),
         );
       }
       return;
@@ -675,7 +676,7 @@ class _AgendamentoViewState extends State<AgendamentoView> {
       context: context,
       builder: (context) {
         return AlertDialog(
-          title: Text(foraDoPrazo ? 'Cancelamento Tardio' : 'Cancelar Agendamento'),
+          title: Text(foraDoPrazo ? AppStrings.cancelamentoTardio : AppStrings.cancelarAgendamento),
           content: Column(
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -690,16 +691,16 @@ class _AgendamentoViewState extends State<AgendamentoView> {
                   ),
                 ),
               const SizedBox(height: 10),
-              const Text('Por favor, informe o motivo do cancelamento:'),
+              Text(AppStrings.informeMotivoCancelamento),
               TextField(
                 controller: motivoController,
-                decoration: const InputDecoration(hintText: 'Ex: Imprevisto de saúde'),
+                decoration: InputDecoration(hintText: AppStrings.exemploMotivo),
                 maxLines: 2,
               ),
             ],
           ),
           actions: [
-            TextButton(onPressed: () => Navigator.pop(context), child: const Text('Voltar')),
+            TextButton(onPressed: () => Navigator.pop(context), child: Text(AppStrings.voltar)),
             ElevatedButton(
               onPressed: () async {
                 final nav = Navigator.of(context);
@@ -711,7 +712,7 @@ class _AgendamentoViewState extends State<AgendamentoView> {
                 await _firestoreService.cancelarAgendamento(agendamento.id!, motivoFinal, status);
                 if (context.mounted) nav.pop();
               },
-              child: const Text('Confirmar Cancelamento'),
+              child: Text(AppStrings.confirmCancellationButton),
             ),
           ],
         );
@@ -734,7 +735,7 @@ class AgendamentoDetalhesView extends StatelessWidget {
     return Scaffold(
       // AppBar transparente para manter o fundo visível
       appBar: AppBar(
-        title: const Text('Detalhes do Agendamento'),
+        title: Text(AppStrings.detalhesAgendamento),
         backgroundColor: Colors.transparent,
         elevation: 0,
       ),

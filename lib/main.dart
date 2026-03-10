@@ -38,11 +38,21 @@ void main() async {
     const String env = String.fromEnvironment('ENV', defaultValue: 'dev');
     // Permite testar a tela de erro mesmo em debug via --dart-define=FORCE_CONFIG_CHECK=true
     const bool forceConfigCheck = bool.fromEnvironment('FORCE_CONFIG_CHECK', defaultValue: false);
-    final String envFile = ".env.$env";
+    final String envFile = env == 'dev' ? '.env' : '.env.$env';
 
     try {
-      await dotenv.load(fileName: envFile);
-      await dotenv.load(fileName: ".env");
+      // Carrega base e depois (opcionalmente) sobrepõe com ambiente específico.
+      // Em ENV=dev, evita tentar carregar ".env.dev" quando ele não existe no Web.
+      await dotenv.load(fileName: '.env', isOptional: true);
+
+      if (envFile != '.env') {
+        final baseEnv = Map<String, String>.from(dotenv.env);
+        await dotenv.load(
+          fileName: envFile,
+          isOptional: true,
+          mergeWith: baseEnv,
+        );
+      }
 
 
       // Verificação de chaves críticas

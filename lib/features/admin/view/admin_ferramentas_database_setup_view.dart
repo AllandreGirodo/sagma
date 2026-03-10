@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:agenda/core/services/firestore_service.dart';
 import 'package:agenda/core/models/firestore_structure_helper.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:agenda/core/utils/app_strings.dart';
 
 /// Tela de ferramentas de administração para visualização e configuração
 /// de dados do banco de dados Firebase.
@@ -92,7 +93,7 @@ class _AdminFerramentasDatabaseSetupViewState
       setState(() => _carregando = false);
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Erro ao carregar: $e')),
+          SnackBar(content: Text(AppStrings.erroCarregar(e.toString()))),
         );
       }
     }
@@ -116,8 +117,8 @@ class _AdminFerramentasDatabaseSetupViewState
 
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            content: Text('Alterações salvas com sucesso!'),
+          SnackBar(
+            content: Text(AppStrings.alteracoesSalvasSucesso),
             backgroundColor: Colors.green,
           ),
         );
@@ -127,7 +128,7 @@ class _AdminFerramentasDatabaseSetupViewState
       setState(() => _carregando = false);
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Erro ao salvar: $e')),
+          SnackBar(content: Text(AppStrings.erroSalvar(e.toString()))),
         );
       }
     }
@@ -137,7 +138,7 @@ class _AdminFerramentasDatabaseSetupViewState
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Ferramentas - Database Setup'),
+        title: Text(AppStrings.ferramentasDatabaseSetup),
         backgroundColor: Colors.deepPurple,
         actions: [
           if (!_carregando)
@@ -309,7 +310,7 @@ class _AdminFerramentasDatabaseSetupViewState
                     child: ElevatedButton.icon(
                       onPressed: _carregando ? null : _salvarAlteracoes,
                       icon: const Icon(Icons.save),
-                      label: const Text('Salvar Alterações'),
+                      label: Text(AppStrings.salvarAlteracoes),
                       style: ElevatedButton.styleFrom(
                         backgroundColor: Colors.green,
                         foregroundColor: Colors.white,

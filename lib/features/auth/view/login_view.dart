@@ -88,15 +88,13 @@ class _LoginViewState extends State<LoginView> {
 
   Future<void> _recuperarSenha() async {
     String email = _emailController.text.trim();
-    final localContext = context;
-    
+
     // Se o campo estiver vazio, abre um diálogo para digitar o email
     if (email.isEmpty) {
       if (!mounted) return;
-      // ignore: use_build_context_synchronously
       final emailDigitado = await showDialog<String>(
-        context: localContext,
-        builder: (context) {
+        context: context,
+        builder: (dialogContext) {
           final controllerTemp = TextEditingController();
           return AlertDialog(
             title: Text(AppStrings.esqueceuSenha),
@@ -106,28 +104,30 @@ class _LoginViewState extends State<LoginView> {
               keyboardType: TextInputType.emailAddress,
             ),
             actions: [
-              TextButton(onPressed: () => Navigator.pop(context), child: Text(AppStrings.cancelButton)),
-              ElevatedButton(onPressed: () => Navigator.pop(context, controllerTemp.text.trim()), child: const Text('Enviar')),
+              TextButton(onPressed: () => Navigator.pop(dialogContext), child: Text(AppStrings.cancelButton)),
+              ElevatedButton(onPressed: () => Navigator.pop(dialogContext, controllerTemp.text.trim()), child: const Text('Enviar')),
             ],
           );
         },
       );
+      if (!mounted) return;
       if (emailDigitado == null || emailDigitado.isEmpty) return;
       email = emailDigitado;
     }
 
+    if (!mounted) return;
     setState(() => _isLoading = true);
-    final messenger = ScaffoldMessenger.of(localContext);
+
     try {
       await FirebaseAuth.instance.sendPasswordResetEmail(email: email);
       if (!mounted) return;
-      messenger.showSnackBar(SnackBar(
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
         content: Text(AppStrings.emailRecuperacaoEnviado),
         backgroundColor: Colors.green,
       ));
     } on FirebaseAuthException catch (e) {
       if (!mounted) return;
-      messenger.showSnackBar(SnackBar(
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
         content: Text(e.message ?? 'Erro ao enviar email'),
         backgroundColor: AppColors.error,
       ));

@@ -248,7 +248,7 @@ class _AgendamentoViewState extends State<AgendamentoView> {
   Widget _buildFilters(BuildContext context) {
     return Container(
       padding: const EdgeInsets.all(8.0),
-      color: Theme.of(context).cardColor.withOpacity(0.5),
+      color: Theme.of(context).cardColor.withValues(alpha: 0.5),
       child: Row(
         children: [
           Expanded(
@@ -260,7 +260,7 @@ class _AgendamentoViewState extends State<AgendamentoView> {
                 border: OutlineInputBorder(borderRadius: BorderRadius.circular(8), borderSide: BorderSide.none),
                 contentPadding: const EdgeInsets.symmetric(vertical: 0, horizontal: 10),
                 filled: true,
-                fillColor: Colors.white.withOpacity(0.7),
+                fillColor: Colors.white.withValues(alpha: 0.7),
               ),
               onChanged: (val) => setState(() => _filtroTexto = val),
             ),
@@ -285,7 +285,7 @@ class _AgendamentoViewState extends State<AgendamentoView> {
             child: Container(
               padding: const EdgeInsets.all(10),
               decoration: BoxDecoration(
-                color: _filtroData != null ? Colors.teal : Colors.white.withOpacity(0.7),
+                color: _filtroData != null ? Colors.teal : Colors.white.withValues(alpha: 0.7),
                 borderRadius: BorderRadius.circular(8),
               ),
               child: Icon(
@@ -752,10 +752,10 @@ class AgendamentoDetalhesView extends StatelessWidget {
                   width: double.infinity,
                   padding: const EdgeInsets.all(32),
                   decoration: BoxDecoration(
-                    color: Theme.of(context).cardColor.withOpacity(0.85),
+                    color: Theme.of(context).cardColor.withValues(alpha: 0.85),
                     borderRadius: BorderRadius.circular(24),
-                    border: Border.all(color: Colors.white.withOpacity(0.3)),
-                    boxShadow: [BoxShadow(color: Colors.black.withOpacity(0.1), blurRadius: 20, spreadRadius: 5)],
+                    border: Border.all(color: Colors.white.withValues(alpha: 0.3)),
+                    boxShadow: [BoxShadow(color: Colors.black.withValues(alpha: 0.1), blurRadius: 20, spreadRadius: 5)],
                   ),
                   child: Material(
                     color: Colors.transparent,
@@ -778,7 +778,7 @@ class AgendamentoDetalhesView extends StatelessWidget {
                         Container(
                           padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
                           decoration: BoxDecoration(
-                            color: _getStatusColor(agendamento.status).withOpacity(0.2),
+                            color: _getStatusColor(agendamento.status).withValues(alpha: 0.2),
                             borderRadius: BorderRadius.circular(20),
                             border: Border.all(color: _getStatusColor(agendamento.status)),
                           ),
@@ -933,11 +933,11 @@ class _AgendamentoCardState extends State<_AgendamentoCard> with SingleTickerPro
                   filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
                   child: Container(
                     decoration: BoxDecoration( 
-                      color: Theme.of(context).cardColor.withOpacity(0.6),
+                      color: Theme.of(context).cardColor.withValues(alpha: 0.6),
                       borderRadius: BorderRadius.circular(16),
-                      border: Border.all(color: Colors.white.withOpacity(0.2)),
+                      border: Border.all(color: Colors.white.withValues(alpha: 0.2)),
                       boxShadow: [
-                        BoxShadow(color: Colors.black.withOpacity(0.05), blurRadius: 10, spreadRadius: 0)
+                        BoxShadow(color: Colors.black.withValues(alpha: 0.05), blurRadius: 10, spreadRadius: 0)
                       ],
                     ),
                     child: Material(
@@ -1003,7 +1003,7 @@ class _AgendamentoCardState extends State<_AgendamentoCard> with SingleTickerPro
                   child: Container(
                     padding: const EdgeInsets.all(20), 
                     decoration: BoxDecoration(
-                      color: Colors.white.withOpacity(0.95),
+                      color: Colors.white.withValues(alpha: 0.95),
                       shape: BoxShape.circle,
                       boxShadow: const [BoxShadow(color: Colors.black26, blurRadius: 15)],
                     ),
@@ -1054,13 +1054,13 @@ class _ShimmerLoadingCardState extends State<_ShimmerLoadingCard> with SingleTic
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(16),
               gradient: LinearGradient( 
-                colors: [Colors.white.withOpacity(0.1), Colors.white.withOpacity(0.4), Colors.white.withOpacity(0.1)],
+                colors: [Colors.white.withValues(alpha: 0.1), Colors.white.withValues(alpha: 0.4), Colors.white.withValues(alpha: 0.1)],
                 stops: const [0.1, 0.5, 0.9],
                 begin: Alignment(-1.0 + (_controller.value * 2.5), -0.3),
                 end: Alignment(1.0 + (_controller.value * 2.5), 0.3),
                 tileMode: TileMode.clamp,
               ),
-              border: Border.all(color: Colors.white.withOpacity(0.1)),
+              border: Border.all(color: Colors.white.withValues(alpha: 0.1)),
             ),
           );
         },

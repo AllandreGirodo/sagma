@@ -6,7 +6,6 @@ import 'package:file_picker/file_picker.dart';
 import 'package:share_plus/share_plus.dart';
 import 'dart:io';
 import 'package:path_provider/path_provider.dart';
-import 'package:cross_file/cross_file.dart';
 
 class AdminConfigView extends StatefulWidget {
   const AdminConfigView({super.key});
@@ -206,7 +205,7 @@ class _AdminConfigViewState extends State<AdminConfigView> {
                   );
                   setState(() => _senhaAdminFerramentas = senhaController.text.trim());
                   if (!mounted) return;
-                  Navigator.pop(dialogContext);
+                  Navigator.of(context).pop();
                   ScaffoldMessenger.of(context).showSnackBar(
                     const SnackBar(
                       content: Text('Senha salva com sucesso!'),
@@ -314,28 +313,33 @@ class _AdminConfigViewState extends State<AdminConfigView> {
                 Text(AppStrings.configCupons, style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.orange)),
                 const SizedBox(height: 10),
                 Card(
-                  child: Column(
-                    children: [
-                      RadioListTile<int>(
-                        title: Text(AppStrings.configCupomAtivo),
-                        value: 1,
-                        groupValue: _statusCampoCupom,
-                        onChanged: (v) => setState(() => _statusCampoCupom = v!),
+                  child: Padding(
+                    padding: const EdgeInsets.all(16.0),
+                    child: DropdownButtonFormField<int>(
+                      initialValue: _statusCampoCupom,
+                      decoration: const InputDecoration(
+                        labelText: 'Estado do Campo Cupom',
+                        border: OutlineInputBorder(),
                       ),
-                      RadioListTile<int>(
-                        title: Text(AppStrings.configCupomOculto),
-                        value: 2,
-                        groupValue: _statusCampoCupom,
-                        onChanged: (v) => setState(() => _statusCampoCupom = v!),
-                      ),
-                      RadioListTile<int>(
-                        title: Text(AppStrings.configCupomOpaco),
-                        subtitle: Text(AppStrings.configCupomOpacoDesc),
-                        value: 3,
-                        groupValue: _statusCampoCupom,
-                        onChanged: (v) => setState(() => _statusCampoCupom = v!),
-                      ),
-                    ],
+                      items: [
+                        DropdownMenuItem<int>(
+                          value: 1,
+                          child: Text(AppStrings.configCupomAtivo),
+                        ),
+                        DropdownMenuItem<int>(
+                          value: 2,
+                          child: Text(AppStrings.configCupomOculto),
+                        ),
+                        DropdownMenuItem<int>(
+                          value: 3,
+                          child: Text('${AppStrings.configCupomOpaco} - ${AppStrings.configCupomOpacoDesc}'),
+                        ),
+                      ],
+                      onChanged: (v) {
+                        if (v == null) return;
+                        setState(() => _statusCampoCupom = v);
+                      },
+                    ),
                   ),
                 ),
                 const SizedBox(height: 20),

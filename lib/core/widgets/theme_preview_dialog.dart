@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:agenda/main.dart';
 import 'package:agenda/core/utils/custom_theme_data.dart';
 import 'package:agenda/core/widgets/animated_background.dart';
+import 'package:agenda/core/utils/app_strings.dart';
 
 class ThemePreviewDialog extends StatefulWidget {
   const ThemePreviewDialog({super.key});
@@ -16,7 +17,7 @@ class _ThemePreviewDialogState extends State<ThemePreviewDialog> {
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
-      title: const Text('Escolher Tema'),
+      title: Text(AppStrings.escolherTema),
       content: SizedBox(
         width: double.maxFinite,
         child: Column(
@@ -37,11 +38,11 @@ class _ThemePreviewDialogState extends State<ThemePreviewDialog> {
                     // Fundo Animado Selecionado
                     AnimatedBackground(
                       themeType: _selectedTheme,
-                      child: const Center(
+                      child: Center(
                         child: Card(
                           child: Padding(
                             padding: EdgeInsets.all(8.0),
-                            child: Text('Pré-visualização'),
+                            child: Text(AppStrings.preVisualizacao),
                           ),
                         ),
                       ),
@@ -67,8 +68,8 @@ class _ThemePreviewDialogState extends State<ThemePreviewDialog> {
             // Dropdown de Seleção
             DropdownButtonFormField<AppThemeType>(
               initialValue: _selectedTheme,
-              decoration: const InputDecoration(
-                labelText: 'Selecione um tema',
+              decoration: InputDecoration(
+                labelText: AppStrings.selecioneUmTema,
                 border: OutlineInputBorder(),
               ),
               isExpanded: true,
@@ -78,7 +79,7 @@ class _ThemePreviewDialogState extends State<ThemePreviewDialog> {
                   value: type,
                   enabled: data.isAvailable,
                   child: Text(
-                    data.label + (data.isAvailable ? '' : ' (Bloqueado)'),
+                    data.isAvailable ? data.label : AppStrings.temaBloqueado(data.label),
                     style: TextStyle(color: data.isAvailable ? null : Colors.grey),
                   ),
                 );
@@ -93,14 +94,14 @@ class _ThemePreviewDialogState extends State<ThemePreviewDialog> {
       actions: [
         TextButton(
           onPressed: () => Navigator.pop(context),
-          child: const Text('Cancelar'),
+          child: Text(AppStrings.cancelButton),
         ),
         ElevatedButton(
           onPressed: () {
             MyApp.setCustomTheme(context, _selectedTheme);
             Navigator.pop(context);
           },
-          child: const Text('Aplicar'),
+          child: Text(AppStrings.aplicar),
         ),
       ],
     );

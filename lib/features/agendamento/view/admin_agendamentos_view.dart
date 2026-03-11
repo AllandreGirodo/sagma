@@ -19,6 +19,7 @@ import 'package:agenda/features/financeiro/view/admin_financeiro_view.dart';
 import 'package:agenda/core/widgets/language_selector.dart';
 import 'package:agenda/core/widgets/theme_selector.dart';
 import 'package:agenda/core/utils/custom_theme_data.dart';
+import 'package:agenda/core/utils/app_strings.dart';
 
 class AdminAgendamentosView extends StatefulWidget {
   const AdminAgendamentosView({super.key});
@@ -62,55 +63,55 @@ class _AdminAgendamentosViewState extends State<AdminAgendamentosView> {
       length: 4,
       child: Scaffold(
         appBar: AppBar(
-          title: const Text('Administração'),
+          title: Text(AppStrings.administracao),
           backgroundColor: Colors.orange,
           foregroundColor: Colors.white,
           actions: [
             IconButton(
               icon: const Icon(Icons.analytics),
-              tooltip: 'Relatórios',
+              tooltip: AppStrings.relatorios,
               onPressed: () {
                 Navigator.push(context, MaterialPageRoute(builder: (context) => const AdminRelatoriosView()));
               },
             ),
             IconButton(
               icon: const Icon(Icons.attach_money),
-              tooltip: 'Financeiro',
+              tooltip: AppStrings.financeiroAnualTitulo,
               onPressed: () {
                 Navigator.push(context, MaterialPageRoute(builder: (context) => const AdminFinanceiroView()));
               },
             ),
             IconButton(
               icon: const Icon(Icons.list_alt),
-              tooltip: 'Logs',
+              tooltip: AppStrings.logsSistema,
               onPressed: () {
                 Navigator.push(context, MaterialPageRoute(builder: (context) => const AdminLogsView()));
               },
             ),
             IconButton(
               icon: const Icon(Icons.privacy_tip),
-              tooltip: 'Auditoria LGPD',
+              tooltip: AppStrings.auditoriaLgpd,
               onPressed: () {
                 Navigator.push(context, MaterialPageRoute(builder: (context) => const AdminLgpdLogsView()));
               },
             ),
             IconButton(
               icon: const Icon(Icons.inventory_2),
-              tooltip: 'Estoque',
+              tooltip: AppStrings.estoqueControle,
               onPressed: () {
                 Navigator.push(context, MaterialPageRoute(builder: (context) => const AdminEstoqueView()));
               },
             ),
             IconButton(
               icon: const Icon(Icons.settings),
-              tooltip: 'Configurações',
+              tooltip: AppStrings.configuracoes,
               onPressed: () {
                 Navigator.push(context, MaterialPageRoute(builder: (context) => const AdminConfigView()));
               },
             ),
             IconButton(
               icon: const Icon(Icons.developer_mode),
-              tooltip: 'Dev Tools (DB)',
+              tooltip: AppStrings.devToolsDb,
               onPressed: () {
                 Navigator.push(context, MaterialPageRoute(builder: (context) => const DevToolsView()));
               },
@@ -132,11 +133,11 @@ class _AdminAgendamentosViewState extends State<AdminAgendamentosView> {
           ],
           bottom: TabBar(
             onTap: (index) => HapticFeedback.mediumImpact(), // Vibração ao trocar de aba
-            tabs: const [
-              Tab(icon: Icon(Icons.dashboard), text: 'Dash'),
-              Tab(icon: Icon(Icons.calendar_today), text: 'Agenda'),
-              Tab(icon: Icon(Icons.people), text: 'Clientes'),
-              Tab(icon: Icon(Icons.person_add), text: 'Pendentes'),
+            tabs: [
+              Tab(icon: const Icon(Icons.dashboard), text: AppStrings.dash),
+              Tab(icon: const Icon(Icons.calendar_today), text: AppStrings.agenda),
+              Tab(icon: const Icon(Icons.people), text: AppStrings.clientes),
+              Tab(icon: const Icon(Icons.person_add), text: AppStrings.pendentes),
             ],
             indicatorColor: Colors.white,
             labelColor: Colors.white,
@@ -227,25 +228,25 @@ class _AdminAgendamentosViewState extends State<AdminAgendamentosView> {
               // Cards Principais
               Row(
                 children: [
-                  Expanded(child: _buildStatCard('Agendamentos (Dia)', '${agendamentosDia.length}', Colors.blue)),
+                  Expanded(child: _buildStatCard(AppStrings.agendamentosDia, '${agendamentosDia.length}', Colors.blue)),
                   const SizedBox(width: 10),
-                  Expanded(child: _buildStatCard('Receita Est. (Mês)', 'R\$ ${receitaEstimada.toStringAsFixed(2)}', Colors.green)),
+                  Expanded(child: _buildStatCard(AppStrings.receitaEstimadaMes, 'R\$ ${receitaEstimada.toStringAsFixed(2)}', Colors.green)),
                 ],
               ),
               const SizedBox(height: 20),
 
-              const Text('Status do Dia', style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
+              Text(AppStrings.statusDoDia, style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
               const SizedBox(height: 10),
               Row(
                 children: [
-                  _buildBarraStatus('Pendentes', pendentesDia, Colors.orange),
-                  _buildBarraStatus('Aprovados', aprovadosDia, Colors.green),
-                  _buildBarraStatus('Cancel/Rec', canceladosDia, Colors.red),
+                  _buildBarraStatus(AppStrings.pendentes, pendentesDia, Colors.orange),
+                  _buildBarraStatus(AppStrings.aprovados, aprovadosDia, Colors.green),
+                  _buildBarraStatus(AppStrings.cancelRec, canceladosDia, Colors.red),
                 ],
               ),
               const SizedBox(height: 20),
 
-              const Text('Taxa de Cancelamento', style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
+              Text(AppStrings.taxaCancelamento, style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
               const SizedBox(height: 10),
               Card(
                 child: Padding(
@@ -253,16 +254,16 @@ class _AdminAgendamentosViewState extends State<AdminAgendamentosView> {
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceAround,
                     children: [
-                      _buildTaxaIndicator('Hoje', taxaDia),
-                      _buildTaxaIndicator('Semana', taxaSemana),
-                      _buildTaxaIndicator('Mês', taxaMes),
+                      _buildTaxaIndicator(AppStrings.hoje, taxaDia),
+                      _buildTaxaIndicator(AppStrings.semana, taxaSemana),
+                      _buildTaxaIndicator(AppStrings.mes, taxaMes),
                     ],
                   ),
                 ),
               ),
               
               const SizedBox(height: 20),
-              const Text('Tipos Mais Agendados (Mês)', style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
+              Text(AppStrings.tiposMaisAgendados, style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
               const SizedBox(height: 10),
               
               if (distribuicaoTipos.isNotEmpty)
@@ -308,15 +309,15 @@ class _AdminAgendamentosViewState extends State<AdminAgendamentosView> {
                   ),
                 )
               else
-                const Center(child: Text('Sem dados para gráfico.', style: TextStyle(color: Colors.grey))),
+                Center(child: Text(AppStrings.semDadosGrafico, style: const TextStyle(color: Colors.grey))),
 
               const SizedBox(height: 20),
               const Divider(),
               
               // Área de Controle do Desenvolvedor (Gravação de Métricas)
               SwitchListTile(
-                title: const Text('Dev: Ativar Gravação de Histórico', style: TextStyle(fontWeight: FontWeight.bold, color: Colors.grey)),
-                subtitle: const Text('Permite salvar as métricas de hoje no banco de dados.'),
+                title: Text(AppStrings.ativarGravacaoHistorico, style: const TextStyle(fontWeight: FontWeight.bold, color: Colors.grey)),
+                subtitle: Text(AppStrings.permiteSalvarMetricas),
                 value: _devGravarMetricas,
                 onChanged: (val) => setState(() => _devGravarMetricas = val),
                 secondary: const Icon(Icons.developer_board, color: Colors.grey),
@@ -329,7 +330,7 @@ class _AdminAgendamentosViewState extends State<AdminAgendamentosView> {
                     width: double.infinity,
                     child: ElevatedButton.icon(
                       icon: const Icon(Icons.save_as),
-                      label: const Text('Gravar Snapshot do Dia (metricas_diarias)'),
+                      label: Text(AppStrings.gravarSnapshot),
                       style: ElevatedButton.styleFrom(
                         backgroundColor: Colors.blueGrey,
                         foregroundColor: Colors.white,
@@ -361,9 +362,9 @@ class _AdminAgendamentosViewState extends State<AdminAgendamentosView> {
       };
 
       await _firestoreService.salvarMetricasDiarias(metricas);
-      if (mounted) ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Métricas do dia salvas com sucesso!')));
+      if (mounted) ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(AppStrings.metricasSalvasSucesso)));
     } catch (e) {
-      if (mounted) ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Erro ao salvar métricas: $e')));
+      if (mounted) ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(AppStrings.erroSalvarMetricas('$e'))));
     }
   }
 
@@ -408,7 +409,7 @@ class _AdminAgendamentosViewState extends State<AdminAgendamentosView> {
         stream: _firestoreService.getAgendamentos(),
         builder: (context, snapshot) {
           if (snapshot.hasError) {
-            return Center(child: Text('Erro: ${snapshot.error}'));
+            return Center(child: Text(AppStrings.erroGenerico('${snapshot.error}')));
           }
           if (snapshot.connectionState == ConnectionState.waiting) {
             return const Center(child: CircularProgressIndicator());
@@ -421,7 +422,7 @@ class _AdminAgendamentosViewState extends State<AdminAgendamentosView> {
               [];
 
           if (agendamentos.isEmpty) {
-            return const Center(child: Text('Nenhum agendamento pendente.'));
+            return Center(child: Text(AppStrings.nenhumAgendamentoPendente));
           }
 
           return ListView.builder(
@@ -435,7 +436,7 @@ class _AdminAgendamentosViewState extends State<AdminAgendamentosView> {
                     DateFormat('dd/MM/yyyy HH:mm').format(agendamento.dataHora),
                     style: const TextStyle(fontWeight: FontWeight.bold),
                   ),
-                  subtitle: Text('Cliente: ${agendamento.clienteId}\nTipo: ${agendamento.tipo}'),
+                  subtitle: Text(AppStrings.resumoClienteTipo(agendamento.clienteId, agendamento.tipo)),
                   trailing: Row(
                     mainAxisSize: MainAxisSize.min,
                     children: [
@@ -444,18 +445,18 @@ class _AdminAgendamentosViewState extends State<AdminAgendamentosView> {
                           padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
                           margin: const EdgeInsets.only(right: 8),
                           decoration: BoxDecoration(color: Colors.amber, borderRadius: BorderRadius.circular(12)),
-                          child: Text('Espera: ${agendamento.listaEspera.length}', 
+                          child: Text(AppStrings.esperaLabel(agendamento.listaEspera.length), 
                             style: const TextStyle(fontSize: 10, fontWeight: FontWeight.bold)),
                         ),
                       IconButton(
                         icon: const Icon(Icons.check_circle, color: Colors.green),
                         onPressed: () => _atualizarStatus(agendamento, 'aprovado', clienteId: agendamento.clienteId),
-                        tooltip: 'Aprovar',
+                        tooltip: AppStrings.aprovar,
                       ),
                       IconButton(
                         icon: const Icon(Icons.cancel, color: Colors.red),
                         onPressed: () => _atualizarStatus(agendamento, 'recusado'),
-                        tooltip: 'Recusar',
+                        tooltip: AppStrings.recusar,
                       ),
                     ],
                   ),
@@ -475,8 +476,8 @@ class _AdminAgendamentosViewState extends State<AdminAgendamentosView> {
           padding: const EdgeInsets.all(8.0),
           child: TextField(
             controller: _searchController,
-            decoration: const InputDecoration(
-              labelText: 'Pesquisar Cliente',
+            decoration: InputDecoration(
+              labelText: AppStrings.pesquisarCliente,
               prefixIcon: Icon(Icons.search),
               border: OutlineInputBorder(),
             ),
@@ -498,7 +499,7 @@ class _AdminAgendamentosViewState extends State<AdminAgendamentosView> {
                   ? todosClientes 
                   : todosClientes.where((c) => c.nome.toLowerCase().contains(_filtroNome)).toList();
 
-              if (clientes.isEmpty) return const Center(child: Text('Nenhum cliente encontrado.'));
+                if (clientes.isEmpty) return Center(child: Text(AppStrings.nenhumClienteEncontrado));
 
               return ListView.builder(
                 itemCount: clientes.length,
@@ -512,7 +513,7 @@ class _AdminAgendamentosViewState extends State<AdminAgendamentosView> {
                         child: Text(cliente.nome.isNotEmpty ? cliente.nome[0].toUpperCase() : '?'),
                       ),
                       title: Text(cliente.nome),
-                      subtitle: Text('Saldo de Sessões: ${cliente.saldoSessoes}'),
+                      subtitle: Text(AppStrings.saldoSessoesLabel(cliente.saldoSessoes)),
                       trailing: Row(
                         mainAxisSize: MainAxisSize.min,
                         children: [
@@ -524,19 +525,19 @@ class _AdminAgendamentosViewState extends State<AdminAgendamentosView> {
                               return IconButton(
                                 icon: Icon(podeVerTudo ? Icons.visibility : Icons.visibility_off),
                                 color: podeVerTudo ? Colors.blue : Colors.grey,
-                                tooltip: 'Permitir ver todos os horários',
+                                tooltip: AppStrings.permitirVerTodosHorarios,
                                 onPressed: () => _firestoreService.atualizarPermissaoVisualizacao(cliente.uid, !podeVerTudo),
                               );
                             },
                           ),
                           IconButton(
                             icon: const Icon(Icons.palette, color: Colors.purple),
-                            tooltip: 'Alterar Tema do Usuário',
+                            tooltip: AppStrings.alterarTemaUsuario,
                             onPressed: () => _alterarTemaUsuarioDialog(cliente),
                           ),
                           ElevatedButton.icon(
                             icon: const Icon(Icons.add_circle, size: 16),
-                            label: const Text('Pacote'),
+                            label: Text(AppStrings.pacote),
                             style: ElevatedButton.styleFrom(backgroundColor: Colors.teal.shade50),
                             onPressed: () => _adicionarPacoteDialog(cliente),
                           ),
@@ -558,7 +559,7 @@ class _AdminAgendamentosViewState extends State<AdminAgendamentosView> {
       context: context,
       builder: (BuildContext dialogContext) {
         return SimpleDialog(
-          title: Text('Tema de ${cliente.nome}'),
+          title: Text(AppStrings.temaDe(cliente.nome)),
           children: AppThemeType.values.map((theme) {
             final data = CustomThemeData.getData(theme);
             return SimpleDialogOption(
@@ -579,7 +580,7 @@ class _AdminAgendamentosViewState extends State<AdminAgendamentosView> {
 
                 // Exibe o SnackBar usando o contexto da Tela (State), verificado pelo 'mounted' do State
                 if (mounted) {
-                  ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Tema alterado para ${data.label}')));
+                  ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(AppStrings.temaAlteradoPara(data.label))));
                 }
               },
             );
@@ -593,7 +594,7 @@ class _AdminAgendamentosViewState extends State<AdminAgendamentosView> {
     await _firestoreService.adicionarPacote(cliente.uid, 10);
     if (mounted) {
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Pacote de 10 sessões adicionado para ${cliente.nome}!')),
+        SnackBar(content: Text(AppStrings.pacoteAdicionadoPara(cliente.nome))),
       );
     }
   }
@@ -604,7 +605,7 @@ class _AdminAgendamentosViewState extends State<AdminAgendamentosView> {
       stream: _firestoreService.getUsuariosPendentes(),
       builder: (context, snapshot) {
         if (snapshot.hasError) {
-          return Center(child: Text('Erro: ${snapshot.error}'));
+          return Center(child: Text(AppStrings.erroGenerico('${snapshot.error}')));
         }
         if (snapshot.connectionState == ConnectionState.waiting) {
           return const Center(child: CircularProgressIndicator());
@@ -613,7 +614,7 @@ class _AdminAgendamentosViewState extends State<AdminAgendamentosView> {
         final usuarios = snapshot.data ?? [];
 
         if (usuarios.isEmpty) {
-          return const Center(child: Text('Nenhum usuário pendente.'));
+          return Center(child: Text(AppStrings.nenhumUsuarioPendente));
         }
 
         return ListView.builder(
@@ -625,11 +626,11 @@ class _AdminAgendamentosViewState extends State<AdminAgendamentosView> {
               child: ListTile(
                 leading: const Icon(Icons.person, color: Colors.orange),
                 title: Text(usuario.nome, style: const TextStyle(fontWeight: FontWeight.bold)),
-                subtitle: Text('Email: ${usuario.email}\nCadastrado em: ${usuario.dataCadastro != null ? DateFormat('dd/MM/yyyy HH:mm').format(usuario.dataCadastro!) : '-'}'),
+                subtitle: Text(AppStrings.emailCadastroLabel(usuario.email, usuario.dataCadastro != null ? DateFormat('dd/MM/yyyy HH:mm').format(usuario.dataCadastro!) : '-')),
                 trailing: IconButton(
                   icon: const Icon(Icons.check_circle, color: Colors.green),
                   onPressed: () => _aprovarUsuario(usuario),
-                  tooltip: 'Aprovar Cadastro',
+                  tooltip: AppStrings.aprovarCadastro,
                 ),
               ),
             );
@@ -646,7 +647,7 @@ class _AdminAgendamentosViewState extends State<AdminAgendamentosView> {
     
     if (mounted) {
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Agendamento $novoStatus com sucesso!')),
+        SnackBar(content: Text(AppStrings.agendamentoStatusSucesso(novoStatus))),
       );
     }
   }
@@ -655,7 +656,7 @@ class _AdminAgendamentosViewState extends State<AdminAgendamentosView> {
     await _firestoreService.aprovarUsuario(usuario.id);
     if (mounted) {
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Usuário ${usuario.nome} aprovado com sucesso!')),
+        SnackBar(content: Text(AppStrings.usuarioAprovadoSucesso(usuario.nome))),
       );
     }
   }

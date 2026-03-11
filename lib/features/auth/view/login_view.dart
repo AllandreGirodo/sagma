@@ -4,10 +4,9 @@ import 'package:google_sign_in/google_sign_in.dart';
 import 'package:local_auth/local_auth.dart';
 import 'package:agenda/core/utils/app_styles.dart';
 import 'package:agenda/core/utils/app_strings.dart';
-import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:agenda/features/agendamento/view/agendamento_view.dart';
-import 'package:agenda/features/agendamento/view/admin_agendamentos_view.dart';
-import 'package:agenda/features/perfil/view/perfil_view.dart'; // Para cadastro, se necessário redirecionar
+import 'package:agenda/features/auth/controller/login_controller.dart';
+import 'package:agenda/features/auth/view/signup_view.dart';
 import 'package:agenda/core/widgets/language_selector.dart';
 import 'package:agenda/core/services/firestore_service.dart';
 
@@ -21,6 +20,7 @@ class LoginView extends StatefulWidget {
 class _LoginViewState extends State<LoginView> {
   final _emailController = TextEditingController();
   final _senhaController = TextEditingController();
+  final _loginController = LoginController();
   bool _isLoading = false;
   bool _isObscure = true;
   final LocalAuthentication auth = LocalAuthentication();
@@ -33,57 +33,22 @@ class _LoginViewState extends State<LoginView> {
 
   Future<void> _login() async {
     setState(() => _isLoading = true);
-    final navigator = Navigator.of(context);
-    final messenger = ScaffoldMessenger.of(context);
     try {
-      await FirebaseAuth.instance.signInWithEmailAndPassword(
-        email: _emailController.text.trim(),
-        password: _senhaController.text.trim(),
+      await _loginController.logar(
+        context,
+        _emailController.text.trim(),
+        _senhaController.text.trim(),
       );
-      
-      if (!mounted) return;
-      
-      // Verifica se é admin (lógica simples por email, ideal seria claim ou banco)
-      final user = FirebaseAuth.instance.currentUser;
-      if (user != null) {
-        final adminEmail = dotenv.env['ADMIN_EMAIL'];
-        if (user.email == adminEmail) { 
-          navigator.pushReplacement(MaterialPageRoute(builder: (_) => const AdminAgendamentosView()));
-        } else {
-          navigator.pushReplacement(MaterialPageRoute(builder: (_) => const AgendamentoView()));
-        }
-      }
-    } on FirebaseAuthException catch (e) {
-      messenger.showSnackBar(SnackBar(
-        content: Text(e.message ?? 'Erro ao fazer login'),
-        backgroundColor: AppColors.error,
-      ));
     } finally {
       if (mounted) setState(() => _isLoading = false);
     }
   }
 
   Future<void> _cadastro() async {
-    // Lógica simplificada de cadastro direto ou navegação para tela de registro
-    setState(() => _isLoading = true);
-    final navigator = Navigator.of(context);
-    final messenger = ScaffoldMessenger.of(context);
-    try {
-      await FirebaseAuth.instance.createUserWithEmailAndPassword(
-        email: _emailController.text.trim(),
-        password: _senhaController.text.trim(),
-      );
-      if (!mounted) return;
-      // Após cadastro, vai para perfil para completar dados
-      navigator.pushReplacement(MaterialPageRoute(builder: (_) => const PerfilView()));
-    } on FirebaseAuthException catch (e) {
-      messenger.showSnackBar(SnackBar(
-        content: Text(e.message ?? 'Erro ao cadastrar'),
-        backgroundColor: AppColors.error,
-      ));
-    } finally {
-      if (mounted) setState(() => _isLoading = false);
-    }
+    await Navigator.push(
+      context,
+      MaterialPageRoute(builder: (_) => const SignUpView()),
+    );
   }
 
   Future<void> _recuperarSenha() async {
@@ -98,14 +63,25 @@ class _LoginViewState extends State<LoginView> {
           final controllerTemp = TextEditingController();
           return AlertDialog(
             title: Text(AppStrings.esqueceuSenha),
-            content: TextField(
-              controller: controllerTemp,
-              decoration: const InputDecoration(labelText: 'Digite seu e-mail cadastrado'),
-              keyboardType: TextInputType.emailAddress,
+            content: Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                TextField(
+                  controller: controllerTemp,
+                  decoration: InputDecoration(labelText: AppStrings.digiteEmailCadastrado),
+                  keyboardType: TextInputType.emailAddress,
+                ),
+                const SizedBox(height: 10),
+                Text(
+                  AppStrings.avisoRecuperacaoSenha,
+                  style: Theme.of(dialogContext).textTheme.bodySmall?.copyWith(color: Colors.grey.shade700),
+                ),
+              ],
             ),
             actions: [
               TextButton(onPressed: () => Navigator.pop(dialogContext), child: Text(AppStrings.cancelButton)),
-              ElevatedButton(onPressed: () => Navigator.pop(dialogContext, controllerTemp.text.trim()), child: const Text('Enviar')),
+              ElevatedButton(onPressed: () => Navigator.pop(dialogContext, controllerTemp.text.trim()), child: Text(AppStrings.enviar)),
             ],
           );
         },
@@ -119,18 +95,7 @@ class _LoginViewState extends State<LoginView> {
     setState(() => _isLoading = true);
 
     try {
-      await FirebaseAuth.instance.sendPasswordResetEmail(email: email);
-      if (!mounted) return;
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-        content: Text(AppStrings.emailRecuperacaoEnviado),
-        backgroundColor: Colors.green,
-      ));
-    } on FirebaseAuthException catch (e) {
-      if (!mounted) return;
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-        content: Text(e.message ?? 'Erro ao enviar email'),
-        backgroundColor: AppColors.error,
-      ));
+      await _loginController.recuperarSenha(context, email);
     } finally {
       if (mounted) setState(() => _isLoading = false);
     }
@@ -159,7 +124,7 @@ class _LoginViewState extends State<LoginView> {
       navigator.pushReplacement(MaterialPageRoute(builder: (_) => const AgendamentoView()));
       
     } catch (e) {
-      if (mounted) messenger.showSnackBar(SnackBar(content: Text('Erro no Google Login: $e')));
+      if (mounted) messenger.showSnackBar(SnackBar(content: Text(AppStrings.erroGoogleLogin('$e'))));
     } finally {
       if (mounted) setState(() => _isLoading = false);
     }
@@ -199,7 +164,7 @@ class _LoginViewState extends State<LoginView> {
         if (user != null && mounted) {
            navigator.pushReplacement(MaterialPageRoute(builder: (_) => const AgendamentoView()));
         } else if (mounted) {
-           messenger.showSnackBar(const SnackBar(content: Text('Faça login com senha uma vez para habilitar o acesso rápido.')));
+            messenger.showSnackBar(SnackBar(content: Text(AppStrings.biometriaLoginMsg)));
         }
       }
     } catch (e) {

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:agenda/core/services/firestore_service.dart';
 import 'package:agenda/core/models/estoque_model.dart';
+import 'package:agenda/core/utils/app_strings.dart';
 
 class AdminEstoqueView extends StatelessWidget {
   const AdminEstoqueView({super.key});
@@ -11,14 +12,14 @@ class AdminEstoqueView extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Controle de Estoque'),
+        title: Text(AppStrings.estoqueControle),
         backgroundColor: Colors.brown,
         foregroundColor: Colors.white,
       ),
       body: StreamBuilder<List<ItemEstoque>>(
         stream: firestoreService.getEstoque(),
         builder: (context, snapshot) {
-          if (snapshot.hasError) return Center(child: Text('Erro: ${snapshot.error}'));
+          if (snapshot.hasError) return Center(child: Text(AppStrings.erroGenerico('${snapshot.error}')));
           if (snapshot.connectionState == ConnectionState.waiting) {
             return const Center(child: CircularProgressIndicator());
           }
@@ -26,7 +27,7 @@ class AdminEstoqueView extends StatelessWidget {
           final itens = snapshot.data ?? [];
 
           if (itens.isEmpty) {
-            return const Center(child: Text('Nenhum item no estoque.'));
+            return Center(child: Text(AppStrings.estoqueVazio));
           }
 
           return ListView.builder(
@@ -42,8 +43,8 @@ class AdminEstoqueView extends StatelessWidget {
                   ),
                   title: Text(item.nome),
                   subtitle: Text(item.consumoAutomatico 
-                      ? 'Baixa automática por sessão' 
-                      : 'Controle manual'),
+                      ? AppStrings.estoqueBaixaAuto 
+                      : AppStrings.estoqueControleManual),
                   trailing: IconButton(
                     icon: const Icon(Icons.edit),
                     onPressed: () => _mostrarDialogo(context, firestoreService, item: item),
@@ -75,31 +76,31 @@ class AdminEstoqueView extends StatelessWidget {
         return StatefulBuilder(
           builder: (context, setState) {
             return AlertDialog(
-              title: Text(item == null ? 'Novo Item' : 'Editar Item'),
+              title: Text(item == null ? AppStrings.estoqueNovoItem : AppStrings.estoqueEditarItem),
               content: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   TextField(
                     controller: nomeController,
-                    decoration: const InputDecoration(labelText: 'Nome do Produto'),
+                    decoration: InputDecoration(labelText: AppStrings.estoqueNomeProduto),
                   ),
                   const SizedBox(height: 10),
                   TextField(
                     controller: qtdController,
-                    decoration: const InputDecoration(labelText: 'Quantidade (Doses/Unidades)'),
+                    decoration: InputDecoration(labelText: AppStrings.estoqueQuantidade),
                     keyboardType: TextInputType.number,
                   ),
                   const SizedBox(height: 10),
                   SwitchListTile(
-                    title: const Text('Baixa Automática'),
-                    subtitle: const Text('Descontar ao aprovar agendamento?'),
+                    title: Text(AppStrings.estoqueBaixaAutomatica),
+                    subtitle: Text(AppStrings.estoqueDescontarAprovacao),
                     value: consumoAuto,
                     onChanged: (val) => setState(() => consumoAuto = val),
                   ),
                 ],
               ),
               actions: [
-                TextButton(onPressed: () => Navigator.pop(context), child: const Text('Cancelar')),
+                TextButton(onPressed: () => Navigator.pop(context), child: Text(AppStrings.cancelButton)),
                 ElevatedButton(
                   onPressed: () {
                     final novoItem = ItemEstoque(
@@ -111,7 +112,7 @@ class AdminEstoqueView extends StatelessWidget {
                     service.salvarItemEstoque(novoItem);
                     Navigator.pop(context);
                   },
-                  child: const Text('Salvar'),
+                  child: Text(AppStrings.salvar),
                 ),
               ],
             );

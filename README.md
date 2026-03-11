@@ -2,6 +2,14 @@
 
 ![Coverage](https://img.shields.io/badge/Coverage-0%25-red)
 
+## 🚀 Novo no Projeto?
+
+**→ Leia [BEFORE_STARTING.md](./BEFORE_STARTING.md) PRIMEIRO!**
+
+Contém setup obrigatório de GitHub Secrets e instruções para começar. (~10 min)
+
+---
+
 Este repositório contém o código-fonte do aplicativo de agendamento e gestão
 para uma clínica de massoterapia. O objetivo do projeto é criar um sistema
 móvel e web em Flutter que permita:

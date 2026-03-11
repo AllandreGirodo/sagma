@@ -4,6 +4,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:agenda/core/services/firestore_service.dart';
 import 'package:agenda/core/models/cliente_model.dart';
 import 'package:agenda/core/models/transacao_model.dart';
+import 'package:agenda/core/utils/app_strings.dart';
 
 class AdminNovaTransacaoView extends StatefulWidget {
   const AdminNovaTransacaoView({super.key});
@@ -65,7 +66,7 @@ class _AdminNovaTransacaoViewState extends State<AdminNovaTransacaoView> {
   Future<void> _salvar() async {
     if (!_formKey.currentState!.validate()) return;
     if (_clienteUidSelecionado == null) {
-      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Selecione um cliente')));
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(AppStrings.selecioneCliente)));
       return;
     }
 
@@ -87,12 +88,12 @@ class _AdminNovaTransacaoViewState extends State<AdminNovaTransacaoView> {
       await _firestoreService.salvarTransacao(transacao);
 
       if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Transação registrada com sucesso!')));
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(AppStrings.transacaoRegistradaSucesso)));
         Navigator.pop(context);
       }
     } catch (e) {
       if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Erro: $e')));
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(AppStrings.erro('$e'))));
         setState(() => _isLoading = false);
       }
     }
@@ -102,7 +103,7 @@ class _AdminNovaTransacaoViewState extends State<AdminNovaTransacaoView> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Nova Transação'),
+        title: Text(AppStrings.novaTransacao),
         backgroundColor: Colors.green,
         foregroundColor: Colors.white,
       ),
@@ -116,10 +117,10 @@ class _AdminNovaTransacaoViewState extends State<AdminNovaTransacaoView> {
                   DropdownButtonFormField<String>(
                     key: ValueKey(_clienteUidSelecionado),
                     initialValue: _clienteUidSelecionado,
-                    decoration: const InputDecoration(labelText: 'Cliente', border: OutlineInputBorder()),
+                    decoration: InputDecoration(labelText: AppStrings.clienteLabel, border: const OutlineInputBorder()),
                     items: _clientes.map((c) => DropdownMenuItem(value: c.uid, child: Text(c.nome))).toList(),
                     onChanged: (v) => setState(() => _clienteUidSelecionado = v),
-                    validator: (v) => v == null ? 'Obrigatório' : null,
+                    validator: (v) => v == null ? AppStrings.requiredField : null,
                   ),
                   const SizedBox(height: 16),
                   Row(
@@ -127,16 +128,16 @@ class _AdminNovaTransacaoViewState extends State<AdminNovaTransacaoView> {
                       Expanded(
                         child: TextFormField(
                           controller: _valorBrutoController,
-                          decoration: const InputDecoration(labelText: 'Valor Bruto (R\$)', border: OutlineInputBorder()),
+                          decoration: InputDecoration(labelText: AppStrings.valorBrutoLabel, border: const OutlineInputBorder()),
                           keyboardType: const TextInputType.numberWithOptions(decimal: true),
-                          validator: (v) => v!.isEmpty ? 'Obrigatório' : null,
+                          validator: (v) => v!.isEmpty ? AppStrings.requiredField : null,
                         ),
                       ),
                       const SizedBox(width: 16),
                       Expanded(
                         child: TextFormField(
                           controller: _valorDescontoController,
-                          decoration: const InputDecoration(labelText: 'Desconto (R\$)', border: OutlineInputBorder()),
+                          decoration: InputDecoration(labelText: AppStrings.descontoLabel, border: const OutlineInputBorder()),
                           keyboardType: const TextInputType.numberWithOptions(decimal: true),
                         ),
                       ),
@@ -145,19 +146,19 @@ class _AdminNovaTransacaoViewState extends State<AdminNovaTransacaoView> {
                   const SizedBox(height: 16),
                   TextFormField(
                     controller: _valorLiquidoController,
-                    decoration: InputDecoration(labelText: 'Valor Líquido (R\$)', border: const OutlineInputBorder(), filled: true, fillColor: Colors.grey[200]),
+                    decoration: InputDecoration(labelText: AppStrings.valorLiquidoLabel, border: const OutlineInputBorder(), filled: true, fillColor: Colors.grey[200]),
                     readOnly: true,
                   ),
                   const SizedBox(height: 16),
                   DropdownButtonFormField<String>(
                     key: ValueKey(_metodoPagamento),
                     initialValue: _metodoPagamento,
-                    decoration: const InputDecoration(labelText: 'Método de Pagamento', border: OutlineInputBorder()),
-                    items: const [
-                      DropdownMenuItem(value: 'pix', child: Text('Pix')),
-                      DropdownMenuItem(value: 'dinheiro', child: Text('Dinheiro')),
-                      DropdownMenuItem(value: 'cartao', child: Text('Cartão')),
-                      DropdownMenuItem(value: 'pacote', child: Text('Pacote')),
+                    decoration: InputDecoration(labelText: AppStrings.metodoPagamentoLabel, border: const OutlineInputBorder()),
+                    items: [
+                      DropdownMenuItem(value: 'pix', child: Text(AppStrings.pix)),
+                      DropdownMenuItem(value: 'dinheiro', child: Text(AppStrings.dinheiro)),
+                      DropdownMenuItem(value: 'cartao', child: Text(AppStrings.cartao)),
+                      DropdownMenuItem(value: 'pacote', child: Text(AppStrings.pacote)),
                     ],
                     onChanged: (v) => setState(() => _metodoPagamento = v!),
                   ),
@@ -165,17 +166,17 @@ class _AdminNovaTransacaoViewState extends State<AdminNovaTransacaoView> {
                   DropdownButtonFormField<String>(
                     key: ValueKey(_statusPagamento),
                     initialValue: _statusPagamento,
-                    decoration: const InputDecoration(labelText: 'Status', border: OutlineInputBorder()),
-                    items: const [
-                      DropdownMenuItem(value: 'pendente', child: Text('Pendente')),
-                      DropdownMenuItem(value: 'pago', child: Text('Pago')),
-                      DropdownMenuItem(value: 'estornado', child: Text('Estornado')),
+                    decoration: InputDecoration(labelText: AppStrings.statusLabel, border: const OutlineInputBorder()),
+                    items: [
+                      DropdownMenuItem(value: 'pendente', child: Text(AppStrings.pendente)),
+                      DropdownMenuItem(value: 'pago', child: Text(AppStrings.pago)),
+                      DropdownMenuItem(value: 'estornado', child: Text(AppStrings.estornado)),
                     ],
                     onChanged: (v) => setState(() => _statusPagamento = v!),
                   ),
                   const SizedBox(height: 16),
                   ListTile(
-                    title: Text('Data do Pagamento: ${DateFormat('dd/MM/yyyy').format(_dataPagamento)}'),
+                    title: Text(AppStrings.dataPagamentoLabel(DateFormat('dd/MM/yyyy').format(_dataPagamento))),
                     trailing: const Icon(Icons.calendar_today),
                     shape: RoundedRectangleBorder(side: const BorderSide(color: Colors.grey), borderRadius: BorderRadius.circular(4)),
                     onTap: () async {
@@ -196,7 +197,7 @@ class _AdminNovaTransacaoViewState extends State<AdminNovaTransacaoView> {
                       foregroundColor: Colors.white,
                       padding: const EdgeInsets.symmetric(vertical: 16),
                     ),
-                    child: const Text('Registrar Transação'),
+                    child: Text(AppStrings.registrarTransacao),
                   ),
                 ],
               ),

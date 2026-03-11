@@ -30,12 +30,37 @@ jobs:
       - name: 📦 Instalar dependências
         run: flutter pub get
 
-      - name: 📝 Criar .env.dev (Mock para Testes)
+      - name: 📝 Criar .env (Testes)
         run: |
-          echo "ENV=dev" > .env.dev
-          echo "DB_ADMIN_PASSWORD=mock" >> .env.dev
-          echo "ADMIN_EMAIL=mock@test.com" >> .env.dev
-          echo "FCM_SERVER_KEY=mock" >> .env.dev
+          cat > .env << 'EOF'
+          ENV=dev
+          DB_ADMIN_PASSWORD=${{ secrets.DB_ADMIN_PASSWORD }}
+          ADMIN_EMAIL=${{ secrets.ADMIN_EMAIL }}
+          WHATSAPP_ADMIN=${{ secrets.WHATSAPP_ADMIN }}
+          FIREBASE_PROJECT_ID=${{ secrets.FIREBASE_PROJECT_ID }}
+          FIREBASE_MESSAGING_SENDER_ID=${{ secrets.FIREBASE_MESSAGING_SENDER_ID }}
+          FIREBASE_STORAGE_BUCKET=${{ secrets.FIREBASE_STORAGE_BUCKET }}
+          FIREBASE_WEB_API_KEY=${{ secrets.FIREBASE_WEB_API_KEY }}
+          FIREBASE_WEB_APP_ID=${{ secrets.FIREBASE_WEB_APP_ID }}
+          FIREBASE_WEB_AUTH_DOMAIN=${{ secrets.FIREBASE_WEB_AUTH_DOMAIN }}
+          VAPID_KEY=${{ secrets.VAPID_KEY }}
+          RECAPTCHA_SITE_KEY=${{ secrets.RECAPTCHA_SITE_KEY }}
+          FIREBASE_ANDROID_API_KEY=${{ secrets.FIREBASE_ANDROID_API_KEY }}
+          FIREBASE_ANDROID_APP_ID=${{ secrets.FIREBASE_ANDROID_APP_ID }}
+          FIREBASE_IOS_API_KEY=${{ secrets.FIREBASE_IOS_API_KEY }}
+          FIREBASE_IOS_APP_ID=${{ secrets.FIREBASE_IOS_APP_ID }}
+          FIREBASE_IOS_CLIENT_ID=${{ secrets.FIREBASE_IOS_CLIENT_ID }}
+          FIREBASE_IOS_BUNDLE_ID=${{ secrets.FIREBASE_IOS_BUNDLE_ID }}
+          FCM_SERVER_KEY=${{ secrets.FCM_SERVER_KEY }}
+          X_ACCESS_API_KEY=${{ secrets.X_ACCESS_API_KEY }}
+          X_MASTER_API_KEY=${{ secrets.X_MASTER_API_KEY }}
+          ACCESS_KEY_ID=${{ secrets.ACCESS_KEY_ID }}
+          PG_PASSWORD=${{ secrets.PG_PASSWORD }}
+          DB_NAME=${{ secrets.DB_NAME }}
+          DB_USER=${{ secrets.DB_USER }}
+          DB_HOST=${{ secrets.DB_HOST }}
+          DB_PORT=${{ secrets.DB_PORT }}
+          EOF
 
       - name: 🧪 Executar Testes com Verificação de Cobertura
         run: |
@@ -77,13 +102,39 @@ jobs:
           git commit -m "docs: update coverage badge to $COVERAGE%" || echo "No changes to commit"
           git push
 
-      - name: 📝 Criar .env.prod (Secrets)
+      - name: 📝 Criar .env.prod (Secrets para Produção)
         # Apenas roda o build se for na branch main (evita gastar recursos em PRs simples ou expor secrets desnecessariamente)
         if: github.ref == 'refs/heads/main'
-        env:
-          ENV_PROD_CONTENT: ${{ secrets.ENV_PROD_FILE }}
         run: |
-          echo "$ENV_PROD_CONTENT" > .env.prod
+          cat > .env.prod << 'EOF'
+          ENV=prod
+          DB_ADMIN_PASSWORD=${{ secrets.DB_ADMIN_PASSWORD }}
+          ADMIN_EMAIL=${{ secrets.ADMIN_EMAIL }}
+          WHATSAPP_ADMIN=${{ secrets.WHATSAPP_ADMIN }}
+          FIREBASE_PROJECT_ID=${{ secrets.FIREBASE_PROJECT_ID }}
+          FIREBASE_MESSAGING_SENDER_ID=${{ secrets.FIREBASE_MESSAGING_SENDER_ID }}
+          FIREBASE_STORAGE_BUCKET=${{ secrets.FIREBASE_STORAGE_BUCKET }}
+          FIREBASE_WEB_API_KEY=${{ secrets.FIREBASE_WEB_API_KEY }}
+          FIREBASE_WEB_APP_ID=${{ secrets.FIREBASE_WEB_APP_ID }}
+          FIREBASE_WEB_AUTH_DOMAIN=${{ secrets.FIREBASE_WEB_AUTH_DOMAIN }}
+          VAPID_KEY=${{ secrets.VAPID_KEY }}
+          RECAPTCHA_SITE_KEY=${{ secrets.RECAPTCHA_SITE_KEY }}
+          FIREBASE_ANDROID_API_KEY=${{ secrets.FIREBASE_ANDROID_API_KEY }}
+          FIREBASE_ANDROID_APP_ID=${{ secrets.FIREBASE_ANDROID_APP_ID }}
+          FIREBASE_IOS_API_KEY=${{ secrets.FIREBASE_IOS_API_KEY }}
+          FIREBASE_IOS_APP_ID=${{ secrets.FIREBASE_IOS_APP_ID }}
+          FIREBASE_IOS_CLIENT_ID=${{ secrets.FIREBASE_IOS_CLIENT_ID }}
+          FIREBASE_IOS_BUNDLE_ID=${{ secrets.FIREBASE_IOS_BUNDLE_ID }}
+          FCM_SERVER_KEY=${{ secrets.FCM_SERVER_KEY }}
+          X_ACCESS_API_KEY=${{ secrets.X_ACCESS_API_KEY }}
+          X_MASTER_API_KEY=${{ secrets.X_MASTER_API_KEY }}
+          ACCESS_KEY_ID=${{ secrets.ACCESS_KEY_ID }}
+          PG_PASSWORD=${{ secrets.PG_PASSWORD }}
+          DB_NAME=${{ secrets.DB_NAME }}
+          DB_USER=${{ secrets.DB_USER }}
+          DB_HOST=${{ secrets.DB_HOST }}
+          DB_PORT=${{ secrets.DB_PORT }}
+          EOF
 
       - name: 🚀 Build APK (Produção)
         if: github.ref == 'refs/heads/main'

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:agenda/core/services/firestore_service.dart';
+import 'package:agenda/core/utils/app_strings.dart';
 
 class BotaoLembreteAdmin extends StatefulWidget {
   const BotaoLembreteAdmin({super.key});
@@ -17,19 +18,19 @@ class _BotaoLembreteAdminState extends State<BotaoLembreteAdmin> {
     final confirmar = await showDialog<bool>(
       context: context,
       builder: (ctx) => AlertDialog(
-        title: const Text('Disparar Lembretes 🔔'),
+        title: Text(AppStrings.dispararLembretes),
         content: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            const Text('Deseja enviar notificações para agendamentos próximos?'),
+            Text(AppStrings.confirmarDisparoLembretes),
             const SizedBox(height: 16),
             TextField(
               controller: horasController,
               keyboardType: TextInputType.number,
-              decoration: const InputDecoration(
-                labelText: 'Horas de antecedência',
+              decoration: InputDecoration(
+                labelText: AppStrings.horasAntecedencia,
                 border: OutlineInputBorder(),
-                suffixText: 'horas',
+                suffixText: AppStrings.horasUnidade,
               ),
             ),
           ],
@@ -37,11 +38,11 @@ class _BotaoLembreteAdminState extends State<BotaoLembreteAdmin> {
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(ctx, false),
-            child: const Text('Cancelar'),
+            child: Text(AppStrings.cancelButton),
           ),
           ElevatedButton(
             onPressed: () => Navigator.pop(ctx, true),
-            child: const Text('Enviar'),
+            child: Text(AppStrings.enviar),
           ),
         ],
       ),
@@ -55,14 +56,14 @@ class _BotaoLembreteAdminState extends State<BotaoLembreteAdmin> {
         
         if (mounted) {
           ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-            content: Text(resultado['mensagem'] ?? 'Processo concluído!'),
+            content: Text(resultado['mensagem'] ?? AppStrings.processoConcluido),
             backgroundColor: Colors.green,
           ));
         }
       } catch (e) {
         if (mounted) {
           ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-            content: Text('Erro ao disparar: $e'),
+            content: Text(AppStrings.erroAoDisparar('$e')),
             backgroundColor: Colors.red,
           ));
         }
@@ -78,7 +79,7 @@ class _BotaoLembreteAdminState extends State<BotaoLembreteAdmin> {
       icon: _isLoading 
           ? const SizedBox(width: 20, height: 20, child: CircularProgressIndicator(strokeWidth: 2, color: Colors.white))
           : const Icon(Icons.notifications_active),
-      tooltip: 'Enviar Lembretes Manuais',
+      tooltip: AppStrings.enviarLembretesManuais,
       onPressed: _isLoading ? null : _confirmarDisparo,
     );
   }

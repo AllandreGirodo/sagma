@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:agenda/core/services/firestore_service.dart';
 import 'package:agenda/core/models/log_model.dart';
+import 'package:agenda/core/utils/app_strings.dart';
 
 class AdminLogsView extends StatefulWidget {
   const AdminLogsView({super.key});
@@ -19,7 +20,7 @@ class _AdminLogsViewState extends State<AdminLogsView> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Logs do Sistema'),
+        title: Text(AppStrings.logsSistema),
         backgroundColor: Colors.blueGrey,
         foregroundColor: Colors.white,
       ),
@@ -57,7 +58,7 @@ class _AdminLogsViewState extends State<AdminLogsView> {
                   logs = logs.where((l) => l.tipo == _filtroSelecionado).toList();
                 }
 
-                if (logs.isEmpty) return const Center(child: Text('Nenhum log encontrado.'));
+                if (logs.isEmpty) return Center(child: Text(AppStrings.nenhumLogEncontrado));
 
                 return ListView.builder(
                   itemCount: logs.length,
@@ -68,7 +69,7 @@ class _AdminLogsViewState extends State<AdminLogsView> {
                       child: ListTile(
                         leading: Icon(_getIconForType(log.tipo), size: 20),
                         title: Text(log.mensagem, style: const TextStyle(fontSize: 14)),
-                        subtitle: Text('${DateFormat('dd/MM/yyyy HH:mm:ss').format(log.dataHora)}\nUsuário: ${log.usuarioId ?? "Sistema"}'),
+                        subtitle: Text('${DateFormat('dd/MM/yyyy HH:mm:ss').format(log.dataHora)}\n${AppStrings.usuarioLog(log.usuarioId ?? AppStrings.sistema)}'),
                         isThreeLine: true,
                         dense: true,
                       ),

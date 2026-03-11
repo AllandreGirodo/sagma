@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:agenda/core/services/firestore_service.dart';
+import 'package:agenda/core/utils/app_strings.dart';
 
 /// Tela Splash para configurar senha de admin se não existir
 /// Aparece como splash inicial, clicando no logo permite digitar a senha
@@ -85,8 +86,8 @@ class _AdminSenhaSetupViewState extends State<AdminSenhaSetupView>
 
         if (mounted) {
           ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(
-              content: Text('Senha de admin configurada com sucesso!'),
+            SnackBar(
+              content: Text(AppStrings.senhaAdminConfigurada),
               backgroundColor: Colors.green,
             ),
           );
@@ -97,7 +98,7 @@ class _AdminSenhaSetupViewState extends State<AdminSenhaSetupView>
           setState(() => _verificando = false);
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
-              content: Text('Erro ao salvar senha: $e'),
+              content: Text(AppStrings.erroSalvarSenha('$e')),
               backgroundColor: Colors.red,
             ),
           );
@@ -132,9 +133,9 @@ class _AdminSenhaSetupViewState extends State<AdminSenhaSetupView>
               const SizedBox(height: 32),
               const CircularProgressIndicator(color: Colors.orange),
               const SizedBox(height: 16),
-              const Text(
-                'Verificando configuração...',
-                style: TextStyle(
+              Text(
+                AppStrings.verificandoConfiguracao,
+                style: const TextStyle(
                   fontSize: 16,
                   color: Colors.black54,
                 ),
@@ -188,7 +189,7 @@ class _AdminSenhaSetupViewState extends State<AdminSenhaSetupView>
                       ),
                       const SizedBox(width: 12),
                       Text(
-                        'Clique no logo para configurar',
+                        AppStrings.cliqueLogoConfigurar,
                         style: TextStyle(
                           fontSize: 16,
                           color: Colors.orange.shade900,
@@ -207,7 +208,7 @@ class _AdminSenhaSetupViewState extends State<AdminSenhaSetupView>
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Configuração Inicial'),
+        title: Text(AppStrings.configuracaoInicial),
         backgroundColor: Colors.orange,
         foregroundColor: Colors.white,
         automaticallyImplyLeading: false,
@@ -227,17 +228,17 @@ class _AdminSenhaSetupViewState extends State<AdminSenhaSetupView>
                   color: Colors.orange,
                 ),
                 const SizedBox(height: 24),
-                const Text(
-                  'Configure a Senha de Admin',
+                Text(
+                  AppStrings.configureSenhaAdmin,
                   textAlign: TextAlign.center,
-                  style: TextStyle(
+                  style: const TextStyle(
                     fontSize: 24,
                     fontWeight: FontWeight.bold,
                   ),
                 ),
                 const SizedBox(height: 12),
                 Text(
-                  'Esta senha será usada para acessar ferramentas administrativas perigosas como DevTools e operações diretas no banco de dados.',
+                  AppStrings.senhaAdminDescricao,
                   textAlign: TextAlign.center,
                   style: TextStyle(
                     fontSize: 14,
@@ -253,18 +254,18 @@ class _AdminSenhaSetupViewState extends State<AdminSenhaSetupView>
                         TextFormField(
                           controller: _senhaController,
                           obscureText: true,
-                          decoration: const InputDecoration(
-                            labelText: 'Senha de Admin',
-                            hintText: 'Mínimo 6 caracteres',
+                          decoration: InputDecoration(
+                            labelText: AppStrings.senhaAdminLabel,
+                            hintText: AppStrings.minimoSeisCaracteres,
                             prefixIcon: Icon(Icons.lock),
                             border: OutlineInputBorder(),
                           ),
                           validator: (value) {
                             if (value == null || value.trim().isEmpty) {
-                              return 'Senha obrigatória';
+                              return AppStrings.senhaObrigatoria;
                             }
                             if (value.trim().length < 6) {
-                              return 'Mínimo 6 caracteres';
+                              return AppStrings.minimoSeisCaracteres;
                             }
                             return null;
                           },
@@ -273,14 +274,14 @@ class _AdminSenhaSetupViewState extends State<AdminSenhaSetupView>
                         TextFormField(
                           controller: _confirmaSenhaController,
                           obscureText: true,
-                          decoration: const InputDecoration(
-                            labelText: 'Confirme a Senha',
+                          decoration: InputDecoration(
+                            labelText: AppStrings.confirmeSenha,
                             prefixIcon: Icon(Icons.lock_outline),
                             border: OutlineInputBorder(),
                           ),
                           validator: (value) {
                             if (value != _senhaController.text) {
-                              return 'As senhas não coincidem';
+                              return AppStrings.senhasNaoCoincidem;
                             }
                             return null;
                           },
@@ -293,7 +294,7 @@ class _AdminSenhaSetupViewState extends State<AdminSenhaSetupView>
                 ElevatedButton.icon(
                   onPressed: _salvarSenha,
                   icon: const Icon(Icons.save),
-                  label: const Text('Salvar e Continuar'),
+                  label: Text(AppStrings.salvarContinuar),
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Colors.orange,
                     foregroundColor: Colors.white,
@@ -318,7 +319,7 @@ class _AdminSenhaSetupViewState extends State<AdminSenhaSetupView>
                       const SizedBox(width: 12),
                       Expanded(
                         child: Text(
-                          'Guarde esta senha em local seguro. Ela será necessária para operações críticas.',
+                          AppStrings.guardeSenhaLocalSeguro,
                           style: TextStyle(
                             fontSize: 12,
                             color: Colors.amber.shade900,

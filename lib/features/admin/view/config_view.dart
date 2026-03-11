@@ -113,10 +113,10 @@ class _AdminConfigViewState extends State<AdminConfigView> {
       final file = File('${directory.path}/backup_agenda_${DateTime.now().millisecondsSinceEpoch}.json');
       await file.writeAsString(jsonStr);
       
-      await Share.shareXFiles([XFile(file.path)], text: 'Backup Agenda Massoterapia');
+      await Share.shareXFiles([XFile(file.path)], text: AppStrings.backupAgendaMassoterapia);
     } catch (e) {
       if (!mounted) return;
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Erro ao exportar: $e')));
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(AppStrings.erroExportar('$e'))));
     } finally {
       setState(() => _isLoading = false);
     }
@@ -131,11 +131,11 @@ class _AdminConfigViewState extends State<AdminConfigView> {
         final jsonStr = await file.readAsString();
         await _firestoreService.restaurarBackupJson(jsonStr);
         if (!mounted) return;
-        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Backup restaurado com sucesso!')));
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(AppStrings.backupRestauradoSucesso)));
       }
     } catch (e) {
       if (!mounted) return;
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Erro ao importar: $e')));
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(AppStrings.erroImportar('$e'))));
     } finally {
       setState(() => _isLoading = false);
     }
@@ -149,7 +149,7 @@ class _AdminConfigViewState extends State<AdminConfigView> {
     await showDialog(
       context: context,
       builder: (dialogContext) => AlertDialog(
-        title: Text(_senhaAdminFerramentas.isEmpty ? 'Configurar Senha Admin' : 'Alterar Senha Admin'),
+        title: Text(_senhaAdminFerramentas.isEmpty ? AppStrings.configurarSenhaAdmin : AppStrings.alterarSenhaAdmin),
         content: Form(
           key: formKey,
           child: Column(
@@ -158,17 +158,17 @@ class _AdminConfigViewState extends State<AdminConfigView> {
               TextFormField(
                 controller: senhaController,
                 obscureText: true,
-                decoration: const InputDecoration(
-                  labelText: 'Nova Senha',
-                  hintText: 'Mínimo 6 caracteres',
+                decoration: InputDecoration(
+                  labelText: AppStrings.novaSenha,
+                  hintText: AppStrings.minimoSeisCaracteres,
                   border: OutlineInputBorder(),
                 ),
                 validator: (value) {
                   if (value == null || value.trim().isEmpty) {
-                    return 'Senha obrigatória';
+                    return AppStrings.senhaObrigatoria;
                   }
                   if (value.trim().length < 6) {
-                    return 'Mínimo 6 caracteres';
+                    return AppStrings.minimoSeisCaracteres;
                   }
                   return null;
                 },
@@ -177,13 +177,13 @@ class _AdminConfigViewState extends State<AdminConfigView> {
               TextFormField(
                 controller: confirmaSenhaController,
                 obscureText: true,
-                decoration: const InputDecoration(
-                  labelText: 'Confirme a Senha',
+                decoration: InputDecoration(
+                  labelText: AppStrings.confirmeSenha,
                   border: OutlineInputBorder(),
                 ),
                 validator: (value) {
                   if (value != senhaController.text) {
-                    return 'As senhas não coincidem';
+                    return AppStrings.senhasNaoCoincidem;
                   }
                   return null;
                 },
@@ -194,7 +194,7 @@ class _AdminConfigViewState extends State<AdminConfigView> {
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(dialogContext),
-            child: const Text('Cancelar'),
+            child: Text(AppStrings.cancelButton),
           ),
           ElevatedButton(
             onPressed: () async {
@@ -207,8 +207,8 @@ class _AdminConfigViewState extends State<AdminConfigView> {
                   if (!mounted) return;
                   Navigator.of(context).pop();
                   ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(
-                      content: Text('Senha salva com sucesso!'),
+                    SnackBar(
+                      content: Text(AppStrings.senhaSalvaSucesso),
                       backgroundColor: Colors.green,
                     ),
                   );
@@ -216,14 +216,14 @@ class _AdminConfigViewState extends State<AdminConfigView> {
                   if (!mounted) return;
                   ScaffoldMessenger.of(context).showSnackBar(
                     SnackBar(
-                      content: Text('Erro ao salvar: $e'),
+                      content: Text(AppStrings.erroSalvarSenha('$e')),
                       backgroundColor: Colors.red,
                     ),
                   );
                 }
               }
             },
-            child: const Text('Salvar'),
+            child: Text(AppStrings.salvar),
           ),
         ],
       ),
@@ -271,13 +271,13 @@ class _AdminConfigViewState extends State<AdminConfigView> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text('${AppStrings.configAntecedencia}: $_horasAntecedencia h'),
+                        Text('${AppStrings.configAntecedencia}: $_horasAntecedencia ${AppStrings.horasUnidade}'),
                         Slider(
                           value: _horasAntecedencia.toDouble(),
                           min: 0,
                           max: 72,
                           divisions: 72,
-                          label: '$_horasAntecedencia h',
+                          label: '$_horasAntecedencia ${AppStrings.horasUnidade}',
                           onChanged: (val) => setState(() => _horasAntecedencia = val.toInt()),
                         ),
                         const Divider(),
@@ -317,8 +317,8 @@ class _AdminConfigViewState extends State<AdminConfigView> {
                     padding: const EdgeInsets.all(16.0),
                     child: DropdownButtonFormField<int>(
                       initialValue: _statusCampoCupom,
-                      decoration: const InputDecoration(
-                        labelText: 'Estado do Campo Cupom',
+                      decoration: InputDecoration(
+                        labelText: AppStrings.configEstadoCampoCupom,
                         border: OutlineInputBorder(),
                       ),
                       items: [
@@ -343,7 +343,7 @@ class _AdminConfigViewState extends State<AdminConfigView> {
                   ),
                 ),
                 const SizedBox(height: 20),
-                Text('Segurança - Senha Admin', style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.orange)),
+                Text(AppStrings.segurancaSenhaAdmin, style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.orange)),
                 const SizedBox(height: 10),
                 Card(
                   child: Padding(
@@ -351,14 +351,14 @@ class _AdminConfigViewState extends State<AdminConfigView> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        const Text(
-                          'Senha de Acesso a DevTools',
-                          style: TextStyle(fontWeight: FontWeight.bold),
+                        Text(
+                          AppStrings.senhaAcessoDevTools,
+                          style: const TextStyle(fontWeight: FontWeight.bold),
                         ),
                         const SizedBox(height: 8),
-                        const Text(
-                          'Esta senha protege o acesso a ferramentas perigosas como DevTools.',
-                          style: TextStyle(fontSize: 12, color: Colors.grey),
+                        Text(
+                          AppStrings.senhaProtegeDevTools,
+                          style: const TextStyle(fontSize: 12, color: Colors.grey),
                         ),
                         const SizedBox(height: 12),
                         Row(
@@ -366,7 +366,7 @@ class _AdminConfigViewState extends State<AdminConfigView> {
                             Expanded(
                               child: Text(
                                 _senhaAdminFerramentas.isEmpty 
-                                    ? 'Não configurada' 
+                                    ? AppStrings.naoConfigurada 
                                     : '••••••••',
                                 style: TextStyle(
                                   fontSize: 16,
@@ -382,8 +382,8 @@ class _AdminConfigViewState extends State<AdminConfigView> {
                                   ? Icons.add_circle 
                                   : Icons.edit),
                               label: Text(_senhaAdminFerramentas.isEmpty 
-                                  ? 'Configurar' 
-                                  : 'Alterar'),
+                                  ? AppStrings.configurar 
+                                  : AppStrings.alterarSenha),
                               onPressed: _configurarSenhaAdmin,
                             ),
                           ],
@@ -395,7 +395,7 @@ class _AdminConfigViewState extends State<AdminConfigView> {
                 const SizedBox(height: 20),
                 Text(AppStrings.configBiometria, style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.orange)),
                 SwitchListTile(
-                  title: const Text('Ativar FaceID/TouchID'),
+                  title: Text(AppStrings.ativarBiometria),
                   subtitle: Text(AppStrings.configBiometriaDesc),
                   value: _biometriaAtiva,
                   onChanged: (val) => setState(() => _biometriaAtiva = val),
@@ -410,7 +410,7 @@ class _AdminConfigViewState extends State<AdminConfigView> {
                 ),
                 SwitchListTile(
                   title: Text(AppStrings.configReciboLeitura),
-                  subtitle: const Text('Exibir ícones de "Lido" nas mensagens'),
+                  subtitle: Text(AppStrings.exibirIconesLido),
                   value: _reciboLeitura,
                   onChanged: (val) => setState(() => _reciboLeitura = val),
                 ),

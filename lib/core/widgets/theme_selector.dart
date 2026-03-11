@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:agenda/core/utils/app_strings.dart';
 import 'package:agenda/core/widgets/theme_preview_dialog.dart';
 
 class ThemeSelector extends StatelessWidget {
@@ -8,7 +9,7 @@ class ThemeSelector extends StatelessWidget {
   Widget build(BuildContext context) {
     return IconButton(
       icon: const Icon(Icons.palette),
-      tooltip: 'Alterar Tema',
+      tooltip: AppStrings.alterarTemaTooltip,
       onPressed: () {
         showDialog(
           context: context,

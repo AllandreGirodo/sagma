@@ -87,6 +87,19 @@ class _OnboardingViewState extends State<OnboardingView> {
                 },
               ),
             ),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 24.0),
+              child: AnimatedSwitcher(
+                duration: const Duration(milliseconds: 220),
+                child: Text(
+                  AppStrings.onboardingDicaArraste(_currentPage, pages.length),
+                  key: ValueKey<int>(_currentPage),
+                  style: AppStyles.body.copyWith(fontSize: 13, color: Colors.grey.shade700),
+                  textAlign: TextAlign.center,
+                ),
+              ),
+            ),
+            const SizedBox(height: 10),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: List.generate(pages.length, (index) => 

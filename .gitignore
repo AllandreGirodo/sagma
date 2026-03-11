@@ -46,5 +46,11 @@ app.*.map.json
 
 # Credenciais e variáveis de ambiente
 .env
+.env.*
+!.env.example
+serviceAccountKey*.json
 google-services.json
 GoogleService-Info.plist
+
+# Instruções de secrets (privadas)
+.github/SECRETS_*.md

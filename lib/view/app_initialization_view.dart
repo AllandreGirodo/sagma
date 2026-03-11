@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:agenda/core/services/firestore_service.dart';
 import 'package:agenda/core/models/firestore_structure_helper.dart';
 import 'package:agenda/features/admin/view/admin_senha_setup_view.dart';
@@ -37,16 +38,50 @@ class _AppInitializationViewState extends State<AppInitializationView> {
 
   Future<void> _inicializarSistema() async {
     try {
-      // 1. Garantir que a estrutura do banco existe
-      final helper = FirestoreStructureHelper();
-      await helper.inicializarEstruturaConfiguracoes();
-
-      // 2. Verificar se a senha de admin está configurada
       final firestoreService = FirestoreService();
-      final senhaConfigurada = await firestoreService.verificaSenhaAdminFerramentasConfigurada();
+      final authUser = FirebaseAuth.instance.currentUser;
+
+      // Sem sessao autenticada, nao acessa configuracoes protegidas por regra.
+      if (authUser == null) {
+        setState(() {
+          _senhaConfigurada = true;
+          _isLoading = false;
+        });
+        return;
+      }
+
+      final usuarioAtual = await firestoreService.getUsuario(authUser.uid);
+      final bool eAdmin = usuarioAtual?.tipo == 'admin';
+
+      // A inicializacao de estrutura e setup de senha pertence apenas ao admin.
+      if (eAdmin) {
+        final helper = FirestoreStructureHelper();
+        await helper.inicializarEstruturaConfiguracoes();
+
+        final senhaConfigurada = await firestoreService.verificaSenhaAdminFerramentasConfigurada();
+        setState(() {
+          _senhaConfigurada = senhaConfigurada;
+          _isLoading = false;
+        });
+        return;
+      }
 
       setState(() {
-        _senhaConfigurada = senhaConfigurada;
+        _senhaConfigurada = true;
+        _isLoading = false;
+      });
+    } on FirebaseException catch (e) {
+      if (e.code == 'permission-denied') {
+        // Fallback seguro: segue para login/onboarding sem bloquear startup.
+        setState(() {
+          _senhaConfigurada = true;
+          _isLoading = false;
+        });
+        return;
+      }
+
+      setState(() {
+        _errorMessage = 'Erro ao inicializar sistema: $e';
         _isLoading = false;
       });
     } catch (e) {

@@ -76,6 +76,17 @@ Service and package prices are subject to change. Payment must be made as agreed
   static String get backupTitulo => _isPt ? 'Backup e Restauração' : 'Backup and Restore';
   static String get backupExportar => _isPt ? 'Exportar Dados' : 'Export Data';
   static String get backupImportar => _isPt ? 'Importar Dados' : 'Import Data';
+  static String get backupAgendaMassoterapia => _isPt ? 'Backup Agenda Massoterapia' : 'Massage Therapy Agenda Backup';
+  static String get novaSenha => _isPt ? 'Nova Senha' : 'New Password';
+  static String get confirmeSenha => _isPt ? 'Confirme a Senha' : 'Confirm Password';
+  static String get senhaObrigatoria => _isPt ? 'Senha obrigatória' : 'Password is required';
+  static String get minimoSeisCaracteres => _isPt ? 'Mínimo 6 caracteres' : 'Minimum 6 characters';
+  static String get senhasNaoCoincidem => _isPt ? 'As senhas não coincidem' : 'Passwords do not match';
+  static String get configEstadoCampoCupom => _isPt ? 'Estado do Campo Cupom' : 'Coupon Field State';
+  static String get senhaAcessoDevTools => _isPt ? 'Senha de Acesso a DevTools' : 'DevTools Access Password';
+  static String get senhaProtegeDevTools => _isPt ? 'Esta senha protege o acesso a ferramentas perigosas como DevTools.' : 'This password protects access to dangerous tools such as DevTools.';
+  static String get naoConfigurada => _isPt ? 'Não configurada' : 'Not configured';
+  static String get configurar => _isPt ? 'Configurar' : 'Configure';
 
   static Map<String, String> get labelsConfig => _isPt ? {
     'whatsapp': 'WhatsApp',
@@ -105,8 +116,16 @@ Service and package prices are subject to change. Payment must be made as agreed
   static String get entrarBtn => _isPt ? 'Entrar' : 'Sign In';
   static String get cadastrarBtn => _isPt ? 'Criar Conta' : 'Create Account';
   static String get esqueceuSenha => _isPt ? 'Esqueceu a senha?' : 'Forgot password?';
+  static String get digiteEmailCadastrado => _isPt ? 'Digite seu e-mail cadastrado' : 'Enter your registered email';
+  static String get avisoRecuperacaoSenha => _isPt
+    ? 'Se este for seu e-mail e tiver cadastro, enviaremos um link para recuperação.'
+    : 'If this is your email and it is registered, we will send a recovery link.';
   static String get erroEmailObrigatorio => _isPt ? 'Por favor, digite seu e-mail para recuperar a senha.' : 'Please enter your email to reset password.';
   static String get emailRecuperacaoEnviado => _isPt ? 'E-mail de recuperação enviado! Verifique sua caixa de entrada.' : 'Recovery email sent! Check your inbox.';
+  static String emailRedefinicaoEnviadoPara(String email) => _isPt ? 'Email de redefinição enviado para $email' : 'Password reset email sent to $email';
+  static String get cadastroUsuarioNaoEncontrado => _isPt ? 'Cadastro de usuário não encontrado.' : 'User record not found.';
+  static String erroLoginComDetalhe(String? erro) => _isPt ? 'Erro de login: ${erro ?? 'desconhecido'}' : 'Login error: ${erro ?? 'unknown'}';
+  static String erroCadastroComDetalhe(String erro) => _isPt ? 'Erro ao cadastrar: $erro' : 'Registration error: $erro';
   static String get biometriaBtn => _isPt ? 'Entrar com Biometria' : 'Login with Biometrics';
   static String get biometriaErro => _isPt ? 'Erro na autenticação biométrica' : 'Biometric authentication error';
 
@@ -117,6 +136,15 @@ Service and package prices are subject to change. Payment must be made as agreed
   static String get onboardingTexto2 => _isPt ? 'Receba lembretes automáticos e atualizações sobre suas sessões.' : 'Receive automatic reminders and updates about your sessions.';
   static String get onboardingTitulo3 => _isPt ? 'Histórico Completo' : 'Full History';
   static String get onboardingTexto3 => _isPt ? 'Acompanhe seu histórico de atendimentos e controle seus pacotes.' : 'Track your service history and control your packages.';
+  static String get onboardingArrasteAvancar => _isPt ? 'Arraste para a esquerda para avançar' : 'Swipe left to continue';
+  static String get onboardingArrasteVoltar => _isPt ? 'Arraste para a direita para voltar' : 'Swipe right to go back';
+  static String get onboardingArrasteAmbos => _isPt ? 'Arraste para os lados para navegar' : 'Swipe both ways to navigate';
+  static String onboardingDicaArraste(int paginaAtual, int totalPaginas) {
+    if (totalPaginas <= 1) return '';
+    if (paginaAtual <= 0) return onboardingArrasteAvancar;
+    if (paginaAtual >= totalPaginas - 1) return onboardingArrasteVoltar;
+    return onboardingArrasteAmbos;
+  }
   static String get pularBtn => _isPt ? 'Pular' : 'Skip';
   static String get comecarBtn => _isPt ? 'Começar' : 'Get Started';
   static String get googleLoginBtn => _isPt ? 'Entrar com Google' : 'Sign in with Google';
@@ -187,6 +215,37 @@ Service and package prices are subject to change. Payment must be made as agreed
   static String get estoqueDescontarAprovacao => _isPt ? 'Descontar ao aprovar agendamento?' : 'Deduct on appointment approval?';
 
   // Agendamento - Geral
+  static List<String> get dicasMassagem => _isPt
+    ? [
+        'Beba bastante água após a massagem para ajudar a eliminar toxinas.',
+        'Evite refeições pesadas pelo menos 1 hora antes da sua sessão.',
+        'Chegue 5 minutos antes para relaxar e aproveitar melhor seu tempo.',
+        'Alongamentos leves diários ajudam a prolongar os efeitos da massagem.',
+        'Informe sempre se houver alguma dor nova ou desconforto recente.'
+      ]
+    : [
+        'Drink plenty of water after massage to help flush toxins.',
+        'Avoid heavy meals at least 1 hour before your session.',
+        'Arrive 5 minutes early to relax and enjoy your time better.',
+        'Light daily stretching helps prolong massage benefits.',
+        'Always report any new pain or recent discomfort.'
+      ];
+  static String get favoritos => _isPt ? 'Favoritos:' : 'Favorites:';
+  static String get selecioneTipo => _isPt ? 'Selecione o Tipo' : 'Select Type';
+  static String get adicionarFavoritos => _isPt ? 'Adicionar aos favoritos' : 'Add to favorites';
+  static String get removerFavoritos => _isPt ? 'Remover dos favoritos' : 'Remove from favorites';
+  static String descontoResumo(String valor) => _isPt ? 'Desconto: $valor' : 'Discount: $valor';
+  static String dataResumo(String data) => _isPt ? 'Data: $data' : 'Date: $data';
+  static String horarioResumo(String horario) => _isPt ? 'Horário: $horario' : 'Time: $horario';
+  static String valorResumo(String valor) => _isPt ? 'Valor: $valor' : 'Amount: $valor';
+  static String cupomResumo(String cupom) => _isPt ? 'Cupom: $cupom' : 'Coupon: $cupom';
+  static String filaEsperaResumo(int quantidade) => _isPt ? '$quantidade pessoas na fila de espera' : '$quantidade people in waitlist';
+  static String tipoStatusResumo(String tipo, String status, String motivoTexto) => _isPt
+    ? 'Tipo: $tipo\nStatus: $status$motivoTexto'
+    : 'Type: $tipo\nStatus: $status$motivoTexto';
+  static String motivoInline(String motivo) => _isPt ? '\nMotivo: $motivo' : '\nReason: $motivo';
+  static String get fazerCheckIn => _isPt ? 'Fazer Check-in' : 'Check in';
+  static String get avaliarAtendimento => _isPt ? 'Avaliar Atendimento' : 'Rate Service';
   static String get buscarPorTipo => _isPt ? 'Buscar por tipo...' : 'Search by type...';
   static String get cupomDesconto => _isPt ? 'Cupom de Desconto' : 'Discount Coupon';
   static String get cupomAplicado => _isPt ? 'Cupom aplicado!' : 'Coupon applied!';
@@ -210,10 +269,17 @@ Service and package prices are subject to change. Payment must be made as agreed
   static String get administracao => _isPt ? 'Administração' : 'Administration';
   static String get relatorios => _isPt ? 'Relatórios' : 'Reports';
   static String get configuracoes => _isPt ? 'Configurações' : 'Settings';
+  static String get devToolsDb => _isPt ? 'Dev Tools (DB)' : 'Dev Tools (DB)';
   static String get dash => _isPt ? 'Dash' : 'Dash';
   static String get agenda => _isPt ? 'Agenda' : 'Schedule';
   static String get clientes => _isPt ? 'Clientes' : 'Clients';
   static String get pendentes => _isPt ? 'Pendentes' : 'Pending';
+  static String get agendamentosDia => _isPt ? 'Agendamentos (Dia)' : 'Appointments (Day)';
+  static String get receitaEstimadaMes => _isPt ? 'Receita Est. (Mês)' : 'Est. Revenue (Month)';
+  static String get aprovados => _isPt ? 'Aprovados' : 'Approved';
+  static String get cancelRec => _isPt ? 'Cancel/Rec' : 'Cancel/Rej';
+  static String get hoje => _isPt ? 'Hoje' : 'Today';
+  static String get semana => _isPt ? 'Semana' : 'Week';
   static String get statusDoDia => _isPt ? 'Status do Dia' : 'Daily Status';
   static String get taxaCancelamento => _isPt ? 'Taxa de Cancelamento' : 'Cancellation Rate';
   static String get mes => _isPt ? 'Mês' : 'Month';
@@ -225,10 +291,22 @@ Service and package prices are subject to change. Payment must be made as agreed
   static String get metricasSalvasSucesso => _isPt ? 'Métricas do dia salvas com sucesso!' : 'Daily metrics saved successfully!';
   static String erroSalvarMetricas(String erro) => _isPt ? 'Erro ao salvar métricas: $erro' : 'Error saving metrics: $erro';
   static String get nenhumAgendamentoPendente => _isPt ? 'Nenhum agendamento pendente.' : 'No pending appointments.';
+  static String get nenhumUsuarioPendente => _isPt ? 'Nenhum usuário pendente.' : 'No pending users.';
   static String get pesquisarCliente => _isPt ? 'Pesquisar Cliente' : 'Search Client';
   static String get nenhumClienteEncontrado => _isPt ? 'Nenhum cliente encontrado.' : 'No clients found.';
+  static String saldoSessoesLabel(int saldo) => _isPt ? 'Saldo de Sessões: $saldo' : 'Session Balance: $saldo';
+  static String emailCadastroLabel(String email, String dataCadastro) => _isPt
+    ? 'Email: $email\nCadastrado em: $dataCadastro'
+    : 'Email: $email\nRegistered on: $dataCadastro';
+  static String get aprovarCadastro => _isPt ? 'Aprovar Cadastro' : 'Approve Registration';
   static String get permitirVerTodosHorarios => _isPt ? 'Permitir ver todos os horários' : 'Allow viewing all times';
   static String get alterarTemaUsuario => _isPt ? 'Alterar Tema do Usuário' : 'Change User Theme';
+  static String resumoClienteTipo(String clienteId, String tipo) => _isPt
+    ? 'Cliente: $clienteId\nTipo: $tipo'
+    : 'Client: $clienteId\nType: $tipo';
+  static String esperaLabel(int quantidade) => _isPt ? 'Espera: $quantidade' : 'Waitlist: $quantidade';
+  static String get aprovar => _isPt ? 'Aprovar' : 'Approve';
+  static String get recusar => _isPt ? 'Recusar' : 'Reject';
   static String get pacote => _isPt ? 'Pacote' : 'Package';
   static String temaDe(String nome) => _isPt ? 'Tema de $nome' : '$nome\'s Theme';
   static String temaAlteradoPara(String labelTema) => _isPt ? 'Tema alterado para $labelTema' : 'Theme changed to $labelTema';
@@ -246,6 +324,12 @@ Service and package prices are subject to change. Payment must be made as agreed
   static String erroSalvarSenha(String erro) => _isPt ? 'Erro ao salvar senha: $erro' : 'Error saving password: $erro';
   static String get configuracaoInicial => _isPt ? 'Configuração Inicial' : 'Initial Setup';
   static String get salvarContinuar => _isPt ? 'Salvar e Continuar' : 'Save and Continue';
+  static String get verificandoConfiguracao => _isPt ? 'Verificando configuração...' : 'Checking configuration...';
+  static String get cliqueLogoConfigurar => _isPt ? 'Clique no logo para configurar' : 'Click the logo to configure';
+  static String get configureSenhaAdmin => _isPt ? 'Configure a Senha de Admin' : 'Configure Admin Password';
+  static String get senhaAdminDescricao => _isPt ? 'Esta senha será usada para acessar ferramentas administrativas perigosas como DevTools e operações diretas no banco de dados.' : 'This password will be used to access dangerous administrative tools such as DevTools and direct database operations.';
+  static String get senhaAdminLabel => _isPt ? 'Senha de Admin' : 'Admin Password';
+  static String get guardeSenhaLocalSeguro => _isPt ? 'Guarde esta senha em local seguro. Ela será necessária para operações críticas.' : 'Keep this password in a safe place. It will be required for critical operations.';
 
   // Admin - Ferramentas Senha Setup
   static String get senhaConfiguradaSucesso => _isPt ? 'Senha configurada com sucesso!' : 'Password configured successfully!';
@@ -290,11 +374,17 @@ Service and package prices are subject to change. Payment must be made as agreed
   // Admin - Logs
   static String get logsSistema => _isPt ? 'Logs do Sistema' : 'System Logs';
   static String get nenhumLogEncontrado => _isPt ? 'Nenhum log encontrado.' : 'No logs found.';
+  static String get sistema => _isPt ? 'Sistema' : 'System';
+  static String usuarioLog(String usuarioId) => _isPt ? 'Usuário: $usuarioId' : 'User: $usuarioId';
 
   // Admin - LGPD Logs
   static String get auditoriaLgpd => _isPt ? 'Auditoria LGPD' : 'LGPD Audit';
   static String get nenhumRegistroLgpd => _isPt ? 'Nenhum registro de auditoria LGPD encontrado.' : 'No LGPD audit records found.';
   static String get acaoDesconhecida => _isPt ? 'Ação Desconhecida' : 'Unknown Action';
+  static String get dataDesconhecida => _isPt ? 'Data desconhecida' : 'Unknown date';
+  static String resumoLogLgpd(String data, String usuarioId, String motivo) => _isPt
+    ? 'Data: $data\nID Usuário: $usuarioId\nMotivo: $motivo'
+    : 'Date: $data\nUser ID: $usuarioId\nReason: $motivo';
 
   // Financeiro
   static String get semDadosFinanceiros => _isPt ? 'Sem dados financeiros.' : 'No financial data.';
@@ -302,6 +392,13 @@ Service and package prices are subject to change. Payment must be made as agreed
   static String get transacaoRegistradaSucesso => _isPt ? 'Transação registrada com sucesso!' : 'Transaction registered successfully!';
   static String erro(String erro) => _isPt ? 'Erro: $erro' : 'Error: $erro';
   static String get novaTransacao => _isPt ? 'Nova Transação' : 'New Transaction';
+  static String get clienteLabel => _isPt ? 'Cliente' : 'Client';
+  static String get valorBrutoLabel => _isPt ? 'Valor Bruto (R\$)' : 'Gross Amount (R\$)';
+  static String get descontoLabel => _isPt ? 'Desconto (R\$)' : 'Discount (R\$)';
+  static String get valorLiquidoLabel => _isPt ? 'Valor Líquido (R\$)' : 'Net Amount (R\$)';
+  static String get metodoPagamentoLabel => _isPt ? 'Método de Pagamento' : 'Payment Method';
+  static String get statusLabel => _isPt ? 'Status' : 'Status';
+  static String dataPagamentoLabel(String data) => _isPt ? 'Data do Pagamento: $data' : 'Payment Date: $data';
   static String get pix => _isPt ? 'Pix' : 'Pix';
   static String get dinheiro => _isPt ? 'Dinheiro' : 'Cash';
   static String get cartao => _isPt ? 'Cartão' : 'Card';
@@ -349,6 +446,26 @@ Service and package prices are subject to change. Payment must be made as agreed
   static String get urlCopiada => _isPt ? 'URL copiada!' : 'URL copied!';
   static String get fechar => _isPt ? 'Fechar' : 'Close';
   static String erroExportarWeb(String erro) => _isPt ? 'Erro ao exportar para web: $erro' : 'Error exporting to web: $erro';
+
+  // Widgets compartilhados
+  static String get alterarTemaTooltip => _isPt ? 'Alterar Tema' : 'Change Theme';
+  static String get escolherTema => _isPt ? 'Escolher Tema' : 'Choose Theme';
+  static String get preVisualizacao => _isPt ? 'Pré-visualização' : 'Preview';
+  static String get selecioneUmTema => _isPt ? 'Selecione um tema' : 'Select a theme';
+  static String temaBloqueado(String label) => _isPt ? '$label (Bloqueado)' : '$label (Locked)';
+  static String get aplicar => _isPt ? 'Aplicar' : 'Apply';
+  static String get dispararLembretes => _isPt ? 'Disparar Lembretes 🔔' : 'Send Reminders 🔔';
+  static String get confirmarDisparoLembretes => _isPt ? 'Deseja enviar notificações para agendamentos próximos?' : 'Do you want to send notifications for upcoming appointments?';
+  static String get horasAntecedencia => _isPt ? 'Horas de antecedência' : 'Hours in advance';
+  static String get horasUnidade => _isPt ? 'horas' : 'hours';
+  static String get enviarLembretesManuais => _isPt ? 'Enviar Lembretes Manuais' : 'Send Manual Reminders';
+  static String get processoConcluido => _isPt ? 'Processo concluído!' : 'Process completed!';
+  static String erroAoDisparar(String erro) => _isPt ? 'Erro ao disparar: $erro' : 'Error sending reminders: $erro';
+  static String get tooltipAlterarIdioma => _isPt ? 'Alterar Idioma / Change Language' : 'Change Language / Alterar Idioma';
+  static String get idiomaPortugues => _isPt ? '🇧🇷 Português' : '🇧🇷 Portuguese';
+  static String get idiomaIngles => _isPt ? '🇺🇸 English' : '🇺🇸 English';
+  static String get idiomaEspanhol => _isPt ? '🇪🇸 Español' : '🇪🇸 Spanish';
+  static String get idiomaJapones => _isPt ? '🇯🇵 日本語' : '🇯🇵 Japanese';
 
   // Login/Auth
   static String get erroLogin => _isPt ? 'Erro ao fazer login' : 'Login error';

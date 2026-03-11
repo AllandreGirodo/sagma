@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:intl/intl.dart';
 import 'package:agenda/core/services/firestore_service.dart';
+import 'package:agenda/core/utils/app_strings.dart';
 
 class AdminLgpdLogsView extends StatelessWidget {
   const AdminLgpdLogsView({super.key});
@@ -12,7 +13,7 @@ class AdminLgpdLogsView extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Auditoria LGPD'),
+        title: Text(AppStrings.auditoriaLgpd),
         backgroundColor: Colors.purple, // Cor distinta para indicar área sensível
         foregroundColor: Colors.white,
       ),
@@ -20,7 +21,7 @@ class AdminLgpdLogsView extends StatelessWidget {
         stream: firestoreService.getLgpdLogs(),
         builder: (context, snapshot) {
           if (snapshot.hasError) {
-            return Center(child: Text('Erro: ${snapshot.error}'));
+            return Center(child: Text(AppStrings.erroGenerico('${snapshot.error}')));
           }
           if (snapshot.connectionState == ConnectionState.waiting) {
             return const Center(child: CircularProgressIndicator());
@@ -29,13 +30,13 @@ class AdminLgpdLogsView extends StatelessWidget {
           final logs = snapshot.data ?? [];
 
           if (logs.isEmpty) {
-            return const Center(
+            return Center(
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Icon(Icons.security, size: 60, color: Colors.grey),
                   SizedBox(height: 10),
-                  Text('Nenhum registro de auditoria LGPD encontrado.'),
+                  Text(AppStrings.nenhumRegistroLgpd),
                 ],
               ),
             );
@@ -49,12 +50,12 @@ class AdminLgpdLogsView extends StatelessWidget {
               final timestamp = log['data_hora'] as Timestamp?;
               final dataFormatada = timestamp != null 
                   ? DateFormat('dd/MM/yyyy HH:mm:ss').format(timestamp.toDate()) 
-                  : 'Data desconhecida';
+                  : AppStrings.dataDesconhecida;
 
               return ListTile(
                 leading: const Icon(Icons.privacy_tip, color: Colors.purple),
-                title: Text(log['acao'] ?? 'Ação Desconhecida', style: const TextStyle(fontWeight: FontWeight.bold)),
-                subtitle: Text('Data: $dataFormatada\nID Usuário: ${log['usuario_id']}\nMotivo: ${log['motivo']}'),
+                title: Text(log['acao'] ?? AppStrings.acaoDesconhecida, style: const TextStyle(fontWeight: FontWeight.bold)),
+                subtitle: Text(AppStrings.resumoLogLgpd(dataFormatada, '${log['usuario_id']}', '${log['motivo']}')),
                 isThreeLine: true,
               );
             },

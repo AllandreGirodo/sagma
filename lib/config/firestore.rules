@@ -14,16 +14,20 @@ service cloud.firestore {
     }
 
     function eAdmin() {
-      // Checa o tipo de usuário no documento dele. Custa 1 leitura.
-      return estaLogado() && get(/databases/$(database)/documents/usuarios/$(request.auth.uid)).data.tipo == 'admin';
+      // Garante autenticação antes de consultar documento e evita erro quando o doc ainda não existe.
+      return estaLogado()
+        && exists(/databases/$(database)/documents/usuarios/$(request.auth.uid))
+        && get(/databases/$(database)/documents/usuarios/$(request.auth.uid)).data.tipo == 'admin';
     }
 
     // --- Regras das Coleções ---
 
     // Usuários (Dados de login e tipo)
     match /usuarios/{userId} {
-      // Apenas o próprio usuário ou um admin podem ler e escrever seus dados.
-      allow read, write: if eDono(userId) || eAdmin();
+      // Novo usuário pode criar seu próprio documento
+      allow create: if eDono(userId);
+      // Após criado, apenas o dono ou admin podem ler/escrever
+      allow read, update, delete: if eDono(userId) || eAdmin();
     }
 
     // Clientes (Dados pessoais e sensíveis)

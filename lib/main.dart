@@ -114,14 +114,22 @@ void main() async {
       debugPrint('Usando Firebase online (sem emuladores locais).');
     }
 
-    // 3. App Check (Só ativa se tiver a chave, evita crash)
+    // 3. App Check (em debug fica opcional para evitar bloquear desenvolvimento web local)
+    const bool enableAppCheckInDebug = bool.fromEnvironment('ENABLE_APPCHECK_IN_DEBUG', defaultValue: false);
+    final bool shouldEnableAppCheck = kReleaseMode || enableAppCheckInDebug;
     final recaptchaKey = dotenv.env['RECAPTCHA_SITE_KEY'];
-    if (recaptchaKey != null && recaptchaKey.isNotEmpty) {
-      await FirebaseAppCheck.instance.activate(
-        providerWeb: ReCaptchaV3Provider(recaptchaKey),
-      );
+    if (shouldEnableAppCheck && recaptchaKey != null && recaptchaKey.isNotEmpty) {
+      try {
+        await FirebaseAppCheck.instance.activate(
+          providerWeb: ReCaptchaV3Provider(recaptchaKey),
+        );
+      } catch (e) {
+        debugPrint('Aviso: falha ao ativar App Check: $e');
+      }
+    } else if (shouldEnableAppCheck) {
+      debugPrint('Aviso: RECAPTCHA_SITE_KEY não configurado. App Check ignorado.');
     } else {
-      debugPrint("Aviso: RECAPTCHA_SITE_KEY não configurado. App Check ignorado.");
+      debugPrint('App Check desativado em debug. Use --dart-define=ENABLE_APPCHECK_IN_DEBUG=true para habilitar.');
     }
 
     // 4. Configurações adicionais
@@ -266,38 +274,60 @@ class _MyAppState extends State<MyApp> {
   }
 
   void _setupNotifications() async {
-    FirebaseMessaging messaging = FirebaseMessaging.instance;
-    await messaging.requestPermission(
-      alert: true, badge: true, sound: true,
-    );
+    const bool enableWebPushInDebug = bool.fromEnvironment('ENABLE_WEB_PUSH_IN_DEBUG', defaultValue: false);
 
-    // Listener para mensagens em Primeiro Plano (Foreground)
-    FirebaseMessaging.onMessage.listen((RemoteMessage message) {
-      debugPrint('Notificação em primeiro plano: ${message.notification?.title}');
-
-      if (message.notification != null) {
-        _scaffoldMessengerKey.currentState?.showSnackBar(
-          SnackBar(
-            content: Text('${message.notification!.title}: ${message.notification!.body ?? ""}'),
-            behavior: SnackBarBehavior.floating,
-            backgroundColor: Colors.teal,
-            duration: const Duration(seconds: 4),
-          ),
-        );
-      }
-    });
-
-    // Obter e salvar token
-    String? token = await messaging.getToken(
-      // Substitua pela chave copiada do Console do Firebase
-      vapidKey: dotenv.env['VAPID_KEY'],
-    );
-    if (token != null) {
-      _salvarTokenNoBanco(token);
+    if (kIsWeb && kDebugMode && !enableWebPushInDebug) {
+      debugPrint('Notificações web desativadas em debug. Use --dart-define=ENABLE_WEB_PUSH_IN_DEBUG=true para habilitar.');
+      return;
     }
 
-    // Ouvir atualização de token
-    messaging.onTokenRefresh.listen(_salvarTokenNoBanco);
+    try {
+      final FirebaseMessaging messaging = FirebaseMessaging.instance;
+      await messaging.requestPermission(
+        alert: true,
+        badge: true,
+        sound: true,
+      );
+
+      // Listener para mensagens em Primeiro Plano (Foreground)
+      FirebaseMessaging.onMessage.listen((RemoteMessage message) {
+        debugPrint('Notificação em primeiro plano: ${message.notification?.title}');
+
+        if (message.notification != null) {
+          _scaffoldMessengerKey.currentState?.showSnackBar(
+            SnackBar(
+              content: Text('${message.notification!.title}: ${message.notification!.body ?? ""}'),
+              behavior: SnackBarBehavior.floating,
+              backgroundColor: Colors.teal,
+              duration: const Duration(seconds: 4),
+            ),
+          );
+        }
+      });
+
+      String? token;
+      if (kIsWeb) {
+        final vapidKey = dotenv.env['VAPID_KEY'];
+        if (vapidKey == null || vapidKey.isEmpty) {
+          debugPrint('Aviso: VAPID_KEY ausente; token web não será gerado.');
+        } else {
+          token = await messaging.getToken(vapidKey: vapidKey);
+        }
+      } else {
+        token = await messaging.getToken();
+      }
+
+      if (token != null) {
+        _salvarTokenNoBanco(token);
+      }
+
+      messaging.onTokenRefresh.listen(
+        _salvarTokenNoBanco,
+        onError: (Object e) => debugPrint('Erro ao atualizar token FCM: $e'),
+      );
+    } catch (e) {
+      debugPrint('Aviso: falha ao inicializar notificações push: $e');
+    }
   }
 
   void _salvarTokenNoBanco(String token) {

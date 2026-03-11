@@ -63,7 +63,7 @@ class _ChatAgendamentoViewState extends State<ChatAgendamentoView> {
       await _service.enviarMensagem(widget.agendamentoId, url, _uid, tipo: tipo);
     } catch (e) {
       if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Erro no envio: $e')));
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(AppStrings.erroEnvio('$e'))));
       }
     } finally {
       if (mounted) setState(() => _isUploading = false);
@@ -78,7 +78,7 @@ class _ChatAgendamentoViewState extends State<ChatAgendamentoView> {
           children: <Widget>[
             ListTile(
               leading: const Icon(Icons.photo_library),
-              title: const Text('Galeria de Imagens'),
+              title: Text(AppStrings.galeriaImagens),
               onTap: () async {
                 Navigator.pop(context);
                 final pickedFile = await ImagePicker().pickImage(source: ImageSource.gallery, imageQuality: 70);
@@ -89,7 +89,7 @@ class _ChatAgendamentoViewState extends State<ChatAgendamentoView> {
             ),
             ListTile(
               leading: const Icon(Icons.audiotrack),
-              title: const Text('Arquivo de Áudio'),
+              title: Text(AppStrings.arquivoAudio),
               onTap: () async {
                 Navigator.pop(context);
                 final result = await FilePicker.platform.pickFiles(type: FileType.audio);

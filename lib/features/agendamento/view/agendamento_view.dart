@@ -40,13 +40,7 @@ class _AgendamentoViewState extends State<AgendamentoView> {
   
   // Dicas do Dia
   String? _dicaDoDia;
-  final List<String> _dicas = [
-    "Beba bastante água após a massagem para ajudar a eliminar toxinas.",
-    "Evite refeições pesadas pelo menos 1 hora antes da sua sessão.",
-    "Chegue 5 minutos antes para relaxar e aproveitar melhor seu tempo.",
-    "Alongamentos leves diários ajudam a prolongar os efeitos da massagem.",
-    "Informe sempre se houver alguma dor nova ou desconforto recente."
-  ];
+  late final List<String> _dicas;
   
   // Filtros
   DateTime? _filtroData;
@@ -58,6 +52,7 @@ class _AgendamentoViewState extends State<AgendamentoView> {
     super.initState();
     _carregarConfig();
     _clockStream = Stream.periodic(const Duration(seconds: 1), (_) => DateTime.now());
+    _dicas = AppStrings.dicasMassagem;
     _dicaDoDia = _dicas[Random().nextInt(_dicas.length)];
   }
 
@@ -150,7 +145,7 @@ class _AgendamentoViewState extends State<AgendamentoView> {
         stream: _firestoreService.getAgendamentos(),
         builder: (context, snapshot) {
           if (snapshot.hasError) {
-            return Center(child: Text('Erro: ${snapshot.error}'));
+            return Center(child: Text(AppStrings.erroGenerico('${snapshot.error}')));
           }
           if (snapshot.connectionState == ConnectionState.waiting) {
             // Efeito Shimmer enquanto carrega
@@ -357,7 +352,7 @@ class _AgendamentoViewState extends State<AgendamentoView> {
                         children: [
                           // Chips de Favoritos para acesso rápido
                           if (favoritos.isNotEmpty) ...[
-                            const Text('Favoritos:', style: TextStyle(fontSize: 12, color: Colors.grey)),
+                            Text(AppStrings.favoritos, style: const TextStyle(fontSize: 12, color: Colors.grey)),
                             Wrap(
                               spacing: 8,
                               children: favoritos.map((fav) => ActionChip(
@@ -375,7 +370,7 @@ class _AgendamentoViewState extends State<AgendamentoView> {
                             children: [
                               Expanded(
                                 child: DropdownButton<String>(
-                                  hint: const Text('Selecione o Tipo'),
+                                  hint: Text(AppStrings.selecioneTipo),
                                   value: _tipoSelecionado,
                                   isExpanded: true,
                                   items: tipos.map((tipo) => DropdownMenuItem(value: tipo, child: Text(tipo))).toList(),
@@ -385,7 +380,7 @@ class _AgendamentoViewState extends State<AgendamentoView> {
                               if (_tipoSelecionado != null)
                                 IconButton(
                                   icon: Icon(isFavorite ? Icons.star : Icons.star_border, color: isFavorite ? Colors.amber : Colors.grey),
-                                  tooltip: isFavorite ? 'Remover dos favoritos' : 'Adicionar aos favoritos',
+                                  tooltip: isFavorite ? AppStrings.removerFavoritos : AppStrings.adicionarFavoritos,
                                   onPressed: () async {
                                     await _firestoreService.toggleFavorito(user.uid, _tipoSelecionado!);
                                     setStateDialog(() {}); // Atualiza UI
@@ -446,7 +441,7 @@ class _AgendamentoViewState extends State<AgendamentoView> {
                             }
                           });
                         },
-                        child: const Text('Aplicar'),
+                        child: Text(AppStrings.aplicar),
                       ),
                     ],
                   ),
@@ -454,7 +449,7 @@ class _AgendamentoViewState extends State<AgendamentoView> {
                     Padding(
                       padding: const EdgeInsets.only(top: 8.0),
                       child: Text(
-                        'Desconto: ${_cupomAplicado!.tipo == 'porcentagem' ? '${_cupomAplicado!.valor.toStringAsFixed(0)}%' : 'R\$ ${_cupomAplicado!.valor.toStringAsFixed(2)}'}',
+                        AppStrings.descontoResumo(_cupomAplicado!.tipo == 'porcentagem' ? '${_cupomAplicado!.valor.toStringAsFixed(0)}%' : 'R\$ ${_cupomAplicado!.valor.toStringAsFixed(2)}'),
                         style: const TextStyle(color: Colors.green, fontWeight: FontWeight.bold),
                       ),
                     ),
@@ -769,12 +764,12 @@ class AgendamentoDetalhesView extends StatelessWidget {
                         const SizedBox(height: 10),
                         const Divider(),
                         const SizedBox(height: 10),
-                        Text('Data: $dateStr', style: const TextStyle(fontSize: 18)),
-                        Text('Horário: $timeStr', style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.teal)),
+                        Text(AppStrings.dataResumo(dateStr), style: const TextStyle(fontSize: 18)),
+                        Text(AppStrings.horarioResumo(timeStr), style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.teal)),
                         if (agendamento.valorFinal != null)
-                          Text('Valor: R\$ ${agendamento.valorFinal!.toStringAsFixed(2)}', style: const TextStyle(fontSize: 16, color: Colors.green)),
+                          Text(AppStrings.valorResumo('R\$ ${agendamento.valorFinal!.toStringAsFixed(2)}'), style: const TextStyle(fontSize: 16, color: Colors.green)),
                         if (agendamento.cupomAplicado != null)
-                          Text('Cupom: ${agendamento.cupomAplicado}', style: const TextStyle(fontSize: 14, color: Colors.grey)),
+                          Text(AppStrings.cupomResumo('${agendamento.cupomAplicado}'), style: const TextStyle(fontSize: 14, color: Colors.grey)),
                         const SizedBox(height: 20),
                         Container(
                           padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
@@ -790,12 +785,12 @@ class AgendamentoDetalhesView extends StatelessWidget {
                         ),
                         if (agendamento.motivoCancelamento != null) ...[
                           const SizedBox(height: 20),
-                          const Text('Motivo do Cancelamento:', style: TextStyle(fontWeight: FontWeight.bold, color: Colors.red)),
+                          Text(AppStrings.motivoCancelamento, style: const TextStyle(fontWeight: FontWeight.bold, color: Colors.red)),
                           Text(agendamento.motivoCancelamento!, textAlign: TextAlign.center),
                         ],
                         const SizedBox(height: 30),
                         if (agendamento.listaEspera.isNotEmpty)
-                          Text('${agendamento.listaEspera.length} pessoas na fila de espera', style: const TextStyle(color: Colors.grey, fontSize: 12)),
+                          Text(AppStrings.filaEsperaResumo(agendamento.listaEspera.length), style: const TextStyle(color: Colors.grey, fontSize: 12)),
                         if (agendamento.avaliacao != null) ...[
                           const SizedBox(height: 20),
                           const Divider(),
@@ -914,7 +909,7 @@ class _AgendamentoCardState extends State<_AgendamentoCard> with SingleTickerPro
 
     final bool isCancelado = agendamento.status == 'cancelado' || agendamento.status == 'cancelado_tardio';
     final String motivoTexto = isCancelado && agendamento.motivoCancelamento != null 
-        ? '\nMotivo: ${agendamento.motivoCancelamento}' : '';
+      ? AppStrings.motivoInline(agendamento.motivoCancelamento!) : '';
 
     final bool isOccupied = agendamento.status == 'aprovado';
     final bool isInWaitList = currentUser != null && agendamento.listaEspera.contains(currentUser.uid);
@@ -949,7 +944,7 @@ class _AgendamentoCardState extends State<_AgendamentoCard> with SingleTickerPro
                           DateFormat('dd/MM/yyyy HH:mm').format(agendamento.dataHora),
                           style: const TextStyle(fontWeight: FontWeight.bold),
                         ),
-                        subtitle: Text('Tipo: ${agendamento.tipo}\nStatus: ${agendamento.status}$motivoTexto'),
+                        subtitle: Text(AppStrings.tipoStatusResumo(agendamento.tipo, agendamento.status, motivoTexto)),
                         isThreeLine: true,
                         trailing: Row(
                           mainAxisSize: MainAxisSize.min,
@@ -958,7 +953,7 @@ class _AgendamentoCardState extends State<_AgendamentoCard> with SingleTickerPro
                             if (isMyAppointment && agendamento.status == 'aprovado')
                               IconButton(
                                 icon: const Icon(Icons.verified_user, color: Colors.blue),
-                                tooltip: 'Fazer Check-in',
+                                tooltip: AppStrings.fazerCheckIn,
                                 onPressed: _handleCheckIn,
                               ),
                             
@@ -966,7 +961,7 @@ class _AgendamentoCardState extends State<_AgendamentoCard> with SingleTickerPro
                             if (isMyAppointment && agendamento.status == 'aprovado' && agendamento.avaliacao == null)
                               IconButton(
                                 icon: const Icon(Icons.star_rate, color: Colors.amber),
-                                tooltip: 'Avaliar Atendimento',
+                                tooltip: AppStrings.avaliarAtendimento,
                                 onPressed: widget.onRate,
                               ),
 

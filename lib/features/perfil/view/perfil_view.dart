@@ -100,7 +100,7 @@ class _PerfilViewState extends State<PerfilView> {
   String? _validarCep(String? value) {
     if (value == null || value.isEmpty) return null;
     final cep = value.replaceAll(RegExp(r'[^0-9]'), '');
-    if (cep.length != 8) return 'CEP inválido';
+    if (cep.length != 8) return AppStrings.invalidCep;
     return null;
   }
 
@@ -108,7 +108,7 @@ class _PerfilViewState extends State<PerfilView> {
     final cep = _cepController.text.replaceAll(RegExp(r'[^0-9]'), '');
     if (cep.length != 8) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Por favor, digite um CEP válido com 8 números.')),
+        SnackBar(content: Text(AppStrings.invalidCep)),
       );
       return;
     }
@@ -123,7 +123,7 @@ class _PerfilViewState extends State<PerfilView> {
         if (data.containsKey('erro')) {
           if (mounted) {
             ScaffoldMessenger.of(context).showSnackBar(
-              const SnackBar(content: Text('CEP não encontrado. Por favor, digite o endereço manualmente.')),
+              SnackBar(content: Text(AppStrings.cepNotFound)),
             );
             _enderecoController.clear();
           }
@@ -134,7 +134,7 @@ class _PerfilViewState extends State<PerfilView> {
     } catch (e) {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Erro ao buscar CEP. Verifique sua conexão ou digite manualmente.')),
+          SnackBar(content: Text(AppStrings.cepError)),
         );
       }
     } finally {
@@ -158,7 +158,7 @@ class _PerfilViewState extends State<PerfilView> {
     if (!_formKey.currentState!.validate()) return;
     if (_isObrigatorio('data_nascimento') && _dataNascimento == null) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Por favor, informe a Data de Nascimento.')),
+        SnackBar(content: Text(AppStrings.birthDateRequired)),
       );
       return;
     }
@@ -232,13 +232,13 @@ class _PerfilViewState extends State<PerfilView> {
       } on FirebaseAuthException catch (e) {
         if (mounted) setState(() => _isLoading = false);
         if (e.code == 'requires-recent-login') {
-          if (mounted) ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Por segurança, faça login novamente para excluir a conta.')));
+          if (mounted) ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(AppStrings.loginAgainToDelete)));
         } else {
-          if (mounted) ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Erro: ${e.message}')));
+          if (mounted) ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(AppStrings.erroGenerico('${e.message}'))));
         }
       } catch (e) {
         if (mounted) setState(() => _isLoading = false);
-        if (mounted) ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Erro ao excluir (faça login novamente): $e')));
+        if (mounted) ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(AppStrings.erroGenerico('$e'))));
       }
     }
   }
@@ -315,27 +315,27 @@ class _PerfilViewState extends State<PerfilView> {
             const SizedBox(height: 20),
             TextFormField(
               controller: _nomeController,
-              decoration: const InputDecoration(labelText: 'Nome Completo', prefixIcon: Icon(Icons.person)),
+              decoration: InputDecoration(labelText: AppStrings.fullNameLabel, prefixIcon: const Icon(Icons.person)),
               validator: (v) => _validar('nome', v),
             ),
             const SizedBox(height: 10),
             TextFormField(
               controller: _whatsappController,
-              decoration: const InputDecoration(labelText: 'WhatsApp', prefixIcon: Icon(Icons.phone)),
+              decoration: InputDecoration(labelText: AppStrings.whatsappLabel, prefixIcon: const Icon(Icons.phone)),
               keyboardType: TextInputType.phone,
               validator: (v) => _validar('whatsapp', v),
             ),
             const SizedBox(height: 10),
             TextFormField(
               controller: _cpfController,
-              decoration: const InputDecoration(labelText: 'CPF', prefixIcon: Icon(Icons.badge)),
+              decoration: InputDecoration(labelText: AppStrings.cpfLabel, prefixIcon: const Icon(Icons.badge)),
               keyboardType: TextInputType.number,
               validator: _validarCpf,
             ),
             const SizedBox(height: 10),
             ListTile(
-              title: const Text('Data de Nascimento'),
-              subtitle: Text(_dataNascimento == null ? 'Não informada' : DateFormat('dd/MM/yyyy').format(_dataNascimento!)),
+              title: Text(AppStrings.birthDateLabel),
+              subtitle: Text(_dataNascimento == null ? AppStrings.birthDateNotInformed : DateFormat('dd/MM/yyyy').format(_dataNascimento!)),
               leading: const Icon(Icons.calendar_today),
               trailing: const Icon(Icons.edit),
               onTap: () async {
@@ -349,14 +349,14 @@ class _PerfilViewState extends State<PerfilView> {
               },
             ),
             const SizedBox(height: 20),
-            const Text('Endereço', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.teal)),
+            Text(AppStrings.addressLabel, style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.teal)),
             const SizedBox(height: 10),
             Row(
               children: [
                 Expanded(
                   child: TextFormField(
                     controller: _cepController,
-                    decoration: const InputDecoration(labelText: 'CEP', prefixIcon: Icon(Icons.location_on)),
+                    decoration: InputDecoration(labelText: AppStrings.cepLabel, prefixIcon: const Icon(Icons.location_on)),
                     keyboardType: TextInputType.number,
                     validator: _validarCep,
                   ),
@@ -367,44 +367,44 @@ class _PerfilViewState extends State<PerfilView> {
             const SizedBox(height: 10),
             TextFormField(
               controller: _enderecoController,
-              decoration: const InputDecoration(labelText: 'Endereço Completo'),
+              decoration: InputDecoration(labelText: AppStrings.addressLabel),
               maxLines: 2,
               validator: (v) => _validar('endereco', v),
             ),
             const SizedBox(height: 20),
-            const Text('Anamnese / Saúde', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.teal)),
+            Text(AppStrings.anamnesisTitle, style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.teal)),
             const SizedBox(height: 10),
             TextFormField(
               controller: _historicoController,
-              decoration: const InputDecoration(labelText: 'Histórico Médico / Observações'),
+              decoration: InputDecoration(labelText: AppStrings.medicalHistoryLabel),
               maxLines: 3,
             ),
             const SizedBox(height: 10),
             TextFormField(
               controller: _alergiasController,
-              decoration: const InputDecoration(labelText: 'Alergias'),
+              decoration: InputDecoration(labelText: AppStrings.allergiesLabel),
             ),
             const SizedBox(height: 10),
             TextFormField(
               controller: _medicamentosController,
-              decoration: const InputDecoration(labelText: 'Medicamentos em uso'),
+              decoration: InputDecoration(labelText: AppStrings.medicationsLabel),
             ),
             const SizedBox(height: 10),
             TextFormField(
               controller: _cirurgiasController,
-              decoration: const InputDecoration(labelText: 'Cirurgias recentes'),
+              decoration: InputDecoration(labelText: AppStrings.surgeriesLabel),
             ),
             const SizedBox(height: 30),
             ElevatedButton(
               onPressed: _salvar,
               style: ElevatedButton.styleFrom(backgroundColor: Colors.teal, foregroundColor: Colors.white, padding: const EdgeInsets.symmetric(vertical: 15)),
-              child: const Text('SALVAR PERFIL'),
+              child: Text(AppStrings.saveProfile),
             ),
             const SizedBox(height: 20),
             TextButton.icon(
               onPressed: _excluirConta,
               icon: const Icon(Icons.delete_forever, color: Colors.red),
-              label: const Text('EXCLUIR MINHA CONTA', style: TextStyle(color: Colors.red)),
+              label: Text(AppStrings.deleteMyAccount, style: const TextStyle(color: Colors.red)),
             ),
           ],
         ),
@@ -417,7 +417,7 @@ class _PerfilViewState extends State<PerfilView> {
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) return const Center(child: CircularProgressIndicator());
         final agendamentos = snapshot.data ?? [];
-        if (agendamentos.isEmpty) return const Center(child: Text('Nenhum agendamento encontrado.'));
+        if (agendamentos.isEmpty) return Center(child: Text(AppStrings.noAppointmentsFound));
 
         return ListView.builder(
           itemCount: agendamentos.length,

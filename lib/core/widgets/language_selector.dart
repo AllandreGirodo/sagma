@@ -9,27 +9,27 @@ class LanguageSelector extends StatelessWidget {
   Widget build(BuildContext context) {
     return PopupMenuButton<Locale>(
       icon: const Icon(Icons.flag, size: 24), // Bandeirinha
-      tooltip: 'Alterar Idioma / Change Language',
+      tooltip: AppStrings.tooltipAlterarIdioma,
       onSelected: (Locale locale) {
         MyApp.setLocale(context, locale);
         AppStrings.setLocale(locale); // Atualiza as strings estáticas
       },
       itemBuilder: (BuildContext context) => <PopupMenuEntry<Locale>>[
-        const PopupMenuItem<Locale>(
+        PopupMenuItem<Locale>(
           value: Locale('pt', 'BR'),
-          child: Text('🇧🇷 Português'),
+          child: Text(AppStrings.idiomaPortugues),
         ),
-        const PopupMenuItem<Locale>(
+        PopupMenuItem<Locale>(
           value: Locale('en', 'US'),
-          child: Text('🇺🇸 English'),
+          child: Text(AppStrings.idiomaIngles),
         ),
-        const PopupMenuItem<Locale>(
+        PopupMenuItem<Locale>(
           value: Locale('es', 'ES'),
-          child: Text('🇪🇸 Español'),
+          child: Text(AppStrings.idiomaEspanhol),
         ),
-        const PopupMenuItem<Locale>(
+        PopupMenuItem<Locale>(
           value: Locale('ja', 'JP'),
-          child: Text('🇯🇵 日本語'),
+          child: Text(AppStrings.idiomaJapones),
         ),
       ],
     );

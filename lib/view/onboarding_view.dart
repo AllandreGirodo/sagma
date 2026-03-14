@@ -49,20 +49,17 @@ class _OnboardingViewState extends State<OnboardingView> {
       {
         'title': AppStrings.onboardingTitulo1,
         'text': AppStrings.onboardingTexto1,
-        'lottie':
-            'https://lottie.host/56e70336-7013-4029-9138-031037567669/7j7Yj2Z2j2.json', // Relax/Spa
+        'lottie': 'assets/lottie/onboarding_relax.json',
       },
       {
         'title': AppStrings.onboardingTitulo2,
         'text': AppStrings.onboardingTexto2,
-        'lottie':
-            'https://assets9.lottiefiles.com/packages/lf20_s8pbrcfw.json', // Notification Bell
+        'lottie': 'assets/lottie/onboarding_notifications.json',
       },
       {
         'title': AppStrings.onboardingTitulo3,
         'text': AppStrings.onboardingTexto3,
-        'lottie':
-            'https://assets2.lottiefiles.com/packages/lf20_49rdyysj.json', // History/List
+        'lottie': 'assets/lottie/onboarding_history.json',
       },
     ];
 
@@ -87,7 +84,7 @@ class _OnboardingViewState extends State<OnboardingView> {
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          Lottie.network(
+                          Lottie.asset(
                             pages[index]['lottie']!,
                             height: 200,
                             errorBuilder: (context, error, stackTrace) =>

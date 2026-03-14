@@ -45,7 +45,9 @@ class DbSeeder {
       'cliente_nome_snapshot': 'Cliente Teste',
       'cliente_telefone_snapshot': '11999999999',
       'data_hora': Timestamp.fromDate(DateTime.now().add(const Duration(days: 1, hours: 10))),
-      'tipo': 'Massagem Relaxante',
+      'tipo': 'relaxante',
+      'tipo_id': 'relaxante',
+      'tipo_massagem': 'relaxante',
       'status': 'pendente',
       'preco': 120.0,
       'avaliacao': 0,
@@ -72,6 +74,23 @@ class DbSeeder {
       'whatsapp_admin': '5511999999999',
       'chat_ativo': true,
       'em_manutencao': false,
+    }, SetOptions(merge: true));
+
+    await _db.collection('configuracoes').doc('servicos').set({
+      'tipos_massagem_ids': [
+        'relaxante',
+        'drenagem_linfatica',
+        'terapeutica',
+        'desportiva',
+        'pedras_quentes',
+      ],
+      'tipos_massagem': [
+        'relaxante',
+        'drenagem_linfatica',
+        'terapeutica',
+        'desportiva',
+        'pedras_quentes',
+      ],
     }, SetOptions(merge: true));
   }
 }

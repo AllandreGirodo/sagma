@@ -341,6 +341,13 @@ class _SignUpViewState extends State<SignUpView> {
                 ),
                 const SizedBox(width: 6),
                 _LanguageFlagButton(
+                  flag: '🇫🇷',
+                  label: 'FR',
+                  locale: const Locale('fr', 'FR'),
+                  small: true,
+                ),
+                const SizedBox(width: 6),
+                _LanguageFlagButton(
                   flag: '🇯🇵',
                   label: 'JP',
                   locale: const Locale('ja', 'JP'),

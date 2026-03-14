@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/foundation.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:local_auth/local_auth.dart';
@@ -55,7 +56,9 @@ class _LoginViewState extends State<LoginView> {
     String email = _emailController.text.trim();
 
     if (!mounted) return;
-    final emailConfirmado = await _abrirDialogoRecuperacaoSenha(emailInicial: email);
+    final emailConfirmado = await _abrirDialogoRecuperacaoSenha(
+      emailInicial: email,
+    );
     if (!mounted) return;
     if (emailConfirmado == null || emailConfirmado.isEmpty) return;
     email = emailConfirmado;
@@ -70,7 +73,9 @@ class _LoginViewState extends State<LoginView> {
     }
   }
 
-  Future<String?> _abrirDialogoRecuperacaoSenha({required String emailInicial}) async {
+  Future<String?> _abrirDialogoRecuperacaoSenha({
+    required String emailInicial,
+  }) async {
     return showDialog<String>(
       context: context,
       builder: (dialogContext) {
@@ -90,7 +95,9 @@ class _LoginViewState extends State<LoginView> {
               if (!temEmailPreenchido)
                 TextField(
                   controller: controllerTemp,
-                  decoration: InputDecoration(labelText: AppStrings.digiteEmailCadastrado),
+                  decoration: InputDecoration(
+                    labelText: AppStrings.digiteEmailCadastrado,
+                  ),
                   keyboardType: TextInputType.emailAddress,
                 )
               else
@@ -101,7 +108,9 @@ class _LoginViewState extends State<LoginView> {
               const SizedBox(height: 10),
               Text(
                 AppStrings.avisoRecuperacaoSenha,
-                style: Theme.of(dialogContext).textTheme.bodySmall?.copyWith(color: Colors.grey.shade700),
+                style: Theme.of(
+                  dialogContext,
+                ).textTheme.bodySmall?.copyWith(color: Colors.grey.shade700),
               ),
             ],
           ),
@@ -111,7 +120,8 @@ class _LoginViewState extends State<LoginView> {
               child: Text(AppStrings.cancelButton),
             ),
             ElevatedButton(
-              onPressed: () => Navigator.pop(dialogContext, controllerTemp.text.trim()),
+              onPressed: () =>
+                  Navigator.pop(dialogContext, controllerTemp.text.trim()),
               child: Text(AppStrings.enviar),
             ),
           ],
@@ -131,7 +141,8 @@ class _LoginViewState extends State<LoginView> {
         return; // Usuário cancelou
       }
 
-      final GoogleSignInAuthentication googleAuth = await googleUser.authentication;
+      final GoogleSignInAuthentication googleAuth =
+          await googleUser.authentication;
       final AuthCredential credential = GoogleAuthProvider.credential(
         accessToken: googleAuth.accessToken,
         idToken: googleAuth.idToken,
@@ -140,31 +151,54 @@ class _LoginViewState extends State<LoginView> {
       await FirebaseAuth.instance.signInWithCredential(credential);
       if (!mounted) return;
       // Redirecionamento é tratado pelo StreamBuilder no AgendamentoView ou aqui manualmente
-      navigator.pushReplacement(MaterialPageRoute(builder: (_) => const AgendamentoView()));
-      
+      navigator.pushReplacement(
+        MaterialPageRoute(builder: (_) => const AgendamentoView()),
+      );
     } catch (e) {
-      if (mounted) messenger.showSnackBar(SnackBar(content: Text(AppStrings.erroGoogleLogin('$e'))));
+      if (mounted) {
+        messenger.showSnackBar(
+          SnackBar(content: Text(AppStrings.erroGoogleLogin('$e'))),
+        );
+      }
     } finally {
       if (mounted) setState(() => _isLoading = false);
     }
   }
 
   Future<void> _verificarBiometriaAutomatica() async {
-    // Verifica se a biometria está ativa nas configurações globais
-    final config = await FirestoreService().getConfiguracao();
-    if (!config.biometriaAtiva) return;
+    // Biometria não é suportada em web
+    if (kIsWeb) return;
 
-    // Verifica se o dispositivo suporta
-    final bool canAuthenticateWithBiometrics = await auth.canCheckBiometrics;
-    final bool canAuthenticate = canAuthenticateWithBiometrics || await auth.isDeviceSupported();
+    try {
+      // Verifica se a biometria está ativa nas configurações globais
+      final config = await FirestoreService().getConfiguracao();
+      if (!config.biometriaAtiva) return;
 
-    if (canAuthenticate) {
-      // Opcional: Tentar autenticar automaticamente se já houver sessão válida (mas expirada na UI)
-      // Para este exemplo, deixaremos apenas o botão visível.
+      // Verifica se o dispositivo suporta
+      final bool canAuthenticateWithBiometrics = await auth.canCheckBiometrics;
+      final bool canAuthenticate =
+          canAuthenticateWithBiometrics || await auth.isDeviceSupported();
+
+      if (canAuthenticate) {
+        // Opcional: Tentar autenticar automaticamente se já houver sessão válida (mas expirada na UI)
+        // Para este exemplo, deixaremos apenas o botão visível.
+      }
+    } catch (e) {
+      debugPrint(AppStrings.erroAoVerificarBiometria);
     }
   }
 
   Future<void> _loginBiometrico() async {
+    // Biometria não é suportada em web
+    if (kIsWeb) {
+      if (mounted) {
+        ScaffoldMessenger.of(
+          context,
+        ).showSnackBar(SnackBar(content: Text(AppStrings.biometriaErro)));
+      }
+      return;
+    }
+
     final navigator = Navigator.of(context);
     final messenger = ScaffoldMessenger.of(context);
     try {
@@ -181,15 +215,49 @@ class _LoginViewState extends State<LoginView> {
         // Para o TCC, simularemos que a biometria valida o usuário atual se ele já estiver logado no cache.
         final user = FirebaseAuth.instance.currentUser;
         if (user != null && mounted) {
-           navigator.pushReplacement(MaterialPageRoute(builder: (_) => const AgendamentoView()));
+          navigator.pushReplacement(
+            MaterialPageRoute(builder: (_) => const AgendamentoView()),
+          );
         } else if (mounted) {
-            messenger.showSnackBar(SnackBar(content: Text(AppStrings.biometriaLoginMsg)));
+          messenger.showSnackBar(
+            SnackBar(content: Text(AppStrings.biometriaLoginMsg)),
+          );
         }
       }
     } catch (e) {
       if (mounted) {
-        messenger.showSnackBar(SnackBar(content: Text('${AppStrings.biometriaErro}: $e')));
+        messenger.showSnackBar(
+          SnackBar(content: Text('${AppStrings.biometriaErro}: $e')),
+        );
       }
+    }
+  }
+
+  Future<void> _inserirTesteNoBanco() async {
+    if (!mounted) return;
+
+    setState(() => _isLoading = true);
+    final messenger = ScaffoldMessenger.of(context);
+
+    try {
+      final id = await FirestoreService().inserirTesteLoginView(
+        emailDigitado: _emailController.text.trim(),
+        uid: FirebaseAuth.instance.currentUser?.uid,
+      );
+
+      if (!mounted) return;
+      messenger.showSnackBar(
+        SnackBar(content: Text(AppStrings.testeInsercaoBancoSucesso(id))),
+      );
+    } catch (e) {
+      if (!mounted) return;
+      messenger.showSnackBar(
+        SnackBar(
+          content: Text(AppStrings.testeInsercaoBancoErro(e.toString())),
+        ),
+      );
+    } finally {
+      if (mounted) setState(() => _isLoading = false);
     }
   }
 
@@ -200,13 +268,15 @@ class _LoginViewState extends State<LoginView> {
 
     return Scaffold(
       // Fundo transparente para permitir ver o AnimatedBackground do main.dart
-      backgroundColor: Colors.transparent, 
+      backgroundColor: Colors.transparent,
       body: Center(
         child: SingleChildScrollView(
           padding: const EdgeInsets.all(24.0),
           child: Card(
             elevation: 8,
-            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(16),
+            ),
             // Cor do card adapta-se ao tema (Surface)
             color: theme.colorScheme.surface.withValues(alpha: 0.9),
             child: Padding(
@@ -214,16 +284,23 @@ class _LoginViewState extends State<LoginView> {
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  const Align(alignment: Alignment.topRight, child: LanguageSelector()),
+                  const Align(
+                    alignment: Alignment.topRight,
+                    child: LanguageSelector(),
+                  ),
                   const Icon(Icons.spa, size: 64, color: AppColors.primary),
                   const SizedBox(height: 16),
                   Text(
                     AppStrings.loginTitulo,
-                    style: AppStyles.title.copyWith(color: theme.colorScheme.onSurface),
+                    style: AppStyles.title.copyWith(
+                      color: theme.colorScheme.onSurface,
+                    ),
                   ),
                   Text(
                     AppStrings.loginSubtitulo,
-                    style: AppStyles.subtitle.copyWith(color: theme.colorScheme.onSurface.withValues(alpha: 0.7)),
+                    style: AppStyles.subtitle.copyWith(
+                      color: theme.colorScheme.onSurface.withValues(alpha: 0.7),
+                    ),
                     textAlign: TextAlign.center,
                   ),
                   const SizedBox(height: 32),
@@ -244,8 +321,11 @@ class _LoginViewState extends State<LoginView> {
                       prefixIcon: const Icon(Icons.lock),
                       border: const OutlineInputBorder(),
                       suffixIcon: IconButton(
-                        icon: Icon(_isObscure ? Icons.visibility : Icons.visibility_off),
-                        onPressed: () => setState(() => _isObscure = !_isObscure),
+                        icon: Icon(
+                          _isObscure ? Icons.visibility : Icons.visibility_off,
+                        ),
+                        onPressed: () =>
+                            setState(() => _isObscure = !_isObscure),
                       ),
                     ),
                     obscureText: _isObscure,
@@ -271,19 +351,43 @@ class _LoginViewState extends State<LoginView> {
                         ),
                         TextButton(
                           onPressed: _recuperarSenha,
-                          child: Text(AppStrings.esqueceuSenha, style: const TextStyle(color: Colors.grey)),
+                          child: Text(
+                            AppStrings.esqueceuSenha,
+                            style: const TextStyle(color: Colors.grey),
+                          ),
                         ),
                         const Divider(),
                         ElevatedButton.icon(
-                          icon: const Icon(Icons.login, color: Colors.red), // Ícone genérico, ideal seria logo do Google
+                          icon: const Icon(
+                            Icons.login,
+                            color: Colors.red,
+                          ), // Ícone genérico, ideal seria logo do Google
                           label: Text(AppStrings.googleLoginBtn),
-                          style: ElevatedButton.styleFrom(backgroundColor: Colors.white, foregroundColor: Colors.black),
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: Colors.white,
+                            foregroundColor: Colors.black,
+                          ),
                           onPressed: _googleLogin,
                         ),
+                        if (kDebugMode) ...[
+                          const SizedBox(height: 10),
+                          SizedBox(
+                            width: double.infinity,
+                            child: OutlinedButton.icon(
+                              onPressed: _inserirTesteNoBanco,
+                              icon: const Icon(Icons.bug_report_outlined),
+                              label: Text(AppStrings.testeInsercaoBancoBtn),
+                            ),
+                          ),
+                        ],
                         const SizedBox(height: 10),
                         // Botão de Biometria
                         IconButton(
-                          icon: const Icon(Icons.fingerprint, size: 40, color: AppColors.primary),
+                          icon: const Icon(
+                            Icons.fingerprint,
+                            size: 40,
+                            color: AppColors.primary,
+                          ),
                           tooltip: AppStrings.biometriaBtn,
                           onPressed: _loginBiometrico,
                         ),

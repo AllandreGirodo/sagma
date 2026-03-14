@@ -27,6 +27,11 @@ class LanguageSelector extends StatelessWidget {
         style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w500, fontStyle: FontStyle.italic),
       ),
       _LanguageMenuOption(
+        locale: const Locale('fr', 'FR'),
+        label: AppStrings.idiomaFrances,
+        style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w500),
+      ),
+      _LanguageMenuOption(
         locale: const Locale('ja', 'JP'),
         label: AppStrings.idiomaJapones,
         style: const TextStyle(

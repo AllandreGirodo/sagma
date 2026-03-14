@@ -48,6 +48,11 @@ class AppLocalizations {
       'newAppointmentTitle': 'Novo Agendamento',
       'dateLabel': 'Data',
       'selectTimeHint': 'Selecione um horário',
+      'massageTypeRelaxante': 'Massagem Relaxante',
+      'massageTypeDrenagemLinfatica': 'Drenagem Linfática',
+      'massageTypeTerapeutica': 'Massagem Terapêutica',
+      'massageTypeDesportiva': 'Massagem Desportiva',
+      'massageTypePedrasQuentes': 'Massagem com Pedras Quentes',
       'cancelButton': 'Cancelar',
       'scheduleButton': 'Agendar',
       'appointmentSuccess': 'Agendamento realizado com sucesso!',
@@ -115,6 +120,11 @@ class AppLocalizations {
       'newAppointmentTitle': 'New Appointment',
       'dateLabel': 'Date',
       'selectTimeHint': 'Select a time',
+      'massageTypeRelaxante': 'Relaxing Massage',
+      'massageTypeDrenagemLinfatica': 'Lymphatic Drainage',
+      'massageTypeTerapeutica': 'Therapeutic Massage',
+      'massageTypeDesportiva': 'Sports Massage',
+      'massageTypePedrasQuentes': 'Hot Stone Massage',
       'cancelButton': 'Cancel',
       'scheduleButton': 'Schedule',
       'appointmentSuccess': 'Appointment scheduled successfully!',
@@ -182,6 +192,11 @@ class AppLocalizations {
       'newAppointmentTitle': 'Nueva Cita',
       'dateLabel': 'Fecha',
       'selectTimeHint': 'Seleccione una hora',
+      'massageTypeRelaxante': 'Masaje Relajante',
+      'massageTypeDrenagemLinfatica': 'Drenaje Linfático',
+      'massageTypeTerapeutica': 'Masaje Terapéutico',
+      'massageTypeDesportiva': 'Masaje Deportivo',
+      'massageTypePedrasQuentes': 'Masaje con Piedras Calientes',
       'cancelButton': 'Cancelar',
       'scheduleButton': 'Agendar',
       'appointmentSuccess': '¡Cita programada con éxito!',
@@ -249,6 +264,11 @@ class AppLocalizations {
       'newAppointmentTitle': '新規予約',
       'dateLabel': '日付',
       'selectTimeHint': '時間を選択',
+      'massageTypeRelaxante': 'リラクゼーションマッサージ',
+      'massageTypeDrenagemLinfatica': 'リンパドレナージュ',
+      'massageTypeTerapeutica': 'セラピーマッサージ',
+      'massageTypeDesportiva': 'スポーツマッサージ',
+      'massageTypePedrasQuentes': 'ホットストーンマッサージ',
       'cancelButton': 'キャンセル',
       'scheduleButton': '予約する',
       'appointmentSuccess': '予約が完了しました！',
@@ -280,6 +300,78 @@ class AppLocalizations {
       'analysisMessage': '{date} に行われた登録は\n管理者の承認待ちです。',
       'contactAdminButton': '管理者に連絡',
       'backToLoginButton': 'ログインに戻る',
+    },
+    'fr': {
+      'appTitle': 'Agenda de massothérapie',
+      'loginTitle': 'Agenda de massothérapie',
+      'emailLabel': 'Email',
+      'passwordLabel': 'Mot de passe',
+      'enterButton': 'ENTRER',
+      'createAccountButton': 'Créer un compte',
+      'fillFieldsError': 'Veuillez remplir l\'email et le mot de passe',
+      'loginSuccess': 'Connexion réussie (Simulation)',
+      'forgotPasswordButton': 'Mot de passe oublié?',
+      // Signup
+      'signupTitle': 'Créer un compte',
+      'fullNameLabel': 'Nom complet',
+      'whatsappLabel': 'WhatsApp',
+      'phoneNumberLabel': 'Téléphone',
+      'isWhatsappNumber': 'Ce numéro est WhatsApp',
+      'isNotWhatsappNumber': 'Ce numéro n\'est pas WhatsApp',
+      'signupInvalidEmailTyping': 'L\'email n\'est pas encore valide.',
+      'signupPhoneOnlyDigitsMessage': 'Complétez uniquement avec les chiffres de 0 à 9.',
+      'signupPhoneMinDigitsMessage': 'Minimum de 10 chiffres requis.',
+      'signupPhoneDigitsLimitReached': 'Limite de chiffres du téléphone atteinte.',
+      'signupPasswordCriteriaTitle': 'Mot de passe suggéré:',
+      'signupPasswordRuleLength': 'Entre 6 et 20 caractères',
+      'signupPasswordRuleUppercase': 'Au moins 1 lettre majuscule',
+      'signupPasswordRuleLowercase': 'Au moins 1 lettre minuscule',
+      'signupPasswordRuleNumber': 'Au moins 1 chiffre',
+      'signupPasswordRuleSpecial': 'Au moins 1 caractère spécial',
+      'signupPasswordWeakMessage': 'Le mot de passe n\'a pas encore respecté le modèle suggéré.',
+      'registerButton': 'ENREGISTRER',
+      'registrationError': 'Erreur d\'enregistrement',
+      // Appointment
+      'appointmentsTitle': 'Rendez-vous',
+      'newAppointmentTitle': 'Nouveau rendez-vous',
+      'dateLabel': 'Date',
+      'selectTimeHint': 'Sélectionnez une heure',
+      'massageTypeRelaxante': 'Massage relaxant',
+      'massageTypeDrenagemLinfatica': 'Drainage lymphatique',
+      'massageTypeTerapeutica': 'Massage thérapeutique',
+      'massageTypeDesportiva': 'Massage sportif',
+      'massageTypePedrasQuentes': 'Massage aux pierres chaudes',
+      'cancelButton': 'Annuler',
+      'scheduleButton': 'Planifier',
+      'appointmentSuccess': 'Rendez-vous programmé avec succès!',
+      'noAppointmentsFound': 'Aucun rendez-vous trouvé.',
+      'viewingAll': 'Affichage di tout',
+      'viewingMine': 'Affichage des miens',
+      'myProfileTooltip': 'Mon Profil',
+      'logoutTooltip': 'Déconnexion',
+      // Profile
+      'profileTitle': 'Mon Profil',
+      'dataTab': 'Données',
+      'historyTab': 'Historique',
+      'personalDataTitle': 'Données personnelles',
+      'cpfLabel': 'CPF/Identifiant',
+      'cepLabel': 'Code Postal',
+      'addressLabel': 'Adresse',
+      'birthDateLabel': 'Date de naissance',
+      'anamnesisTitle': 'Formulaire d\'anamnèse',
+      'medicalHistoryLabel': 'Historique médical',
+      'allergiesLabel': 'Allergies',
+      'medicationsLabel': 'Médicaments utilisés',
+      'surgeriesLabel': 'Chirurgies récentes',
+      'deleteAccountButton': 'Supprimer mon compte et mes données',
+      'saveButton': 'Enregistrer',
+      'requiredField': 'Ce champ est obligatoire',
+      // Waiting Approval
+      'waitingApprovalTitle': 'En attente d\'approbation',
+      'analysisTitle': 'Enregistrement en révision',
+      'analysisMessage': 'Votre enregistrement effectué le\n{date}\nattend l\'approbation de l\'administrateur.',
+      'contactAdminButton': 'Contacter l\'administrateur',
+      'backToLoginButton': 'Retour à la connexion',
     },
   };
 
@@ -325,6 +417,11 @@ class AppLocalizations {
   String get newAppointmentTitle => _t('newAppointmentTitle');
   String get dateLabel => _t('dateLabel');
   String get selectTimeHint => _t('selectTimeHint');
+  String get massageTypeRelaxante => _t('massageTypeRelaxante');
+  String get massageTypeDrenagemLinfatica => _t('massageTypeDrenagemLinfatica');
+  String get massageTypeTerapeutica => _t('massageTypeTerapeutica');
+  String get massageTypeDesportiva => _t('massageTypeDesportiva');
+  String get massageTypePedrasQuentes => _t('massageTypePedrasQuentes');
   String get cancelButton => _t('cancelButton');
   String get scheduleButton => _t('scheduleButton');
   String get appointmentSuccess => _t('appointmentSuccess');
@@ -362,7 +459,7 @@ class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> 
   const _AppLocalizationsDelegate();
 
   @override
-  bool isSupported(Locale locale) => ['pt', 'en', 'es', 'ja'].contains(locale.languageCode);
+  bool isSupported(Locale locale) => ['pt', 'en', 'es', 'ja', 'fr'].contains(locale.languageCode);
 
   @override
   Future<AppLocalizations> load(Locale locale) {

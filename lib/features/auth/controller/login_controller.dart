@@ -7,6 +7,7 @@ import 'package:agenda/features/auth/view/aguardando_aprovacao_view.dart';
 import 'package:agenda/core/services/firestore_service.dart';
 import 'package:agenda/core/services/auth_security_service.dart';
 import 'package:agenda/core/models/usuario_model.dart';
+import 'package:agenda/core/models/firestore_structure_helper.dart';
 import 'package:agenda/main.dart';
 import 'package:agenda/core/utils/custom_theme_data.dart';
 import 'package:agenda/core/utils/app_strings.dart';
@@ -73,6 +74,14 @@ class LoginController {
 
           // 3. Redirecionar com base no tipo de usuário
           if (usuario.tipo == 'admin') {
+            try {
+              await FirestoreStructureHelper().inicializarSistemaCompleto();
+            } catch (e) {
+              debugPrint('Falha ao inicializar colecoes de entrada: $e');
+            }
+
+            if (!context.mounted) return;
+
             Navigator.pushReplacement(
               context,
               MaterialPageRoute(builder: (context) => const AdminAgendamentosView()),
@@ -173,15 +182,16 @@ class LoginController {
     } on FirebaseAuthException catch (e) {
       if (context.mounted) {
         final String message;
-        switch (e.code) {
-          case 'email-already-in-use':
-            message = AppStrings.erroEmailJaEmUso;
-            break;
-          case 'firebase-app-check-token-is-invalid':
-            message = AppStrings.erroCadastroAppCheck;
-            break;
-          default:
-            message = AppStrings.erroCadastroComDetalhe(e.message ?? e.code);
+        if (_isAppCheckSignupError(e)) {
+          message = AppStrings.erroCadastroAppCheck;
+        } else {
+          switch (e.code) {
+            case 'email-already-in-use':
+              message = AppStrings.erroEmailJaEmUso;
+              break;
+            default:
+              message = AppStrings.erroCadastroComDetalhe(e.message ?? e.code);
+          }
         }
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(content: Text(message)),
@@ -239,6 +249,19 @@ class LoginController {
         code == 'invalid-login-credentials' ||
         code == 'user-not-found' ||
         code == 'invalid-email';
+  }
+
+  bool _isAppCheckSignupError(FirebaseAuthException e) {
+    final code = e.code.toLowerCase();
+    final message = (e.message ?? '').toLowerCase();
+
+    return code.contains('app-check') ||
+        code.contains('appcheck') ||
+        code.contains('unauthenticated') ||
+        message.contains('app check') ||
+        message.contains('app-check') ||
+        message.contains('firebase app check token is invalid') ||
+        message.contains('unauthenticated');
   }
 
   int _secondsFrom(Duration? duration) {

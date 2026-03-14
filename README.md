@@ -4,7 +4,7 @@
 
 ## 🚀 Novo no Projeto?
 
-**→ Leia [BEFORE_STARTING.md](./BEFORE_STARTING.md) PRIMEIRO!**
+**→ Leia [BEFORE_STARTING.md](./.github/BEFORE_STARTING.md) PRIMEIRO!**
 
 Contém setup obrigatório de GitHub Secrets e instruções para começar. (~10 min)
 

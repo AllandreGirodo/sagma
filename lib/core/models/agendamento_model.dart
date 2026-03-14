@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:agenda/core/utils/massage_type_catalog.dart';
 
 class Agendamento {
   final String? id;
@@ -40,31 +41,38 @@ class Agendamento {
     this.valorFinal,
   });
 
-  Map<String, dynamic> toMap() => {
-    'cliente_id': clienteId,
-    'data_hora': Timestamp.fromDate(dataHora),
-    'tipo': tipo,
-    'tipo_massagem': tipo,
-    'status': status,
-    'motivo_cancelamento': motivoCancelamento,
-    'lista_espera': listaEspera,
-    'data_criacao': dataCriacao != null ? Timestamp.fromDate(dataCriacao!) : FieldValue.serverTimestamp(),
-    'cliente_nome_snapshot': clienteNomeSnapshot,
-    'cliente_telefone_snapshot': clienteTelefoneSnapshot,
-    'avaliacao': avaliacao,
-    'comentario_avaliacao': comentarioAvaliacao,
-    'cupom_aplicado': cupomAplicado,
-    'valor_original': valorOriginal,
-    'valor_final': valorFinal,
-    'preco': valorFinal ?? valorOriginal,
-  };
+  Map<String, dynamic> toMap() {
+    final tipoId = MassageTypeCatalog.normalizeId(tipo);
+
+    return {
+      'cliente_id': clienteId,
+      'data_hora': Timestamp.fromDate(dataHora),
+      'tipo': tipoId,
+      'tipo_id': tipoId,
+      'tipo_massagem': tipoId,
+      'status': status,
+      'motivo_cancelamento': motivoCancelamento,
+      'lista_espera': listaEspera,
+      'data_criacao': dataCriacao != null ? Timestamp.fromDate(dataCriacao!) : FieldValue.serverTimestamp(),
+      'cliente_nome_snapshot': clienteNomeSnapshot,
+      'cliente_telefone_snapshot': clienteTelefoneSnapshot,
+      'avaliacao': avaliacao,
+      'comentario_avaliacao': comentarioAvaliacao,
+      'cupom_aplicado': cupomAplicado,
+      'valor_original': valorOriginal,
+      'valor_final': valorFinal,
+      'preco': valorFinal ?? valorOriginal,
+    };
+  }
 
   factory Agendamento.fromMap(Map<String, dynamic> map, {String? id}) {
     return Agendamento(
       id: id,
       clienteId: map['cliente_id'] ?? '',
       dataHora: (map['data_hora'] as Timestamp).toDate(),
-        tipo: map['tipo'] ?? map['tipo_massagem'] ?? '',
+      tipo: MassageTypeCatalog.normalizeId(
+        (map['tipo_id'] ?? map['tipo'] ?? map['tipo_massagem'] ?? '').toString(),
+      ),
       status: map['status'] ?? 'pendente',
       motivoCancelamento: map['motivo_cancelamento'],
       listaEspera: map['lista_espera'] != null 

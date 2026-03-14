@@ -14,6 +14,8 @@ import 'package:agenda/core/utils/validadores.dart';
 import 'package:agenda/features/auth/view/login_view.dart';
 import 'package:agenda/core/utils/app_strings.dart';
 import 'package:agenda/core/widgets/language_selector.dart';
+import 'package:agenda/app_localizations.dart';
+import 'package:agenda/core/utils/massage_type_catalog.dart';
 
 class PerfilView extends StatefulWidget {
   const PerfilView({super.key});
@@ -426,7 +428,9 @@ class _PerfilViewState extends State<PerfilView> {
             return Card(
               margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
               child: ListTile(
-                title: Text(a.tipo),
+                title: Text(
+                  MassageTypeCatalog.localize(AppLocalizations.of(context)!, a.tipo),
+                ),
                 subtitle: Text(DateFormat('dd/MM/yyyy HH:mm').format(a.dataHora)),
                 trailing: Text(a.status.toUpperCase(), style: TextStyle(color: a.status == 'aprovado' ? Colors.green : Colors.orange, fontWeight: FontWeight.bold)),
               ),

@@ -15,6 +15,7 @@ import 'package:universal_html/html.dart' as html;
 import 'package:pdf/pdf.dart';
 import 'package:pdf/widgets.dart' as pw;
 import 'package:flutter/services.dart' show rootBundle;
+import 'package:agenda/core/utils/app_strings.dart';
 
 class DashboardView extends StatefulWidget {
   final FirestoreService? firestoreService;
@@ -43,7 +44,7 @@ class _DashboardViewState extends State<DashboardView> {
       WidgetsBinding.instance.addPostFrameCallback((_) {
         if (mounted) {
           ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(content: Text('Acesso negado.'), backgroundColor: Colors.red),
+            SnackBar(content: Text(AppStrings.acessoNegado), backgroundColor: Colors.red),
           );
           Navigator.pop(context);
         }
@@ -58,28 +59,28 @@ class _DashboardViewState extends State<DashboardView> {
         actions: [
           IconButton(
             icon: const Icon(Icons.picture_as_pdf),
-            tooltip: 'Exportar Relatório Financeiro (PDF)',
+            tooltip: AppStrings.tooltipExportarPdfFinanceiro,
             onPressed: () => _exportarRelatorioFinanceiroPDF(context, firestoreService),
           ),
           IconButton(
             icon: const Icon(Icons.download_for_offline),
-            tooltip: 'Exportar Agendamentos (Excel)',
+            tooltip: AppStrings.tooltipExportarExcel,
             onPressed: () => _exportarExcel(context, firestoreService),
           ),
         ],
-        title: const Text('Dashboard Administrativo'),
+        title: Text(AppStrings.dashboardAdministrativo),
       ),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(16.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const Text('Resumo do Dia', style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold)),
+            Text(AppStrings.resumoDoDia, style: const TextStyle(fontSize: 22, fontWeight: FontWeight.bold)),
             const SizedBox(height: 16),
             StreamBuilder<List<Agendamento>>(
               stream: firestoreService.getAgendamentos(),
               builder: (context, snapshot) {
-                if (snapshot.hasError) return Text('Erro: ${snapshot.error}');
+                if (snapshot.hasError) return Text(AppStrings.erroGenerico(snapshot.error.toString()));
                 if (!snapshot.hasData) return const Center(child: CircularProgressIndicator());
 
                 final agendamentos = snapshot.data!;
@@ -119,7 +120,7 @@ class _DashboardViewState extends State<DashboardView> {
               },
             ),
             const SizedBox(height: 32),
-            const Text('Estoque Baixo', style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold)),
+            Text(AppStrings.estoqueBaixo, style: const TextStyle(fontSize: 22, fontWeight: FontWeight.bold)),
             const SizedBox(height: 16),
             StreamBuilder<List<ItemEstoque>>(
               stream: firestoreService.getEstoque(),
@@ -131,14 +132,14 @@ class _DashboardViewState extends State<DashboardView> {
                 final baixoEstoque = estoque.where((item) => item.quantidade < 5).toList();
 
                 if (baixoEstoque.isEmpty) {
-                  return const Card(child: Padding(padding: EdgeInsets.all(16), child: Text('Estoque em dia!')));
+                  return Card(child: Padding(padding: const EdgeInsets.all(16), child: Text(AppStrings.estoqueEmDia)));
                 }
 
                 return Column(
                   children: baixoEstoque.map((item) => ListTile(
                     leading: const Icon(Icons.warning_amber_rounded, color: Colors.red),
                     title: Text(item.nome),
-                    subtitle: Text('Restam apenas ${item.quantidade} unidades'),
+                    subtitle: Text(AppStrings.restamApenas(item.quantidade)),
                   )).toList(),
                 );
               },
@@ -156,7 +157,7 @@ class _DashboardViewState extends State<DashboardView> {
             onPressed: () => _confirmarTrocaManutencao(context, firestoreService, !emManutencao),
             backgroundColor: emManutencao ? Colors.red : Colors.green,
             icon: Icon(emManutencao ? Icons.lock_open : Icons.lock),
-            label: Text(emManutencao ? 'Desativar Manutenção' : 'Ativar Manutenção'),
+            label: Text(emManutencao ? AppStrings.desativarManutencao : AppStrings.ativarManutencao),
           );
         },
       ),
@@ -194,7 +195,7 @@ class _DashboardViewState extends State<DashboardView> {
       }
     } else if (bytes == null && context.mounted) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Nenhum dado para exportar.')),
+          SnackBar(content: Text(AppStrings.nenhumDadoExportar)),
       );
     }
   }
@@ -298,7 +299,7 @@ class _DashboardViewState extends State<DashboardView> {
     } catch (e) {
       if (context.mounted && Navigator.canPop(context)) Navigator.pop(context);
       if (context.mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Erro ao gerar PDF: $e')));
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(AppStrings.erroGerarPdf(e.toString()))));
       }
     }
   }
@@ -307,19 +308,19 @@ class _DashboardViewState extends State<DashboardView> {
     final confirm = await showDialog<bool>(
       context: context,
       builder: (context) => AlertDialog(
-        title: Text(novoStatus ? 'Ativar Modo Manutenção?' : 'Desativar Modo Manutenção?'),
-        content: Text(novoStatus 
-          ? 'Isso bloqueará o acesso de TODOS os clientes ao aplicativo imediatamente.' 
-          : 'O aplicativo ficará disponível novamente para todos os clientes.'),
+        title: Text(novoStatus ? AppStrings.ativarModoManutencao : AppStrings.desativarModoManutencao),
+        content: Text(novoStatus
+          ? AppStrings.ativarModoManutencaoConteudo
+          : AppStrings.desativarModoManutencaoConteudo),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context, false),
-            child: const Text('Cancelar'),
+            child: Text(AppStrings.cancelButton),
           ),
           ElevatedButton(
             style: ElevatedButton.styleFrom(backgroundColor: novoStatus ? Colors.red : Colors.green, foregroundColor: Colors.white),
             onPressed: () => Navigator.pop(context, true),
-            child: const Text('Confirmar'),
+            child: Text(AppStrings.confirmar),
           ),
         ],
       ),
@@ -361,7 +362,7 @@ class _DashboardViewState extends State<DashboardView> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Text('Faturamento (Últimos $_diasFiltro dias)', style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
+                  Text(AppStrings.faturamentoUltimosDias(_diasFiltro), style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
                   DropdownButton<int>(
                     value: _diasFiltro,
                     items: const [

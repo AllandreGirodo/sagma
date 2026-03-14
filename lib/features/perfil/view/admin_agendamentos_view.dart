@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:agenda/core/utils/app_strings.dart';
 
 class AdminAgendamentosView extends StatelessWidget {
   const AdminAgendamentosView({super.key});
@@ -6,8 +7,8 @@ class AdminAgendamentosView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Administração de Agendamentos')),
-      body: const Center(child: Text('Tela de Administração')),
+      appBar: AppBar(title: Text(AppStrings.administracaoAgendamentos)),
+      body: Center(child: Text(AppStrings.telaAdministracao)),
     );
   }
 }

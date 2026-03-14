@@ -32,7 +32,7 @@ class _AdminFinanceiroViewState extends State<AdminFinanceiroView> {
             return const Center(child: CircularProgressIndicator());
           }
           if (!snapshot.hasData || snapshot.data!.isEmpty) {
-            return const Center(child: Text('Sem dados financeiros.'));
+            return Center(child: Text(AppStrings.semDadosFinanceiros));
           }
 
           final agendamentos = snapshot.data!;
@@ -136,7 +136,7 @@ class _AdminFinanceiroViewState extends State<AdminFinanceiroView> {
                   ),
                 ),
                 const SizedBox(height: 20),
-                Text('Total Anual: R\$ ${faturamentoMensal.values.reduce((a, b) => a + b).toStringAsFixed(2)}', 
+                Text(AppStrings.totalAnual(faturamentoMensal.values.reduce((a, b) => a + b).toStringAsFixed(2)), 
                   style: AppStyles.title.copyWith(color: Colors.green)),
               ],
             ),

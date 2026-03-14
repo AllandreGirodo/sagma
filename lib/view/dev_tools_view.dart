@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:agenda/core/services/firestore_service.dart';
+import 'package:agenda/core/utils/app_strings.dart';
 import 'package:agenda/features/admin/view/admin_ferramentas_senha_setup_view.dart';
 import 'db_seeder.dart';
 import 'dart:convert';
@@ -73,7 +74,7 @@ class _DevToolsViewState extends State<DevToolsView> {
     await prefs.setBool('enable_device_preview', value);
     setState(() => _devicePreviewEnabled = value);
     if (!mounted) return;
-    ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Reinicie o app para aplicar a alteração.')));
+    ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(AppStrings.reinicieApp)));
   }
 
   Future<String?> _solicitarSenha({
@@ -105,11 +106,11 @@ class _DevToolsViewState extends State<DevToolsView> {
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(dialogContext),
-            child: const Text('Cancelar'),
+            child: Text(AppStrings.cancelButton),
           ),
           ElevatedButton(
             onPressed: () => Navigator.pop(dialogContext, controller.text.trim()),
-            child: const Text('Confirmar'),
+            child: Text(AppStrings.confirmar),
           ),
         ],
       ),
@@ -154,7 +155,7 @@ class _DevToolsViewState extends State<DevToolsView> {
     } catch (_) {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Nao foi possivel validar a senha da collection.')),
+            SnackBar(content: Text(AppStrings.naoValidarSenhaCollection)),
         );
       }
       await _fecharTelaSemAutenticacao();
@@ -164,7 +165,7 @@ class _DevToolsViewState extends State<DevToolsView> {
     if (!senhaColecaoValida) {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Senha da collection incorreta.')),
+            SnackBar(content: Text(AppStrings.senhaCollectionIncorreta)),
         );
       }
       await _fecharTelaSemAutenticacao();
@@ -185,7 +186,7 @@ class _DevToolsViewState extends State<DevToolsView> {
     if (senhaDev != _senhaDev) {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Senha dev incorreta.')),
+            SnackBar(content: Text(AppStrings.senhaDevIncorreta)),
         );
       }
       await _fecharTelaSemAutenticacao();
@@ -225,13 +226,13 @@ class _DevToolsViewState extends State<DevToolsView> {
         break;
       default:
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Sem script de seed para $collection')),
+          SnackBar(content: Text(AppStrings.semScriptSeed(collection))),
         );
         return;
     }
     if (!mounted) return;
     ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(content: Text('Tabela $collection populada (Merge/Ignore se existe).')),
+      SnackBar(content: Text(AppStrings.tabelaPopulada(collection))),
     );
     setState(() {}); // Atualiza contadores
   }
@@ -240,14 +241,14 @@ class _DevToolsViewState extends State<DevToolsView> {
     final confirm = await showDialog<bool>(
       context: context,
       builder: (context) => AlertDialog(
-        title: Text('TRUNCATE TABLE $collection?'),
-        content: Text('Tem certeza que deseja apagar TODOS os dados de $collection? Esta ação é irreversível.'),
+        title: Text(AppStrings.truncateTable(collection)),
+        content: Text(AppStrings.truncateConfirmacao(collection)),
         actions: [
-          TextButton(onPressed: () => Navigator.pop(context, false), child: const Text('Cancelar')),
+          TextButton(onPressed: () => Navigator.pop(context, false), child: Text(AppStrings.cancelButton)),
           ElevatedButton(
             style: ElevatedButton.styleFrom(backgroundColor: Colors.red, foregroundColor: Colors.white),
             onPressed: () => Navigator.pop(context, true),
-            child: const Text('APAGAR TUDO'),
+            child: Text(AppStrings.apagarTudo),
           ),
         ],
       ),
@@ -259,7 +260,7 @@ class _DevToolsViewState extends State<DevToolsView> {
       setState(() {});
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Collection $collection limpa com sucesso.')),
+          SnackBar(content: Text(AppStrings.collectionLimpa(collection))),
         );
       }
     }
@@ -268,13 +269,13 @@ class _DevToolsViewState extends State<DevToolsView> {
   // --- Exportação (JSON / CSV) ---
   Future<void> _exportarCollection(String collection, String formato) async {
     try {
-      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Gerando arquivo...')));
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(AppStrings.gerandoArquivo)));
       
       // 1. Busca dados
       final data = await _firestoreService.getFullCollection(collection);
       if (!mounted) return;
       if (data.isEmpty) {
-        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Coleção vazia.')));
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(AppStrings.colecaoVazia)));
         return;
       }
 
@@ -289,7 +290,7 @@ class _DevToolsViewState extends State<DevToolsView> {
         extensao = 'json';
       } else if (formato == 'excel') {
         if (collection != 'agendamentos') {
-          ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Excel disponível apenas para Agendamentos.')));
+          ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(AppStrings.excelApenasAgendamentos)));
           return;
         }
         conteudo = await _firestoreService.gerarRelatorioAgendamentosExcel();
@@ -324,7 +325,7 @@ class _DevToolsViewState extends State<DevToolsView> {
 
     } catch (e) {
       if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Erro ao exportar: $e')));
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(AppStrings.erroExportar(e.toString()))));
       }
     }
   }
@@ -332,14 +333,14 @@ class _DevToolsViewState extends State<DevToolsView> {
   // --- Exportação Web (JSONBin.io) ---
   Future<void> _exportarParaWeb(String collection) async {
     try {
-      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Enviando para JSONBin...')));
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(AppStrings.enviandoParaJsonBin)));
 
       if (!mounted) return;
       // 1. Busca dados
       final data = await _firestoreService.getFullCollection(collection);
       if (!mounted) return;
       if (data.isEmpty) {
-        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Coleção vazia.')));
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(AppStrings.colecaoVazia)));
         return;
       }
 
@@ -371,29 +372,29 @@ class _DevToolsViewState extends State<DevToolsView> {
           showDialog(
             context: context,
             builder: (context) => AlertDialog(
-              title: const Text('Exportação Concluída ☁️'),
+              title: Text(AppStrings.exportacaoConcluida),
               content: Column(
                 mainAxisSize: MainAxisSize.min,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  const Text('Dados salvos na nuvem com sucesso!'),
+                  Text(AppStrings.dadosSalvosNuvem),
                   const SizedBox(height: 10),
                   SelectableText('Bin ID: $binId', style: const TextStyle(fontWeight: FontWeight.bold)),
                   const SizedBox(height: 5),
-                  const Text('URL API:'),
+                  Text(AppStrings.urlApi),
                   SelectableText(url, style: const TextStyle(color: Colors.blue, fontSize: 12)),
                 ],
               ),
               actions: [
                 TextButton.icon(
                   icon: const Icon(Icons.copy),
-                  label: const Text('Copiar URL'),
-                  onPressed: () {
-                    Clipboard.setData(ClipboardData(text: url));
-                    ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('URL copiada!')));
+                  label: Text(AppStrings.copiarUrl),
+                    onPressed: () {
+                      Clipboard.setData(ClipboardData(text: url));
+                      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(AppStrings.urlCopiada)));
                   },
                 ),
-                TextButton(onPressed: () => Navigator.pop(context), child: const Text('Fechar')),
+                TextButton(onPressed: () => Navigator.pop(context), child: Text(AppStrings.fechar)),
               ],
             ),
           );
@@ -403,7 +404,7 @@ class _DevToolsViewState extends State<DevToolsView> {
       }
     } catch (e) {
       if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Erro ao exportar para web: $e')));
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(AppStrings.erroExportarWeb(e.toString()))));
       }
     }
   }
@@ -421,7 +422,7 @@ class _DevToolsViewState extends State<DevToolsView> {
 
       if (result != null) {
         File file = File(result.files.single.path!);
-        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Lendo arquivo...')));
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(AppStrings.lendoArquivo)));
 
         // 2. Ler e Parsear JSON
         String conteudo = await file.readAsString();
@@ -432,14 +433,14 @@ class _DevToolsViewState extends State<DevToolsView> {
 
         // 3. Enviar para Firestore
         if (mounted) {
-          ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Importando ${dados.length} registros...')));
+          ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(AppStrings.importandoRegistros(dados.length))));
         }
         await _firestoreService.importarColecao(collection, dados);
 
         if (!mounted) return;
         if (mounted) {
           ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(content: Text('Importação concluída com sucesso!')),
+              SnackBar(content: Text(AppStrings.importacaoConcluida)),
           );
           setState(() {}); // Atualiza contadores
         }
@@ -448,7 +449,7 @@ class _DevToolsViewState extends State<DevToolsView> {
       }
     } catch (e) {
       if (!mounted) return;
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Erro ao importar: $e')));
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(AppStrings.erroImportar(e.toString()))));
     }
   }
 
@@ -506,7 +507,7 @@ class _DevToolsViewState extends State<DevToolsView> {
                       }).toList();
                     }
 
-                    if (docs.isEmpty) return const Center(child: Text('Nenhum documento encontrado.'));
+                    if (docs.isEmpty) return Center(child: Text(AppStrings.nenhumDocumentoEncontrado));
 
                     return ListView.separated(
                       controller: scrollController,
@@ -552,7 +553,7 @@ class _DevToolsViewState extends State<DevToolsView> {
           ),
         ),
         actions: [
-          TextButton(onPressed: () => Navigator.pop(context), child: const Text('Fechar')),
+          TextButton(onPressed: () => Navigator.pop(context), child: Text(AppStrings.fechar)),
         ],
       ),
     );
@@ -586,7 +587,7 @@ class _DevToolsViewState extends State<DevToolsView> {
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        const Text('System Logs (Real-time)', style: TextStyle(color: Colors.greenAccent, fontFamily: 'monospace', fontWeight: FontWeight.bold)),
+                        Text(AppStrings.systemLogsRealtime, style: const TextStyle(color: Colors.greenAccent, fontFamily: 'monospace', fontWeight: FontWeight.bold)),
                         Row(
                           children: [
                             // Filtro
@@ -596,11 +597,11 @@ class _DevToolsViewState extends State<DevToolsView> {
                               style: const TextStyle(color: Colors.white, fontSize: 12),
                               underline: Container(), // Remove a linha padrão
                               icon: const Icon(Icons.filter_list, color: Colors.greenAccent, size: 16),
-                              items: const [
-                                DropdownMenuItem(value: 'todos', child: Text('Todos')),
-                                DropdownMenuItem(value: 'erro', child: Text('Erros')),
-                                DropdownMenuItem(value: 'aviso', child: Text('Avisos')),
-                                DropdownMenuItem(value: 'info', child: Text('Info')),
+                              items: [
+                                DropdownMenuItem(value: 'todos', child: Text(AppStrings.filtroTodos)),
+                                DropdownMenuItem(value: 'erro', child: Text(AppStrings.filtroErros)),
+                                DropdownMenuItem(value: 'aviso', child: Text(AppStrings.filtroAvisos)),
+                                DropdownMenuItem(value: 'info', child: Text(AppStrings.filtroInfo)),
                               ],
                               onChanged: (value) {
                                 if (value != null) {
@@ -619,7 +620,7 @@ class _DevToolsViewState extends State<DevToolsView> {
                     child: StreamBuilder<List<LogModel>>(
                   stream: _firestoreService.getLogs(),
                   builder: (context, snapshot) {
-                    if (snapshot.hasError) return Center(child: Text('Erro: ${snapshot.error}', style: const TextStyle(color: Colors.red)));
+                    if (snapshot.hasError) return Center(child: Text(AppStrings.erroGenerico(snapshot.error.toString()), style: const TextStyle(color: Colors.red)));
                     if (!snapshot.hasData) return const Center(child: CircularProgressIndicator(color: Colors.greenAccent));
 
                     var logs = snapshot.data!;
@@ -628,7 +629,7 @@ class _DevToolsViewState extends State<DevToolsView> {
                       logs = logs.where((l) => l.tipo == filtroSelecionado).toList();
                     }
 
-                    if (logs.isEmpty) return const Center(child: Text('Sem logs registrados.', style: TextStyle(color: Colors.white54)));
+                    if (logs.isEmpty) return Center(child: Text(AppStrings.semLogsRegistrados, style: const TextStyle(color: Colors.white54)));
 
                     return ListView.separated(
                       controller: scrollController,
@@ -677,13 +678,13 @@ class _DevToolsViewState extends State<DevToolsView> {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('DevTools - DB Manager'),
+        title: Text(AppStrings.devToolsDbManager),
         backgroundColor: Colors.grey[900],
         foregroundColor: Colors.greenAccent,
         actions: [
           IconButton(
             icon: const Icon(Icons.terminal),
-            tooltip: 'Console de Logs',
+            tooltip: AppStrings.tooltipConsoleLogs,
             onPressed: _abrirConsoleLogs,
           ),
           IconButton(
@@ -695,8 +696,8 @@ class _DevToolsViewState extends State<DevToolsView> {
       body: ListView(
         children: [
           SwitchListTile(
-            title: const Text('Ativar Device Preview (Simulador de Telas)'),
-            subtitle: const Text('Requer reinício do app. Útil para testar responsividade.'),
+            title: Text(AppStrings.ativarDevicePreview),
+            subtitle: Text(AppStrings.requerReinicioApp),
             value: _devicePreviewEnabled,
             onChanged: _toggleDevicePreview,
             secondary: const Icon(Icons.devices_other, color: Colors.purpleAccent),
@@ -713,20 +714,20 @@ class _DevToolsViewState extends State<DevToolsView> {
               return ListTile(
                 leading: const Icon(Icons.table_chart),
                 title: Text(collection, style: const TextStyle(fontWeight: FontWeight.bold)),
-                subtitle: Text('Registros: $count'),
+                subtitle: Text(AppStrings.registros(count)),
                 trailing: Row(
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     // Botão Visualizar JSON
                     IconButton(
                       icon: const Icon(Icons.visibility, color: Colors.purple),
-                      tooltip: 'Visualizar Dados (JSON)',
+                      tooltip: AppStrings.tooltipVisualizarJson,
                       onPressed: () => _abrirVisualizadorJson(collection),
                     ),
                     // Menu Exportar
                     PopupMenuButton<String>(
                       icon: const Icon(Icons.download, color: Colors.orange),
-                      tooltip: 'Exportar',
+                      tooltip: AppStrings.tooltipExportarDados,
                       onSelected: (format) {
                         if (format == 'web') {
                           _exportarParaWeb(collection);
@@ -735,33 +736,33 @@ class _DevToolsViewState extends State<DevToolsView> {
                         }
                       },
                       itemBuilder: (context) => [
-                        const PopupMenuItem(
+                        PopupMenuItem(
                           value: 'json',
-                          child: Row(children: [Icon(Icons.code, size: 18), SizedBox(width: 8), Text('JSON')]),
+                          child: Row(children: [const Icon(Icons.code, size: 18), const SizedBox(width: 8), Text(AppStrings.exportFormatoJson)]),
                         ),
-                        const PopupMenuItem(
+                        PopupMenuItem(
                           value: 'csv',
-                          child: Row(children: [Icon(Icons.table_view, size: 18), SizedBox(width: 8), Text('CSV')]),
+                          child: Row(children: [const Icon(Icons.table_view, size: 18), const SizedBox(width: 8), Text(AppStrings.exportFormatoCsv)]),
                         ),
-                        const PopupMenuItem(
+                        PopupMenuItem(
                           value: 'excel',
-                          child: Row(children: [Icon(Icons.grid_on, size: 18), SizedBox(width: 8), Text('Excel (XLSX)')]),
+                          child: Row(children: [const Icon(Icons.grid_on, size: 18), const SizedBox(width: 8), Text(AppStrings.exportFormatoExcel)]),
                         ),
-                        const PopupMenuItem(
+                        PopupMenuItem(
                           value: 'web',
-                          child: Row(children: [Icon(Icons.cloud_upload, size: 18), SizedBox(width: 8), Text('Web (JSONBin)')]),
+                          child: Row(children: [const Icon(Icons.cloud_upload, size: 18), const SizedBox(width: 8), Text(AppStrings.exportFormatoWeb)]),
                         ),
                       ],
                     ),
                     // Botão Importar
                     IconButton(
                       icon: const Icon(Icons.upload_file, color: Colors.green),
-                      tooltip: 'Importar JSON (Restore)',
+                      tooltip: AppStrings.tooltipImportarJson,
                       onPressed: () => _importarCollection(collection),
                     ),
                     // Botões Existentes
-                    IconButton(icon: const Icon(Icons.add_circle_outline, color: Colors.blue), onPressed: () => _popularCollection(collection), tooltip: 'Popular (Seed)'),
-                    IconButton(icon: const Icon(Icons.delete_forever, color: Colors.red), onPressed: () => _limparCollection(collection), tooltip: 'Limpar (Truncate)'),
+                    IconButton(icon: const Icon(Icons.add_circle_outline, color: Colors.blue), onPressed: () => _popularCollection(collection), tooltip: AppStrings.tooltipPopularSeed),
+                    IconButton(icon: const Icon(Icons.delete_forever, color: Colors.red), onPressed: () => _limparCollection(collection), tooltip: AppStrings.tooltipLimparTruncate),
                   ],
                 ),
               );

@@ -7,6 +7,9 @@ import 'package:pdf/pdf.dart';
 import 'package:pdf/widgets.dart' as pw;
 import 'package:agenda/core/services/firestore_service.dart';
 import 'package:agenda/core/models/agendamento_model.dart';
+import 'package:agenda/app_localizations.dart';
+import 'package:agenda/core/utils/app_strings.dart';
+import 'package:agenda/core/utils/massage_type_catalog.dart';
 
 class AdminRelatoriosView extends StatelessWidget {
   const AdminRelatoriosView({super.key});
@@ -17,14 +20,14 @@ class AdminRelatoriosView extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Relatórios Gerenciais'),
+        title: Text(AppStrings.relatoriosGerenciais),
         backgroundColor: Colors.indigo,
         foregroundColor: Colors.white,
         actions: [
           // Botão de Exportar PDF
           IconButton(
             icon: const Icon(Icons.picture_as_pdf),
-            tooltip: 'Exportar PDF e Compartilhar',
+            tooltip: AppStrings.exportarPdfCompartilhar,
             onPressed: () => _gerarECompartilharPdf(context, firestoreService),
           ),
         ],
@@ -43,7 +46,7 @@ class AdminRelatoriosView extends StatelessWidget {
           ).toList();
 
           if (agendamentosMes.isEmpty) {
-            return const Center(child: Text('Sem dados para este mês.'));
+            return Center(child: Text(AppStrings.semDadosMes));
           }
 
           // Métricas
@@ -56,7 +59,7 @@ class AdminRelatoriosView extends StatelessWidget {
           return ListView(
             padding: const EdgeInsets.all(16),
             children: [
-              Text('Resumo de ${DateFormat('MMMM yyyy', 'pt_BR').format(now)}', 
+              Text(AppStrings.resumoDe(DateFormat('MMMM yyyy', 'pt_BR').format(now)),
                 style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
               const SizedBox(height: 20),
               
@@ -77,14 +80,14 @@ class AdminRelatoriosView extends StatelessWidget {
               ),
 
               const SizedBox(height: 30),
-              const Text('Detalhamento de Cancelamentos', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+              Text(AppStrings.detalhamentoCancelamentos, style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
               const Divider(),
               ...agendamentosMes.where((a) => a.status.contains('cancelado')).map((a) {
                 return ListTile(
                   leading: const Icon(Icons.cancel, color: Colors.red),
                   title: Text(DateFormat('dd/MM HH:mm').format(a.dataHora)),
-                  subtitle: Text(a.motivoCancelamento ?? 'Sem motivo registrado'),
-                  trailing: Text(a.status == 'cancelado_tardio' ? 'Tardio' : 'Normal', 
+                  subtitle: Text(a.motivoCancelamento ?? AppStrings.semMotivoCancelamento),
+                  trailing: Text(a.status == 'cancelado_tardio' ? AppStrings.tardio : AppStrings.normal, 
                     style: TextStyle(color: a.status == 'cancelado_tardio' ? Colors.purple : Colors.grey)),
                 );
               }),
@@ -114,8 +117,11 @@ class AdminRelatoriosView extends StatelessWidget {
   }
 
   Future<void> _gerarECompartilharPdf(BuildContext context, FirestoreService service) async {
+    final messenger = ScaffoldMessenger.of(context);
+    final localizations = AppLocalizations.of(context)!;
+
     try {
-      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Gerando PDF...')));
+      messenger.showSnackBar(SnackBar(content: Text(AppStrings.gerandoPdf)));
 
       // 1. Obter dados (snapshot único para o relatório)
       final snapshot = await service.getAgendamentos().first;
@@ -138,17 +144,17 @@ class AdminRelatoriosView extends StatelessWidget {
       pdf.addPage(
         pw.Page(
           pageFormat: PdfPageFormat.a4,
-          build: (pw.Context context) {
+          build: (pw.Context pdfContext) {
             return pw.Column(
               crossAxisAlignment: pw.CrossAxisAlignment.start,
               children: [
                 pw.Header(
                   level: 0,
-                  child: pw.Text('Relatório Mensal - Agenda Massoterapia', style: pw.TextStyle(fontSize: 24, fontWeight: pw.FontWeight.bold)),
+                  child: pw.Text(AppStrings.relatorioMensalTitulo, style: pw.TextStyle(fontSize: 24, fontWeight: pw.FontWeight.bold)),
                 ),
                 pw.SizedBox(height: 10),
-                pw.Text('Mês de Referência: ${DateFormat('MMMM yyyy', 'pt_BR').format(now)}'),
-                pw.Text('Data de Emissão: ${DateFormat('dd/MM/yyyy HH:mm').format(now)}'),
+                pw.Text(AppStrings.mesReferencia(DateFormat('MMMM yyyy', 'pt_BR').format(now))),
+                pw.Text(AppStrings.dataEmissao(DateFormat('dd/MM/yyyy HH:mm').format(now))),
                 pw.Divider(),
                 pw.SizedBox(height: 20),
                 
@@ -159,27 +165,27 @@ class AdminRelatoriosView extends StatelessWidget {
                   child: pw.Column(
                     crossAxisAlignment: pw.CrossAxisAlignment.start,
                     children: [
-                      pw.Text('Resumo Financeiro', style: pw.TextStyle(fontSize: 18, fontWeight: pw.FontWeight.bold)),
+                      pw.Text(AppStrings.resumoFinanceiro, style: pw.TextStyle(fontSize: 18, fontWeight: pw.FontWeight.bold)),
                       pw.SizedBox(height: 5),
-                      pw.Text('Total de Agendamentos: ${agendamentosMes.length}'),
-                      pw.Text('Sessões Realizadas/Aprovadas: $realizados'),
-                      pw.Text('Receita Bruta Estimada: R\$ ${receitaEstimada.toStringAsFixed(2)}', style: pw.TextStyle(color: PdfColors.green, fontWeight: pw.FontWeight.bold)),
+                      pw.Text(AppStrings.totalAgendamentos(agendamentosMes.length)),
+                      pw.Text(AppStrings.sessoesRealizadas(realizados)),
+                      pw.Text(AppStrings.receitaBruta('R\$ ${receitaEstimada.toStringAsFixed(2)}'), style: pw.TextStyle(color: PdfColors.green, fontWeight: pw.FontWeight.bold)),
                     ],
                   ),
                 ),
                 pw.SizedBox(height: 20),
 
                 // Tabela de Agendamentos
-                pw.Text('Detalhamento', style: pw.TextStyle(fontSize: 16, fontWeight: pw.FontWeight.bold)),
+                pw.Text(AppStrings.detalhamento, style: pw.TextStyle(fontSize: 16, fontWeight: pw.FontWeight.bold)),
                 pw.SizedBox(height: 10),
                 pw.TableHelper.fromTextArray(
-                  context: context,
+                  context: pdfContext,
                   headerStyle: pw.TextStyle(fontWeight: pw.FontWeight.bold),
                   headers: ['Data', 'Cliente', 'Tipo', 'Status', 'Valor'],
                   data: agendamentosMes.map((a) => [
                     DateFormat('dd/MM HH:mm').format(a.dataHora),
                     a.clienteNomeSnapshot ?? 'ID: ${a.clienteId.substring(0, 5)}...', // Proteção de dados se snapshot falhar
-                    a.tipo,
+                    MassageTypeCatalog.localize(localizations, a.tipo),
                     a.status.toUpperCase(),
                     a.status == 'aprovado' ? 'R\$ ${config.precoSessao}' : '-',
                   ]).toList(),
@@ -197,7 +203,9 @@ class AdminRelatoriosView extends StatelessWidget {
 
       await Share.shareXFiles([XFile(file.path)], text: 'Segue o relatório financeiro de ${DateFormat('MMMM').format(now)}.');
     } catch (e) {
-      if (context.mounted) ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Erro ao gerar PDF: $e')));
+      if (context.mounted) {
+        messenger.showSnackBar(SnackBar(content: Text(AppStrings.erroGerarPdf(e.toString()))));
+      }
     }
   }
 }

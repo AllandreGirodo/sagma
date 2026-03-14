@@ -20,6 +20,8 @@ import 'package:agenda/core/widgets/language_selector.dart';
 import 'package:agenda/core/widgets/theme_selector.dart';
 import 'package:agenda/core/utils/custom_theme_data.dart';
 import 'package:agenda/core/utils/app_strings.dart';
+import 'package:agenda/app_localizations.dart';
+import 'package:agenda/core/utils/massage_type_catalog.dart';
 
 class AdminAgendamentosView extends StatefulWidget {
   const AdminAgendamentosView({super.key});
@@ -205,7 +207,8 @@ class _AdminAgendamentosViewState extends State<AdminAgendamentosView> {
         // Distribuição de Tipos (Para o Gráfico)
         final Map<String, int> distribuicaoTipos = {};
         for (var a in agendamentosMes) {
-          distribuicaoTipos[a.tipo] = (distribuicaoTipos[a.tipo] ?? 0) + 1;
+          final tipoId = MassageTypeCatalog.normalizeId(a.tipo);
+          distribuicaoTipos[tipoId] = (distribuicaoTipos[tipoId] ?? 0) + 1;
         }
 
         return SingleChildScrollView(
@@ -300,7 +303,10 @@ class _AdminAgendamentosViewState extends State<AdminAgendamentosView> {
                             children: [
                               Container(width: 12, height: 12, color: color),
                               const SizedBox(width: 4),
-                              Text('${e.key} (${e.value})', style: const TextStyle(fontSize: 12)),
+                              Text(
+                                '${MassageTypeCatalog.localize(AppLocalizations.of(context)!, e.key)} (${e.value})',
+                                style: const TextStyle(fontSize: 12),
+                              ),
                             ],
                           );
                         }).toList(),
@@ -436,7 +442,12 @@ class _AdminAgendamentosViewState extends State<AdminAgendamentosView> {
                     DateFormat('dd/MM/yyyy HH:mm').format(agendamento.dataHora),
                     style: const TextStyle(fontWeight: FontWeight.bold),
                   ),
-                  subtitle: Text(AppStrings.resumoClienteTipo(agendamento.clienteId, agendamento.tipo)),
+                  subtitle: Text(
+                    AppStrings.resumoClienteTipo(
+                      agendamento.clienteId,
+                      MassageTypeCatalog.localize(AppLocalizations.of(context)!, agendamento.tipo),
+                    ),
+                  ),
                   trailing: Row(
                     mainAxisSize: MainAxisSize.min,
                     children: [

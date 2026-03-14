@@ -1,5 +1,7 @@
 import 'package:audioplayers/audioplayers.dart';
+import 'package:flutter/foundation.dart' show kDebugMode, kIsWeb;
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart' show AssetManifest, rootBundle;
 import 'package:agenda/core/utils/custom_theme_data.dart';
 
 class BackgroundSoundManager extends StatefulWidget {
@@ -23,6 +25,8 @@ class _BackgroundSoundManagerState extends State<BackgroundSoundManager> {
   final AudioPlayer _player = AudioPlayer();
   String? _targetAsset; // Rastreia o ativo que desejamos tocar para evitar condições de corrida
   final AudioCache _audioCache = AudioCache(prefix: 'assets/'); // Cache dedicado
+  bool _assetManifestLoaded = false;
+  Set<String> _availableAssets = <String>{};
 
   @override
   void initState() {
@@ -35,16 +39,44 @@ class _BackgroundSoundManagerState extends State<BackgroundSoundManager> {
   // Sistema de Cache: Pré-carrega sons comuns para evitar delay na primeira execução
   Future<void> _preLoadSounds() async {
     try {
-      await _audioCache.loadAll([
+      await _ensureAssetManifestLoaded();
+      final existingSounds = <String>[
         'sounds/ocean_waves.mp3',
         'sounds/space_ambient.mp3',
         'sounds/celebration.mp3',
         'sounds/wind_howling.mp3',
         // Adicione outros sons do seu projeto aqui
-      ]);
+      ].where(_isAssetAvailable).toList();
+
+      if (existingSounds.isNotEmpty) {
+        await _audioCache.loadAll(existingSounds);
+      }
     } catch (e) {
       debugPrint('Erro ao pré-carregar sons: $e');
     }
+  }
+
+  Future<void> _ensureAssetManifestLoaded() async {
+    if (_assetManifestLoaded) return;
+    _assetManifestLoaded = true;
+
+    // No web debug o AssetManifest.json pode não estar disponível; evita ruído no console.
+    if (kIsWeb && kDebugMode) {
+      _availableAssets = <String>{};
+      return;
+    }
+
+    try {
+      final manifest = await AssetManifest.loadFromAssetBundle(rootBundle);
+      _availableAssets = manifest.listAssets().toSet();
+    } catch (e) {
+      debugPrint('Aviso: não foi possível ler o AssetManifest: $e');
+      _availableAssets = <String>{};
+    }
+  }
+
+  bool _isAssetAvailable(String relativeAssetPath) {
+    return _availableAssets.contains('assets/$relativeAssetPath');
   }
 
   @override
@@ -84,6 +116,13 @@ class _BackgroundSoundManagerState extends State<BackgroundSoundManager> {
     // Se o som alvo já é o que queremos, ignora (evita múltiplas chamadas rápidas)
     if (_targetAsset == assetToPlay) return;
     _targetAsset = assetToPlay;
+
+    await _ensureAssetManifestLoaded();
+    if (!_isAssetAvailable(assetToPlay)) {
+      debugPrint('Arquivo de áudio não encontrado no bundle: assets/$assetToPlay');
+      await _player.stop();
+      return;
+    }
 
 
     try {

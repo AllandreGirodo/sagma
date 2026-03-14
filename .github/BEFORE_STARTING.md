@@ -51,6 +51,40 @@ flutter run
 
 ---
 
+### 5️⃣ (Web Debug) Configure App Check Debug Token
+
+Se você for rodar no Chrome com Firebase online, configure o token de debug do App Check para evitar erro 403.
+
+1. Rode uma vez para gerar/logar o token:
+
+```bash
+flutter run -d chrome --dart-define=ENV=dev
+```
+
+2. Copie o valor mostrado no log:
+
+```text
+App Check debug token: <SEU_TOKEN>
+```
+
+3. No Firebase Console, acesse:
+
+`Build > App Check > Apps > [seu app web] > Gerenciar tokens de depuração > Adicionar token`
+
+4. Preencha:
+- Nome: por exemplo `web-chrome-dev-agenda`
+- Valor: cole o token do log
+
+5. Rode com App Check habilitado no debug:
+
+```bash
+flutter run -d chrome --dart-define=ENV=dev --dart-define=ENABLE_APPCHECK_IN_DEBUG=true --dart-define=FIREBASE_APPCHECK_DEBUG_TOKEN=<SEU_TOKEN>
+```
+
+**Cuidado:** o valor do token pode não aparecer novamente no Console. Guarde com segurança e não compartilhe publicamente.
+
+---
+
 ## 🔐 Segurança
 
 - ✅ O arquivo `.env` (local) está no `.gitignore`
@@ -80,6 +114,10 @@ flutter run
 
 ### ❌ ".env: arquivo não encontrado"
 → Execute: `cp .env.example .env`
+
+### ❌ "App Check 403 (exchangeDebugToken)"
+→ Verifique se o token de debug foi criado no Firebase Console e se você está rodando com:
+`--dart-define=ENABLE_APPCHECK_IN_DEBUG=true --dart-define=FIREBASE_APPCHECK_DEBUG_TOKEN=<SEU_TOKEN>`
 
 ---
 

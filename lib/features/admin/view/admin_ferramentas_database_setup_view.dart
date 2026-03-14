@@ -3,6 +3,8 @@ import 'package:agenda/core/services/firestore_service.dart';
 import 'package:agenda/core/models/firestore_structure_helper.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:agenda/core/utils/app_strings.dart';
+import 'package:agenda/app_localizations.dart';
+import 'package:agenda/core/utils/massage_type_catalog.dart';
 
 /// Tela de ferramentas de administração para visualização e configuração
 /// de dados do banco de dados Firebase.
@@ -237,7 +239,21 @@ class _AdminFerramentasDatabaseSetupViewState
                   _buildCard([
                     _buildCampoListaNaoEditavel(
                       'Tipos de Massagem',
-                      List<String>.from(_configServicos['tipos_massagem'] ?? []),
+                      MassageTypeCatalog
+                          .normalizeIds(
+                            List<String>.from(
+                              _configServicos['tipos_massagem_ids'] ??
+                                  _configServicos['tipos_massagem'] ??
+                                  [],
+                            ),
+                          )
+                          .map(
+                            (tipoId) => MassageTypeCatalog.localize(
+                              AppLocalizations.of(context)!,
+                              tipoId,
+                            ),
+                          )
+                          .toList(),
                       Icons.spa,
                     ),
                     _buildCampoNaoEditavel(

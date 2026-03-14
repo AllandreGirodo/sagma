@@ -176,10 +176,18 @@ class FirestoreStructureHelper {
     // Configurações de serviços
     await ensureDocumentExists('configuracoes/servicos', {
       'tipos_massagem': [
-        'Relaxante',
-        'Terapêutica',
-        'Desportiva',
-        'Pedras Quentes',
+        'relaxante',
+        'drenagem_linfatica',
+        'terapeutica',
+        'desportiva',
+        'pedras_quentes',
+      ],
+      'tipos_massagem_ids': [
+        'relaxante',
+        'drenagem_linfatica',
+        'terapeutica',
+        'desportiva',
+        'pedras_quentes',
       ],
       'duracao_padrao_minutos': 60,
       'preco_padrao': 150.0,
@@ -257,10 +265,18 @@ class FirestoreStructureHelper {
   static Map<String, dynamic> getConfigServicosPadrao() {
     return {
       'tipos_massagem': [
-        'Relaxante',
-        'Terapêutica',
-        'Desportiva',
-        'Pedras Quentes',
+        'relaxante',
+        'drenagem_linfatica',
+        'terapeutica',
+        'desportiva',
+        'pedras_quentes',
+      ],
+      'tipos_massagem_ids': [
+        'relaxante',
+        'drenagem_linfatica',
+        'terapeutica',
+        'desportiva',
+        'pedras_quentes',
       ],
       'duracao_padrao_minutos': 60,
       'preco_padrao': 150.0,

@@ -16,6 +16,7 @@ import 'package:agenda/core/widgets/language_selector.dart';
 import 'package:agenda/app_localizations.dart';
 import 'package:agenda/core/models/cliente_model.dart';
 import 'package:agenda/core/utils/app_strings.dart';
+import 'package:agenda/core/utils/massage_type_catalog.dart';
 
 class AgendamentoView extends StatefulWidget {
   const AgendamentoView({super.key});
@@ -64,6 +65,11 @@ class _AgendamentoViewState extends State<AgendamentoView> {
   void dispose() {
     _searchController.dispose();
     super.dispose();
+  }
+
+  String _tipoLabel(BuildContext context, String tipoIdOuLegado) {
+    final localizations = AppLocalizations.of(context)!;
+    return MassageTypeCatalog.localize(localizations, tipoIdOuLegado);
   }
 
   @override
@@ -174,9 +180,10 @@ class _AgendamentoViewState extends State<AgendamentoView> {
 
           // Filtro por Texto (Tipo)
           if (_filtroTexto.isNotEmpty) {
-            agendamentos = agendamentos.where((a) => 
-              a.tipo.toLowerCase().contains(_filtroTexto.toLowerCase())
-            ).toList();
+            agendamentos = agendamentos.where((a) {
+              final tipoLocalizado = _tipoLabel(context, a.tipo).toLowerCase();
+              return tipoLocalizado.contains(_filtroTexto.toLowerCase());
+            }).toList();
           }
 
           if (agendamentos.isEmpty) {
@@ -340,9 +347,13 @@ class _AgendamentoViewState extends State<AgendamentoView> {
                     ]),
                     builder: (context, snapshot) {
                       if (!snapshot.hasData) return const LinearProgressIndicator();
-                      final tipos = snapshot.data![0] as List<String>;
+                      final tipos = MassageTypeCatalog.normalizeIds(
+                        snapshot.data![0] as List<String>,
+                      );
                       final cliente = snapshot.data![1] as Cliente?;
-                      final favoritos = cliente?.favoritos ?? <String>[];
+                      final favoritos = MassageTypeCatalog.normalizeIds(
+                        cliente?.favoritos ?? <String>[],
+                      );
 
                       // Verifica se o tipo selecionado é favorito
                       final isFavorite = _tipoSelecionado != null && favoritos.contains(_tipoSelecionado);
@@ -356,7 +367,7 @@ class _AgendamentoViewState extends State<AgendamentoView> {
                             Wrap(
                               spacing: 8,
                               children: favoritos.map((fav) => ActionChip(
-                                label: Text(fav),
+                                label: Text(_tipoLabel(context, fav)),
                                 avatar: const Icon(Icons.star, size: 16, color: Colors.amber),
                                 onPressed: () => setStateDialog(() => _tipoSelecionado = fav),
                                 backgroundColor: _tipoSelecionado == fav ? Colors.teal.shade100 : null,
@@ -373,7 +384,14 @@ class _AgendamentoViewState extends State<AgendamentoView> {
                                   hint: Text(AppStrings.selecioneTipo),
                                   value: _tipoSelecionado,
                                   isExpanded: true,
-                                  items: tipos.map((tipo) => DropdownMenuItem(value: tipo, child: Text(tipo))).toList(),
+                                  items: tipos
+                                      .map(
+                                        (tipoId) => DropdownMenuItem(
+                                          value: tipoId,
+                                          child: Text(_tipoLabel(context, tipoId)),
+                                        ),
+                                      )
+                                      .toList(),
                                   onChanged: (val) => setStateDialog(() => _tipoSelecionado = val),
                                 ),
                               ),
@@ -590,7 +608,7 @@ class _AgendamentoViewState extends State<AgendamentoView> {
     final novoAgendamento = Agendamento(
       clienteId: user.uid,
       dataHora: dataHoraFinal,
-      tipo: _tipoSelecionado!,
+      tipo: MassageTypeCatalog.normalizeId(_tipoSelecionado!),
       cupomAplicado: _cupomAplicado?.codigo,
       valorOriginal: _config?.precoSessao,
       valorFinal: _valorFinalSessao,
@@ -726,6 +744,10 @@ class AgendamentoDetalhesView extends StatelessWidget {
     // Formatação de data e hora
     final dateStr = DateFormat('dd/MM/yyyy').format(agendamento.dataHora);
     final timeStr = DateFormat('HH:mm').format(agendamento.dataHora);
+    final tipoLocalizado = MassageTypeCatalog.localize(
+      AppLocalizations.of(context)!,
+      agendamento.tipo,
+    );
 
     return Scaffold(
       // AppBar transparente para manter o fundo visível
@@ -760,7 +782,7 @@ class AgendamentoDetalhesView extends StatelessWidget {
                       children: [
                         const Icon(Icons.spa, size: 60, color: Colors.teal),
                         const SizedBox(height: 20),
-                        Text(agendamento.tipo, style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold)),
+                        Text(tipoLocalizado, style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold)),
                         const SizedBox(height: 10),
                         const Divider(),
                         const SizedBox(height: 10),
@@ -886,6 +908,10 @@ class _AgendamentoCardState extends State<_AgendamentoCard> with SingleTickerPro
     final agendamento = widget.agendamento;
     final currentUser = widget.currentUser;
     final isMyAppointment = currentUser != null && agendamento.clienteId == currentUser.uid;
+    final tipoLocalizado = MassageTypeCatalog.localize(
+      AppLocalizations.of(context)!,
+      agendamento.tipo,
+    );
 
     IconData statusIcon;
     Color statusColor;
@@ -944,7 +970,7 @@ class _AgendamentoCardState extends State<_AgendamentoCard> with SingleTickerPro
                           DateFormat('dd/MM/yyyy HH:mm').format(agendamento.dataHora),
                           style: const TextStyle(fontWeight: FontWeight.bold),
                         ),
-                        subtitle: Text(AppStrings.tipoStatusResumo(agendamento.tipo, agendamento.status, motivoTexto)),
+                        subtitle: Text(AppStrings.tipoStatusResumo(tipoLocalizado, agendamento.status, motivoTexto)),
                         isThreeLine: true,
                         trailing: Row(
                           mainAxisSize: MainAxisSize.min,

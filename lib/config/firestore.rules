@@ -109,5 +109,11 @@ service cloud.firestore {
       allow read: if eAdmin();
       allow create: if estaLogado();
     }
+
+    // Coleção de teste (apenas debug) — apenas usuários autenticados podem criar documentos
+    match /teste/{docId} {
+      allow create: if estaLogado();
+      allow read, update, delete: if eAdmin();
+    }
   }
 }

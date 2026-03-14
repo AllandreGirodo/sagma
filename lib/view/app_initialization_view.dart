@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:agenda/core/services/firestore_service.dart';
 import 'package:agenda/core/models/firestore_structure_helper.dart';
+import 'package:agenda/core/utils/app_strings.dart';
 import 'package:agenda/features/admin/view/admin_senha_setup_view.dart';
 import 'package:agenda/features/auth/view/login_view.dart';
 import 'package:agenda/view/onboarding_view.dart';
@@ -30,6 +31,22 @@ class _AppInitializationViewState extends State<AppInitializationView> {
   bool _senhaConfigurada = false;
   String? _errorMessage;
 
+  Future<void> _tentarInicializarColecoesEntrada() async {
+    final helper = FirestoreStructureHelper();
+
+    try {
+      await helper.inicializarSistemaCompleto();
+    } on FirebaseException catch (e) {
+      // Em cenários sem sessão/permissão suficiente, segue o fluxo normal.
+      if (e.code != 'permission-denied') {
+        rethrow;
+      }
+      debugPrint(
+        'Sem permissão para criar coleções de entrada agora. Fluxo seguirá com fallback.',
+      );
+    }
+  }
+
   @override
   void initState() {
     super.initState();
@@ -55,8 +72,7 @@ class _AppInitializationViewState extends State<AppInitializationView> {
 
       // A inicializacao de estrutura e setup de senha pertence apenas ao admin.
       if (eAdmin) {
-        final helper = FirestoreStructureHelper();
-        await helper.inicializarEstruturaConfiguracoes();
+        await _tentarInicializarColecoesEntrada();
 
         final senhaConfigurada = await firestoreService.verificaSenhaAdminFerramentasConfigurada();
         setState(() {
@@ -152,7 +168,7 @@ class _AppInitializationViewState extends State<AppInitializationView> {
                     _inicializarSistema();
                   },
                   icon: const Icon(Icons.refresh),
-                  label: const Text('Tentar novamente'),
+                  label: Text(AppStrings.tentarNovamente),
                 ),
               ],
             ),

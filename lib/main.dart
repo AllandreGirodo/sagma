@@ -15,7 +15,6 @@ import 'package:agenda/core/widgets/background_sound_manager.dart';
 import 'package:agenda/core/utils/app_styles.dart';
 import 'package:agenda/core/utils/app_strings.dart';
 import 'package:agenda/core/utils/app_check_debug_token.dart';
-import 'package:agenda/view/app_initialization_view.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:agenda/config/firebase_options.dart';
 import 'package:agenda/view/config_error_view.dart';
@@ -24,10 +23,16 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:cloud_functions/cloud_functions.dart';
 import 'package:agenda/view/manutencao_view.dart';
 import 'package:agenda/app_localizations.dart';
+import 'package:agenda/view/app_initialization_view.dart';
 
 Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
   // Manipular mensagens em segundo plano
   debugPrint(AppStrings.backgroundMessageHandling(message.messageId));
+}
+
+void _bootDiag(String message) {
+  if (!kDebugMode) return;
+  debugPrint('[BOOT_DIAG] $message');
 }
 
 String _normalizeAppCheckDebugToken(String? raw) {
@@ -216,12 +221,20 @@ void main() async {
         Uri.base.host == '0.0.0.0' ||
         Uri.base.host == '::1');
 
-    final String? debugTokenForWeb =
-        (kDebugMode && isLocalWebHost) ? null : appCheckDebugToken;
-
     const bool enableAppCheckInDebug = bool.fromEnvironment(
       'ENABLE_APPCHECK_IN_DEBUG',
       defaultValue: false,
+    );
+
+    final String? debugTokenForWeb =
+        (kIsWeb && (kReleaseMode || enableAppCheckInDebug))
+            ? appCheckDebugToken
+            : null;
+
+    _bootDiag(
+      'host=${Uri.base.host} localWeb=$isLocalWebHost '
+      'enableAppCheckInDebug=$enableAppCheckInDebug '
+      'debugTokenProvided=${appCheckDebugToken.isNotEmpty}',
     );
 
     await configureWebAppCheckDebugToken(
@@ -271,6 +284,10 @@ void main() async {
     final recaptchaKey = _resolveRecaptchaSiteKey();
     final bool shouldEnableWebAppCheck =
         kIsWeb && (kReleaseMode || enableAppCheckInDebug);
+    _bootDiag(
+      'webAppCheck shouldEnable=$shouldEnableWebAppCheck '
+      'recaptchaConfigured=${recaptchaKey.isNotEmpty}',
+    );
     if (shouldEnableWebAppCheck && recaptchaKey.isNotEmpty) {
       try {
         await FirebaseAppCheck.instance.activate(
@@ -296,7 +313,7 @@ void main() async {
 
     runApp(
       DevicePreview(
-        enabled: !kReleaseMode, // Ativa o DevicePreview em modo debug
+        enabled: !kReleaseMode && !kIsWeb,
         builder: (context) => MyApp(
           initialLocale: initialLocale,
           initialThemeMode: themeMode,
@@ -569,9 +586,7 @@ class _MyAppState extends State<MyApp> {
             Locale('fr', 'FR'),
             Locale('ja', 'JP'),
           ],
-          home: AppInitializationView(
-            onboardingComplete: widget.onboardingComplete,
-          ),
+          home: AppInitializationView(onboardingComplete: false),
           // Builder global: Envolve todo o app no fundo animado e verifica manutenção
           builder: (context, child) {
             final childWithPreview = DevicePreview.appBuilder(context, child);

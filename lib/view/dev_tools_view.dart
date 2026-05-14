@@ -33,7 +33,7 @@ class DevToolsView extends StatefulWidget {
 class _DevToolsViewState extends State<DevToolsView> {
   final FirestoreService _firestoreService = FirestoreService();
   final FirebaseFunctions _functions = FirebaseFunctions.instance;
-  late final String _senhaDev = _carregarSenhaDev();
+  late String _senhaDev;
   bool _autenticado = false;
   bool _devicePreviewEnabled = false;
   bool _valorTesteBooleanoBanco = false;
@@ -57,6 +57,7 @@ class _DevToolsViewState extends State<DevToolsView> {
   @override
   void initState() {
     super.initState();
+    _senhaDev = _carregarSenhaDev();
     // Verifica se a senha está configurada
     WidgetsBinding.instance.addPostFrameCallback((_) async {
       final permitido = await _usuarioPodeAcessarDevTools();

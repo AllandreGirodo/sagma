@@ -34,7 +34,12 @@ class _LoginViewState extends State<LoginView> {
   bool _isObscure = true;
   bool _lembrarCredenciais = false;
   final LocalAuthentication auth = LocalAuthentication();
-  bool _googleSignInInitialized = false;
+  Future<void>? _googleSignInInitFuture;
+
+  void _authDiag(String message) {
+    if (!kIsWeb || !kDebugMode) return;
+    debugPrint('[AUTH_DIAG] $message');
+  }
 
   void _setLoadingSafely(bool value) {
     if (!mounted) return;
@@ -63,9 +68,8 @@ class _LoginViewState extends State<LoginView> {
         }
 
   Future<void> _initializeGoogleSignInIfNeeded() async {
-    if (_googleSignInInitialized) return;
-    await GoogleSignIn.instance.initialize();
-    _googleSignInInitialized = true;
+    _googleSignInInitFuture ??= GoogleSignIn.instance.initialize();
+    await _googleSignInInitFuture;
   }
 
         bool _isFirestorePermissionLikelyAppCheck(Object e) {
@@ -81,6 +85,7 @@ class _LoginViewState extends State<LoginView> {
   @override
   void initState() {
     super.initState();
+    _authDiag('initState host=${Uri.base.host} url=${Uri.base}');
     _carregarCredenciaisSalvas();
     _processarRetornoLoginGoogleRedirect();
     _verificarBiometriaAutomatica();
@@ -90,22 +95,32 @@ class _LoginViewState extends State<LoginView> {
     if (!kIsWeb) return;
 
     try {
+      _authDiag('redirect: chamando getRedirectResult');
       final resultado = await FirebaseAuth.instance.getRedirectResult();
       final usuarioAutenticado = resultado.user ?? FirebaseAuth.instance.currentUser;
       final temRetornoValido =
           resultado.user != null ||
           resultado.credential != null ||
           usuarioAutenticado != null;
+      _authDiag(
+        'redirect: result user=${resultado.user?.uid ?? '-'} '
+        'credential=${resultado.credential != null} '
+        'currentUser=${FirebaseAuth.instance.currentUser?.uid ?? '-'} '
+        'valido=$temRetornoValido',
+      );
       if (!temRetornoValido || !mounted) return;
 
       _setLoadingSafely(true);
       await _loginController
           .logarComGoogleAutenticado(context, authUser: usuarioAutenticado)
           .timeout(const Duration(seconds: 25));
+      _authDiag('redirect: logarComGoogleAutenticado concluido');
     } on TimeoutException {
       // Evita derrubar sessão válida quando o retorno do redirect atrasa em navegadores com cache/cookies restritos.
+      _authDiag('redirect: timeout');
       debugPrint('Timeout ao processar retorno do Google Redirect.');
     } on FirebaseAuthException catch (e) {
+      _authDiag('redirect: FirebaseAuthException code=${e.code} message=${e.message}');
       if (_isGoogleCancelCode(e.code)) {
         if (FirebaseAuth.instance.currentUser == null) {
           await FirebaseAuth.instance.signOut();
@@ -114,6 +129,7 @@ class _LoginViewState extends State<LoginView> {
       }
       debugPrint(AppStrings.erroGoogleLogin('${e.code}: ${e.message}'));
     } catch (e) {
+      _authDiag('redirect: erro generico=$e');
       debugPrint(AppStrings.erroGoogleLogin('$e'));
     } finally {
       _setLoadingSafely(false);
@@ -315,50 +331,40 @@ class _LoginViewState extends State<LoginView> {
 
   Future<void> _googleLogin() async {
     if (_isLoading) return;
+    _authDiag('googleLogin: start currentUser=${FirebaseAuth.instance.currentUser?.uid ?? '-'}');
     _setLoadingSafely(true);
     final messenger = ScaffoldMessenger.of(context);
     try {
       if (kIsWeb) {
-        final provider = GoogleAuthProvider()
-          ..setCustomParameters({'prompt': 'select_account'});
-        try {
-          await FirebaseAuth.instance.signInWithPopup(provider);
-        } on FirebaseAuthException catch (e) {
-          if (e.code == 'popup-blocked' ||
-              e.code == 'cancelled-popup-request' ||
-              e.code == 'operation-not-supported-in-this-environment' ||
-              e.code == 'internal-error') {
-            await FirebaseAuth.instance.signInWithRedirect(provider);
-            return;
-          }
-          if (_isGoogleCancelCode(e.code)) {
-            await FirebaseAuth.instance.signOut();
-            return;
-          }
-          rethrow;
-        }
-      } else {
-        await _initializeGoogleSignInIfNeeded();
-        final googleUser = await GoogleSignIn.instance.authenticate();
-        final idToken = googleUser.authentication.idToken;
-        if (idToken == null || idToken.isEmpty) {
-          await FirebaseAuth.instance.signOut();
-          return;
-        }
-
-        final AuthCredential credential = GoogleAuthProvider.credential(
-          idToken: idToken,
-        );
-
-        await FirebaseAuth.instance.signInWithCredential(credential);
+        final provider = GoogleAuthProvider();
+        provider.setCustomParameters({'prompt': 'select_account'});
+        await FirebaseAuth.instance.signInWithRedirect(provider);
+        return;
       }
+
+      await _initializeGoogleSignInIfNeeded();
+      final googleUser = await GoogleSignIn.instance.authenticate();
+      final idToken = googleUser.authentication.idToken;
+      if (idToken == null || idToken.isEmpty) {
+        await FirebaseAuth.instance.signOut();
+        return;
+      }
+
+      final AuthCredential credential = GoogleAuthProvider.credential(
+        idToken: idToken,
+      );
+
+      await FirebaseAuth.instance.signInWithCredential(credential);
 
       if (!mounted) return;
       await _loginController.logarComGoogleAutenticado(context);
+      _authDiag('googleLogin: logarComGoogleAutenticado concluido');
 
     } on TimeoutException {
+      _authDiag('googleLogin: timeout -> signOut');
       await FirebaseAuth.instance.signOut();
     } catch (e) {
+      _authDiag('googleLogin: erro=$e');
       final erroPermissaoFirestore =
           e is FirebaseException && e.code == 'permission-denied';
       if (erroPermissaoFirestore) {

@@ -30,6 +30,8 @@
   <!-- Favicon -->
   <link rel="icon" type="image/png" href="favicon.png"/>
 
+  <meta name="google-signin-client_id" content="921196873870-vloq5dk4ik70epudf4seunkhglkq1c5q.apps.googleusercontent.com">
+
   <title>agenda</title>
   <link rel="manifest" href="manifest.json">
 </head>
@@ -43,14 +45,5 @@
     * https://docs.flutter.dev/platform-integration/web/initialization
   -->
   <script src="flutter_bootstrap.js" async></script>
-  <script>
-    // Habilita App Check debug token apenas em ambiente local
-    if (
-      location.hostname === "localhost" ||
-      location.hostname === "127.0.0.1"
-    ) {
-      self.FIREBASE_APPCHECK_DEBUG_TOKEN = true;
-    }
-  </script>
 </body>
 </html>

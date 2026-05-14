@@ -4,6 +4,11 @@ import 'dart:js_interop_unsafe';
 import 'package:web/web.dart' as web;
 
 Future<void> configureAppCheckDebugToken(String? debugToken) async {
+  final token = (debugToken ?? '').trim();
+  if (token.isEmpty) {
+    return;
+  }
+
   final host = web.window.location.hostname;
   final isLocalhost =
       host == 'localhost' ||
@@ -15,17 +20,10 @@ Future<void> configureAppCheckDebugToken(String? debugToken) async {
     return;
   }
 
-  final hasExplicitToken = debugToken != null && debugToken.isNotEmpty;
-  if (!hasExplicitToken) {
-    (web.window as JSObject).setProperty(
-      'FIREBASE_APPCHECK_DEBUG_TOKEN'.toJS,
-      false.toJS,
-    );
-    return;
-  }
-
+  // Em localhost, expõe o token real somente quando ele existe.
+  // Isso evita o SDK cair em estado inválido com valor booleano falso.
   (web.window as JSObject).setProperty(
     'FIREBASE_APPCHECK_DEBUG_TOKEN'.toJS,
-    debugToken.toJS,
+    token.toJS,
   );
 }

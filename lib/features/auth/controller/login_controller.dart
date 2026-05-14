@@ -1,5 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:agenda/features/agendamento/view/agendamento_view.dart';
 import 'package:agenda/features/agendamento/view/admin_agendamentos_view.dart';
@@ -821,6 +822,11 @@ class LoginController {
   }
 
   bool _isAppCheckSignupError(FirebaseAuthException e) {
+    // Desabilita detecção de App Check em desenvolvimento local web
+    if (kIsWeb && Uri.base.host == 'localhost' || Uri.base.host == '127.0.0.1') {
+      return false;
+    }
+    
     final code = e.code.toLowerCase();
     final message = (e.message ?? '').toLowerCase();
 
@@ -833,6 +839,11 @@ class LoginController {
 
         bool _isFirestorePermissionLikelyAppCheck(Object e) {
           if (e is! FirebaseException) return false;
+          
+          // Desabilita detecção de App Check em desenvolvimento local web
+          if (kIsWeb && (Uri.base.host == 'localhost' || Uri.base.host == '127.0.0.1')) {
+            return false;
+          }
 
           final message = (e.message ?? '').toLowerCase();
           return message.contains('app check') ||

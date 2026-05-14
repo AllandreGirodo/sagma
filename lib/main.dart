@@ -227,9 +227,9 @@ void main() async {
     );
 
     final String? debugTokenForWeb =
-        (kIsWeb && (kReleaseMode || enableAppCheckInDebug))
-            ? appCheckDebugToken
-            : null;
+      (kIsWeb && (kReleaseMode || enableAppCheckInDebug || isLocalWebHost))
+        ? appCheckDebugToken
+        : null;
 
     _bootDiag(
       'host=${Uri.base.host} localWeb=$isLocalWebHost '
@@ -283,7 +283,7 @@ void main() async {
     // 3. App Check para Web
     final recaptchaKey = _resolveRecaptchaSiteKey();
     final bool shouldEnableWebAppCheck =
-        kIsWeb && (kReleaseMode || enableAppCheckInDebug);
+      kIsWeb && (kReleaseMode || enableAppCheckInDebug);
     _bootDiag(
       'webAppCheck shouldEnable=$shouldEnableWebAppCheck '
       'recaptchaConfigured=${recaptchaKey.isNotEmpty}',
@@ -313,7 +313,7 @@ void main() async {
 
     runApp(
       DevicePreview(
-        enabled: !kReleaseMode && !kIsWeb,
+        enabled: !kReleaseMode,
         builder: (context) => MyApp(
           initialLocale: initialLocale,
           initialThemeMode: themeMode,
@@ -586,7 +586,9 @@ class _MyAppState extends State<MyApp> {
             Locale('fr', 'FR'),
             Locale('ja', 'JP'),
           ],
-          home: AppInitializationView(onboardingComplete: false),
+          home: AppInitializationView(
+            onboardingComplete: widget.onboardingComplete,
+          ),
           // Builder global: Envolve todo o app no fundo animado e verifica manutenção
           builder: (context, child) {
             final childWithPreview = DevicePreview.appBuilder(context, child);

@@ -74,6 +74,11 @@ class _LoginViewState extends State<LoginView> {
 
         bool _isFirestorePermissionLikelyAppCheck(Object e) {
           if (e is! FirebaseException) return false;
+          
+          // Desabilita detecção de App Check em desenvolvimento local web
+          if (kIsWeb && (Uri.base.host == 'localhost' || Uri.base.host == '127.0.0.1')) {
+            return false;
+          }
 
           final message = (e.message ?? '').toLowerCase();
           return message.contains('app check') ||
@@ -339,6 +344,7 @@ class _LoginViewState extends State<LoginView> {
         final provider = GoogleAuthProvider();
         provider.setCustomParameters({'prompt': 'select_account'});
         await FirebaseAuth.instance.signInWithRedirect(provider);
+        _authDiag('googleLogin: signInWithRedirect disparado');
         return;
       }
 

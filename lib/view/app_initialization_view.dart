@@ -184,7 +184,14 @@ class _AppInitializationViewState extends State<AppInitializationView> {
       );
     }
 
-    // Sistema inicializado e senha configurada - prosseguir para o fluxo normal
+    final authUser = FirebaseAuth.instance.currentUser;
+
+    // Se já existe sessão autenticada, não volta para onboarding.
+    if (authUser != null) {
+      return const LoginView();
+    }
+
+    // Sistema inicializado e sem sessão ativa - prosseguir para o fluxo normal.
     if (!widget.onboardingComplete) {
       return const OnboardingView();
     }

@@ -24,6 +24,10 @@ class AppLocalizations {
       'fillFieldsError': 'Por favor, preencha email e senha',
       'loginSuccess': 'Login realizado com sucesso (Simulação)',
       'forgotPasswordButton': 'Esqueci minha senha',
+      'aboutAppTitle': 'Sobre o Aplicativo',
+      'softwareVersion': 'Versão do software: 1.0.0',
+      'lastUpdate': 'Última alteração: 14/05/2026',
+      'closeButton': 'Fechar',
       // Cadastro
       'signupTitle': 'Criar Conta',
       'fullNameLabel': 'Nome Completo',
@@ -119,6 +123,10 @@ class AppLocalizations {
       'fillFieldsError': 'Please fill in email and password',
       'loginSuccess': 'Login successful (Simulation)',
       'forgotPasswordButton': 'Forgot password?',
+      'aboutAppTitle': 'About the App',
+      'softwareVersion': 'Software version: 1.0.0',
+      'lastUpdate': 'Last update: 05/14/2026',
+      'closeButton': 'Close',
       // Signup
       'signupTitle': 'Create Account',
       'fullNameLabel': 'Full Name',
@@ -207,6 +215,10 @@ class AppLocalizations {
       'fillFieldsError': 'Por favor complete correo y contraseña',
       'loginSuccess': 'Inicio de sesión exitoso (Simulación)',
       'forgotPasswordButton': '¿Olvidó su contraseña?',
+      'aboutAppTitle': 'Sobre la Aplicación',
+      'softwareVersion': 'Versión del software: 1.0.0',
+      'lastUpdate': 'Última actualización: 14/05/2026',
+      'closeButton': 'Cerrar',
       // Signup
       'signupTitle': 'Crear Cuenta',
       'fullNameLabel': 'Nombre Completo',
@@ -295,6 +307,10 @@ class AppLocalizations {
       'fillFieldsError': 'メールとパスワードを入力してください',
       'loginSuccess': 'ログイン成功（シミュレーション）',
       'forgotPasswordButton': 'パスワードを忘れた場合',
+      'aboutAppTitle': 'アプリについて',
+      'softwareVersion': 'ソフトウェアバージョン: 1.0.0',
+      'lastUpdate': '最終更新日: 2026/05/14',
+      'closeButton': '閉じる',
       // Signup
       'signupTitle': 'アカウント作成',
       'fullNameLabel': '氏名',
@@ -376,6 +392,10 @@ class AppLocalizations {
       'fillFieldsError': 'Veuillez remplir l\'email et le mot de passe',
       'loginSuccess': 'Connexion réussie (Simulation)',
       'forgotPasswordButton': 'Mot de passe oublié?',
+      'aboutAppTitle': 'À propos de l\'application',
+      'softwareVersion': 'Version du logiciel: 1.0.0',
+      'lastUpdate': 'Dernière mise à jour: 14/05/2026',
+      'closeButton': 'Fermer',
       // Signup
       'signupTitle': 'Créer un compte',
       'fullNameLabel': 'Nom complet',
@@ -475,6 +495,10 @@ class AppLocalizations {
   String get fillFieldsError => _t('fillFieldsError');
   String get loginSuccess => _t('loginSuccess');
   String get forgotPasswordButton => _t('forgotPasswordButton');
+  String get aboutAppTitle => _t('aboutAppTitle');
+  String get softwareVersion => _t('softwareVersion');
+  String get lastUpdate => _t('lastUpdate');
+  String get closeButton => _t('closeButton');
 
   // Signup
   String get signupTitle => _t('signupTitle');

@@ -5,6 +5,9 @@ import 'package:agenda/core/models/firestore_structure_helper.dart';
 import 'package:agenda/core/utils/app_strings.dart';
 import 'package:agenda/features/admin/view/admin_senha_setup_view.dart';
 import 'package:agenda/features/auth/view/login_view.dart';
+import 'package:agenda/features/agendamento/view/agendamento_view.dart';
+import 'package:agenda/features/agendamento/view/admin_agendamentos_view.dart';
+import 'package:agenda/features/auth/view/aguardando_aprovacao_view.dart';
 import 'package:agenda/view/onboarding_view.dart';
 
 /// Tela inicial que verifica o estado de configuração do sistema.
@@ -30,6 +33,7 @@ class _AppInitializationViewState extends State<AppInitializationView> {
   bool _isLoading = true;
   bool _senhaConfigurada = false;
   String? _errorMessage;
+  Widget? _navigateTo;
 
   Future<void> _tentarInicializarColecoesEntrada() async {
     final helper = FirestoreStructureHelper();
@@ -63,35 +67,60 @@ class _AppInitializationViewState extends State<AppInitializationView> {
         setState(() {
           _senhaConfigurada = true;
           _isLoading = false;
+          _navigateTo = null;
         });
         return;
       }
 
+      // Se já existe sessão autenticada, determina a navegação apropriada
       final usuarioAtual = await firestoreService.getUsuario(authUser.uid);
-      final bool eAdmin = usuarioAtual?.tipo == 'admin';
-
-      // A inicializacao de estrutura e setup de senha pertence apenas ao admin.
-      if (eAdmin) {
-        await _tentarInicializarColecoesEntrada();
-
-        final senhaConfigurada = await firestoreService.verificaSenhaAdminFerramentasConfigurada();
-        setState(() {
-          _senhaConfigurada = senhaConfigurada;
-          _isLoading = false;
-        });
-        return;
-      }
-
-      setState(() {
-        _senhaConfigurada = true;
-        _isLoading = false;
-      });
-    } on FirebaseException catch (e) {
-      if (e.code == 'permission-denied') {
-        // Fallback seguro: segue para login/onboarding sem bloquear startup.
+      
+      if (usuarioAtual != null) {
+        // Admin: vai para dashboard administrativo
+        if (usuarioAtual.tipo == 'admin') {
+          setState(() {
+            _senhaConfigurada = true;
+            _isLoading = false;
+            _navigateTo = const AdminAgendamentosView();
+          });
+          return;
+        }
+        
+        // Cliente aprovado: vai para agendamentos
+        if (usuarioAtual.aprovado == true) {
+          setState(() {
+            _senhaConfigurada = true;
+            _isLoading = false;
+            _navigateTo = const AgendamentoView();
+          });
+          return;
+        }
+        
+        // Cliente não aprovado: aguarda aprovação
         setState(() {
           _senhaConfigurada = true;
           _isLoading = false;
+          _navigateTo = AguardandoAprovacaoView(
+            dataCadastro: usuarioAtual.dataCadastro ?? DateTime.now(),
+          );
+        });
+        return;
+      }
+
+      // Usuário autenticado mas sem perfil no Firestore - vai para login
+      setState(() {
+        _senhaConfigurada = true;
+        _isLoading = false;
+        _navigateTo = const LoginView();
+      });
+      return;
+    } on FirebaseException catch (e) {
+      // Sem permissão - fallback seguro
+      if (e.code == 'permission-denied') {
+        setState(() {
+          _senhaConfigurada = true;
+          _isLoading = false;
+          _navigateTo = const LoginView();
         });
         return;
       }
@@ -184,12 +213,12 @@ class _AppInitializationViewState extends State<AppInitializationView> {
       );
     }
 
-    final authUser = FirebaseAuth.instance.currentUser;
-
-    // Se já existe sessão autenticada, não volta para onboarding.
-    if (authUser != null) {
-      return const LoginView();
+    // Se há navegação pendente, exibe aquela tela
+    if (_navigateTo != null) {
+      return _navigateTo!;
     }
+
+    final authUser = FirebaseAuth.instance.currentUser;
 
     // Sistema inicializado e sem sessão ativa - prosseguir para o fluxo normal.
     if (!widget.onboardingComplete) {

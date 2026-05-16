@@ -126,15 +126,19 @@ Funcionalidades mapeadas que não entraram no MVP (Mínimo Produto Viável) mas 
 
 Documentação das coleções utilizadas:
 
-*   **`usuarios`** (`usuarios/{email_normalizado}`): Identidade, tipo de acesso (admin/cliente), aprovacoes e metadados de cadastro.
-*   **`usuarios/{email_normalizado}/perfil/cliente`**: Dados de cliente (anamnese, contatos, saldo de sessoes, historico de recorrencia).
-*   **`usuarios_por_email`**: Indice auxiliar para resolucao por e-mail e verificacoes de acesso.
-*   **`agendamentos`**: Data, hora, status (pendente/aprovado/cancelado), motivo e lista de espera.
+*   **`usuarios`** (`usuarios/{email_normalizado}`): Identidade, tipo de acesso (admin/cliente), aprovacoes, reprovacao opcional, consentimento LGPD e metadados de cadastro.
+*   **`usuarios/{email_normalizado}/perfil/cliente`**: Dados de cliente (anamnese, contatos, saldo de sessoes, historico de recorrencia e consentimento operacional).
+*   **`agendamentos`**: Data, hora, tipo, status, motivo, lista de espera, snapshots do cliente e valores do atendimento.
+*   **`transacoes`**: Valor bruto, desconto, valor liquido, metodo de pagamento, status e referencia opcional ao agendamento.
 *   **`estoque`**: Produtos, quantidade e flag de consumo automático.
-*   **`configuracoes`**: Variáveis globais do sistema.
-*   **`configuracoes/log_clientes`**: Sequencial incremental de cadastro de clientes e ultimo horario de cadastro monotônico.
-*   **`logs`**: Auditoria de ações críticas (quem cancelou, quem aprovou).
-*   **`lgpd_logs`**: Registro de solicitações de exclusão/anonimização (Retenção: 5 anos).
+*   **`cupons`**: Cupons de desconto ativos ou expirados, por percentual ou valor fixo.
+*   **`configuracoes`**: Subdocumentos `geral`, `seguranca`, `servicos`, `notificacoes`, `pagamento` e `log_clientes`.
+*   **`configuracoes_gerais`**: Base por tenant para a administradora padrao e parametros da instalacao.
+*   **`app_software`** e **`app_changelog`**: Governanca de versao e historico de mudancas do aplicativo.
+*   **`logs`**: Auditoria de ações críticas e eventos do sistema.
+*   **`lgpd_logs`**: Registro de solicitações de exclusão/anonimização (retenção legal).
+
+O diagrama consolidado e pronto para reutilizacao em Git/Word esta em [DIAGRAMAS.md](DIAGRAMAS.md).
 
 ---
 

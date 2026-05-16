@@ -225,6 +225,10 @@ void main() async {
       'ENABLE_APPCHECK_IN_DEBUG',
       defaultValue: false,
     );
+    const bool enableAppCheckInRelease = bool.fromEnvironment(
+      'ENABLE_APPCHECK_IN_RELEASE',
+      defaultValue: false,
+    );
 
     final String? debugTokenForWeb =
       (kIsWeb && (kReleaseMode || enableAppCheckInDebug || isLocalWebHost))
@@ -234,6 +238,7 @@ void main() async {
     _bootDiag(
       'host=${Uri.base.host} localWeb=$isLocalWebHost '
       'enableAppCheckInDebug=$enableAppCheckInDebug '
+      'enableAppCheckInRelease=$enableAppCheckInRelease '
       'debugTokenProvided=${appCheckDebugToken.isNotEmpty}',
     );
 
@@ -282,8 +287,9 @@ void main() async {
 
     // 3. App Check para Web
     final recaptchaKey = _resolveRecaptchaSiteKey();
+    // Nunca ativa App Check em localhost (development)
     final bool shouldEnableWebAppCheck =
-      kIsWeb && (kReleaseMode || enableAppCheckInDebug);
+        kIsWeb && (kReleaseMode || enableAppCheckInDebug) && !isLocalWebHost;
     _bootDiag(
       'webAppCheck shouldEnable=$shouldEnableWebAppCheck '
       'recaptchaConfigured=${recaptchaKey.isNotEmpty}',

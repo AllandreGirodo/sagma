@@ -24,6 +24,10 @@ móvel e web em Flutter que permita:
 - Banco de dados NoSQL usando Firebase Firestore e autenticação via Firebase
   Authentication.
 
+## Diagramas tecnicos
+
+Os diagramas consolidados do sistema ficam em [DIAGRAMAS.md](DIAGRAMAS.md). Esse arquivo traz a versao Mermaid para o GitHub e as versoes PlantUML para exportacao em PNG/JPEG para o Word.
+
 ## Estrutura do projeto
 
 Pasta `lib/` (estado atual):
@@ -67,8 +71,9 @@ Pasta `lib/` (estado atual):
 4. **Implemente o MVP** (versão mínima viável):
    - Crie telas de login/cadastro com Firebase Auth.
    - Modele as coleções Firestore conforme a arquitetura atual:
-     `usuarios/{email_normalizado}` + `usuarios/{email_normalizado}/perfil/cliente`,
-     `usuarios_por_email`, `agendamentos`, `transacoes`, `estoque`, `configuracoes`.
+  `usuarios/{email_normalizado}` + `usuarios/{email_normalizado}/perfil/cliente`,
+  `agendamentos`, `transacoes`, `estoque`, `configuracoes`, `lgpd_logs`,
+  `app_software` e `app_changelog`.
    - Adicione internacionalização usando o arquivo de traduções.
    - Desenvolva a interface de agenda com `table_calendar` ou similar.
 
@@ -101,4 +106,5 @@ avança.
 - Implemente dashboard administrativo e componentes de calendário.
 
 Fotos do caderno, esquemas de banco e outros rascunhos podem ser adicionados
-a `docs/` ou anexados ao repositório.
+a `docs/` ou anexados ao repositório. Para os diagramas oficiais deste TCC,
+prefira manter a fonte em [DIAGRAMAS.md](DIAGRAMAS.md).

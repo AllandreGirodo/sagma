@@ -42,5 +42,3 @@ Apesar das correções de erro de código, recomenda-se:
 3. **Verificar Variáveis de Ambiente**: O arquivo `.env` deve conter as chaves mencionadas no `main.dart` para o funcionamento pleno das notificações e segurança.
 
 ---
-**Relatório gerado por Manus AI**  
-Data: 08 de Março de 2026

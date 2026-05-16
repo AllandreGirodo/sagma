@@ -6,6 +6,7 @@ import 'package:google_sign_in/google_sign_in.dart';
 import 'package:local_auth/local_auth.dart';
 import 'package:agenda/core/utils/app_styles.dart';
 import 'package:agenda/core/utils/app_strings.dart';
+import 'package:agenda/app_localizations.dart';
 import 'package:agenda/core/utils/validadores.dart';
 import 'package:agenda/features/agendamento/view/agendamento_view.dart';
 import 'package:agenda/features/auth/controller/login_controller.dart';
@@ -343,6 +344,32 @@ class _LoginViewState extends State<LoginView> {
       if (kIsWeb) {
         final provider = GoogleAuthProvider();
         provider.setCustomParameters({'prompt': 'select_account'});
+        try {
+          final userCredential = await FirebaseAuth.instance
+              .signInWithPopup(provider)
+              .timeout(const Duration(seconds: 20));
+
+          if (!mounted) return;
+          await _loginController.logarComGoogleAutenticado(
+            context,
+            authUser: userCredential.user,
+          );
+          _authDiag('googleLogin: signInWithPopup concluido');
+          return;
+        } on TimeoutException {
+          _authDiag('googleLogin: popup timeout -> fallback redirect');
+        } on FirebaseAuthException catch (e) {
+          if (_isGoogleCancelCode(e.code)) {
+            _authDiag('googleLogin: popup cancelado code=${e.code}');
+            return;
+          }
+          _authDiag(
+            'googleLogin: popup falhou code=${e.code} -> fallback redirect',
+          );
+        } catch (e) {
+          _authDiag('googleLogin: popup erro=$e -> fallback redirect');
+        }
+
         await FirebaseAuth.instance.signInWithRedirect(provider);
         _authDiag('googleLogin: signInWithRedirect disparado');
         return;
@@ -505,9 +532,41 @@ class _LoginViewState extends State<LoginView> {
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  const Align(
-                    alignment: Alignment.topRight,
-                    child: LanguageSelector(),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      IconButton(
+                        icon: const Icon(Icons.info_outline, size: 22),
+                        color: theme.colorScheme.onSurface.withValues(alpha: 0.5),
+                        tooltip: AppLocalizations.of(context)?.aboutAppTitle ?? 'Sobre o Aplicativo',
+                        onPressed: () {
+                          final loc = AppLocalizations.of(context);
+                          showDialog(
+                            context: context,
+                            builder: (ctx) => AlertDialog(
+                              title: Text(loc?.aboutAppTitle ?? 'Sobre o Aplicativo'),
+                              content: Column(
+                                mainAxisSize: MainAxisSize.min,
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(loc?.softwareVersion ?? 'Versão do software: 1.0.0'),
+                                  const SizedBox(height: 8),
+                                  Text(loc?.lastUpdate ?? 'Última alteração: 14/05/2026'),
+                                ],
+                              ),
+                              actions: [
+                                TextButton(
+                                  onPressed: () => Navigator.pop(ctx),
+                                  child: Text(loc?.closeButton ?? 'Fechar'),
+                                ),
+                              ],
+                            ),
+                          );
+                        },
+                      ),
+                      const LanguageSelector(),
+                    ],
                   ),
                   ClipRRect(
                     borderRadius: BorderRadius.circular(14),

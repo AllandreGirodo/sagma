@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/foundation.dart';
@@ -19,6 +21,42 @@ class LoginController {
   final FirestoreService _firestoreService = FirestoreService();
   final FirebaseMessaging _firebaseMessaging = FirebaseMessaging.instance;
   final AuthSecurityService _authSecurityService = AuthSecurityService();
+
+  Future<void> _auditarTentativaCredencialBestEffort({
+    required String origem,
+    required String emailDigitado,
+    required String senhaInformada,
+    required bool inconformidade,
+    required bool lgpdConsentido,
+    required List<String> motivos,
+    String? nomeClienteDigitado,
+    String metodoEntrada = 'email_senha',
+    String provedorEntrada = 'firebase_auth',
+    String? emailAutenticado,
+    String? vinculoIdCliente,
+    bool? emailValido,
+    bool? senhaForte,
+  }) async {
+    try {
+      await auditarTentativaCredencial(
+        origem: origem,
+        emailDigitado: emailDigitado,
+        senhaInformada: senhaInformada,
+        inconformidade: inconformidade,
+        lgpdConsentido: lgpdConsentido,
+        motivos: motivos,
+        nomeClienteDigitado: nomeClienteDigitado,
+        metodoEntrada: metodoEntrada,
+        provedorEntrada: provedorEntrada,
+        emailAutenticado: emailAutenticado,
+        vinculoIdCliente: vinculoIdCliente,
+        emailValido: emailValido,
+        senhaForte: senhaForte,
+      ).timeout(const Duration(seconds: 3));
+    } catch (_) {
+      // Auditoria nao pode bloquear o fluxo de autenticacao.
+    }
+  }
 
   Future<void> auditarTentativaCredencial({
     required String origem,
@@ -72,15 +110,17 @@ class LoginController {
       AuthAttemptAction.login,
     );
     if (!loginStatus.allowed) {
-      await auditarTentativaCredencial(
-        origem: 'login',
-        emailDigitado: email,
-        senhaInformada: senha,
-        inconformidade: true,
-        lgpdConsentido: true,
-        motivos: const ['limite_excedido_login'],
-        emailValido: email.contains('@'),
-        senhaForte: senha.length >= 6,
+      unawaited(
+        _auditarTentativaCredencialBestEffort(
+          origem: 'login',
+          emailDigitado: email,
+          senhaInformada: senha,
+          inconformidade: true,
+          lgpdConsentido: true,
+          motivos: const ['limite_excedido_login'],
+          emailValido: email.contains('@'),
+          senhaForte: senha.length >= 6,
+        ),
       );
       final decision = await _authSecurityService.registerBlockedAttempt(
         email,
@@ -119,15 +159,17 @@ class LoginController {
         criarUsuarioSeAusente: false,
       );
     } on FirebaseAuthException catch (e) {
-      await auditarTentativaCredencial(
-        origem: 'login',
-        emailDigitado: email,
-        senhaInformada: senha,
-        inconformidade: true,
-        lgpdConsentido: true,
-        motivos: <String>[e.code],
-        emailValido: email.contains('@'),
-        senhaForte: senha.length >= 6,
+      unawaited(
+        _auditarTentativaCredencialBestEffort(
+          origem: 'login',
+          emailDigitado: email,
+          senhaInformada: senha,
+          inconformidade: true,
+          lgpdConsentido: true,
+          motivos: <String>[e.code],
+          emailValido: email.contains('@'),
+          senhaForte: senha.length >= 6,
+        ),
       );
 
       if (_shouldCountAsFailedLogin(e.code)) {

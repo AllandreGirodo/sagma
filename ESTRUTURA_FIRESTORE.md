@@ -3,119 +3,154 @@
 ## Visão Geral da Arquitetura
 
 ```mermaid
-graph TD
-  A[Firebase Firestore] --> C[usuarios]
-  A --> C0[usuarios/{email}/perfil/cliente]
-    A --> D[agendamentos]
-    A --> E[transacoes]
-    A --> F[cupons]
-    A --> G[estoque]
-    A --> H[logs]
-  A --> I[app_changelog/changelogs]
-    A --> J[configuracoes]
-  A --> K[configuracoes_gerais]
-  A --> L[auditoria_credenciais]
-  A --> M[metricas_diarias]
-  A --> N[app_software]
-  A --> O[lgpd_logs]
-  A --> P[teste]
-    
-    D --> D1[mensagens subcoleção]
-    
-    J --> J1[geral]
-    J --> J2[seguranca]
-    J --> J3[servicos]
-    J --> J4[notificacoes]
-    J --> J5[pagamento]
-    J --> J6[log_clientes]
-    
-    style A fill:#ff6b6b
-    style J fill:#4ecdc4
-    style J1 fill:#95e1d3
-    style J2 fill:#95e1d3
-    style J3 fill:#95e1d3
-    style J4 fill:#95e1d3
-    style J5 fill:#95e1d3
-```
+erDiagram
+  USUARIOS ||--o| PERFIL_CLIENTE : "perfil"
+  USUARIOS ||--o{ AGENDAMENTOS : "solicita"
+  USUARIOS ||--o{ TRANSACOES : "gera"
+  USUARIOS ||--o{ LGPD_LOGS : "audita"
+  USUARIOS ||--o{ LOGS : "registra"
+  AGENDAMENTOS ||--o{ CHAT_MENSAGENS : "contém"
+  AGENDAMENTOS ||--o| TRANSACOES : "pode gerar"
+  AGENDAMENTOS }o--|| CUPONS : "usa"
+  AGENDAMENTOS ||--o{ ESTOQUE : "consome"
+  CONFIGURACOES ||--|| GERAL : "tem"
+  CONFIGURACOES ||--|| SEGURANCA : "tem"
+  CONFIGURACOES ||--|| SERVICOS : "tem"
+  CONFIGURACOES ||--|| NOTIFICACOES : "tem"
+  CONFIGURACOES ||--|| PAGAMENTO : "tem"
+  CONFIGURACOES ||--|| LOG_CLIENTES : "sequencia"
+  APP_SOFTWARE ||--|| CONFIG : "versao"
+  APP_CHANGELOG ||--o{ CHANGELOGS : "historico"
 
----
-
-## 📋 Collections Principais
-
-### Observação de modelagem baseada na planilha
-
-O arquivo `base_tcc_agenda_outros_horarios.xlsx` trouxe 1.918 registros úteis, com forte predominância de:
-
-- `Telefone Principal`
-- `nome indicado` e `telefone indicado`
-- `nome secundario` e `telefone secundario`
-- categoria (`Contato Direto` ou `Indicação`)
-- sinais históricos de recorrência (`Frequência Histórica`, `Última Data`, `Último Horário`, `Último Dia da Semana`)
-- sugestão booleana de cliente fixo
-
-Por isso o perfil do cliente em `usuarios/{email_normalizado}/perfil/cliente` concentra não só anamnese, mas também CRM leve, contato alternativo e leitura histórica de recorrência.
-
-### 1. `clientes` Collection
-**Documento ID:** `{uid}` (Firebase Auth UID)
-
-> Status atual: **descontinuada para novos cadastros**.  
-> O sistema usa `usuarios/{email_normalizado}/perfil/cliente` como fonte principal.  
-> Esta seção permanece apenas para compatibilidade histórica/migração.
-
-```javascript
-{
-  uid: string,                    // ID único do Firebase Auth
-  cliente_nome: string,           // Nome completo do cliente
-  nome_preferido: string,         // Nome social, apelido ou forma de tratamento
-  ddi: string,                    // DDI principal. Padrão: "55"
-  whatsapp: string,               // Campo legado para compatibilidade
-  telefone_principal: string,     // Número principal sem máscara
-  nome_contato_secundario: string,// Nome associado ao telefone secundário
-  telefone_secundario: string,    // Número alternativo
-  nome_indicacao: string,         // Quem indicou o cliente
-  telefone_indicacao: string,     // Telefone da indicação
-  categoria_origem: string,       // 'Contato Direto' | 'Indicação'
-  cpf: string,                    // CPF do cliente
-  cep: string,                    // CEP separado do endereço livre
-  data_nascimento: Timestamp,     // Data de nascimento
-  saldo_sessoes: number,          // Quantidade de sessões pré-pagas
-  favoritos: string[],            // Lista de IDs de favoritos
-  endereco: string,               // Endereço completo
-  historico_medico: string,       // Histórico médico
-  alergias: string,               // Alergias conhecidas
-  medicamentos: string,           // Medicamentos em uso
-  cirurgias: string,              // Histórico de cirurgias
-  anamnese_ok: boolean,           // Anamnese preenchida
-
-  // Sinais históricos importados da agenda/CRM
-  presenca_agenda: boolean,       // Já apareceu em agenda histórica?
-  frequencia_historica_agenda: number,
-  ultima_data_agendada: Timestamp,
-  ultimo_horario_agendado: string,
-  ultimo_dia_semana_agendado: string,
-  sugestao_cliente_fixo: boolean,
-
-  // Recorrência semanal consolidada
-  agenda_fixa_semana: {
-    "1_domingo": boolean,
-    "2_segunda": boolean,
-    "3_terca": boolean,
-    "4_quarta": boolean,
-    "5_quinta": boolean,
-    "6_sexta": boolean,
-    "7_sabado": boolean
-  },
-
-  // Horários históricos esparsos que não valem um subdocumento próprio
-  agenda_historico: {
-    horarios_recorrentes: string,
-    outro_horario_1: string,
-    outro_horario_2: string,
-    outro_horario_3: string,
-    outro_horario_4: string,
-    outro_horario_5: string
+  USUARIOS {
+    string email_normalizado PK
+    string id
+    string tipo
+    bool aprovado
+    bool reprovado
+    timestamp data_cadastro
   }
-}
+
+  PERFIL_CLIENTE {
+    string uid
+    string cliente_nome
+    string telefone_principal
+    number saldo_sessoes
+    bool anamnese_ok
+  }
+
+  LOG_CLIENTES {
+    number sequencial_clientes
+    timestamp ultimo_horario_cadastro
+  }
+
+  AGENDAMENTOS {
+    string id PK
+    string cliente_id FK
+    timestamp data_hora
+    string status
+    string tipo
+    number valor_final
+    timestamp data_criacao
+  }
+
+  TRANSACOES {
+    string id PK
+    string cliente_uid FK
+    string agendamento_id FK
+    number valor_liquido
+    string status_pagamento
+    string metodo_pagamento
+    timestamp data_pagamento
+  }
+
+  CUPONS {
+    string codigo PK
+    string tipo
+    number valor
+    timestamp validade
+    bool ativo
+  }
+
+  CHAT_MENSAGENS {
+    string id PK
+    string autor_id FK
+    string texto
+    timestamp data_hora
+    bool lida
+  }
+
+  ESTOQUE {
+    string id PK
+    string nome
+    number quantidade
+    bool consumo_automatico
+  }
+
+  LGPD_LOGS {
+    string id PK
+    string usuario_uid FK
+    string acao
+    timestamp data_hora
+  }
+
+  LOGS {
+    string id PK
+    string usuario_id FK
+    string tipo
+    string mensagem
+    timestamp data_hora
+  }
+
+  GERAL {
+    string id PK
+    number preco_sessao
+    number inicio_sono
+    number intervalo_agendamentos_minutos
+    string whatsapp_admin
+  }
+
+  SEGURANCA {
+    string id PK
+    string senha_admin_ferramentas
+    number tentativas_login_max
+    number tempo_bloqueio_minutos
+  }
+
+  SERVICOS {
+    string id PK
+    number duracao_padrao_minutos
+    number preco_padrao
+  }
+
+  NOTIFICACOES {
+    string id PK
+    number lembrete_antecedencia_horas
+    bool enviar_confirmacao_agendamento
+    bool enviar_lembrete_automatico
+  }
+
+  PAGAMENTO {
+    string id PK
+    bool aceita_pix
+    bool aceita_dinheiro
+    bool aceita_cartao
+    number taxa_cancelamento_percent
+  }
+
+  CONFIG {
+    string id PK
+    string current_version
+    string min_required_version
+  }
+
+  CHANGELOGS {
+    string id PK
+    string version_number
+    timestamp timestamp
+    string title
+    bool is_critical
+  }
 ```
 
 **Índices Necessários:**

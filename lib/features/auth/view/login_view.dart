@@ -344,6 +344,17 @@ class _LoginViewState extends State<LoginView> {
       if (kIsWeb) {
         final provider = GoogleAuthProvider();
         provider.setCustomParameters({'prompt': 'select_account'});
+
+        // Em ambiente local (emulador), preferir redirect para evitar popups
+        // abrindo handlers inesperados ou sendo bloqueados pelo navegador.
+        final isLocalhost = Uri.base.host == 'localhost' || Uri.base.host == '127.0.0.1';
+        if (isLocalhost) {
+          _authDiag('googleLogin: ambiente local detectado -> usar redirect');
+          await FirebaseAuth.instance.signInWithRedirect(provider);
+          _authDiag('googleLogin: signInWithRedirect disparado (local)');
+          return;
+        }
+
         try {
           final userCredential = await FirebaseAuth.instance
               .signInWithPopup(provider)

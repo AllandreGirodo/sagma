@@ -26,7 +26,7 @@ móvel e web em Flutter que permita:
 
 ## Diagramas tecnicos
 
-Os diagramas consolidados do sistema ficam em [DIAGRAMAS.md](DIAGRAMAS.md). Esse arquivo traz a versao Mermaid para o GitHub e as versoes PlantUML para exportacao em PNG/JPEG para o Word.
+Os diagramas consolidados do sistema ficam em [DIAGRAMAS.md](DIAGRAMAS.md). Esse arquivo traz a versao Mermaid para o GitHub e orientacao para modelagem em Java no Astah.
 
 ## Estrutura do projeto
 

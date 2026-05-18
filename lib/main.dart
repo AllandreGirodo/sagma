@@ -256,10 +256,18 @@ void main() async {
     // --- CONFIGURACAO DE AMBIENTE FIREBASE ---
     // Por padrao, usa Firebase online (projeto gratuito).
     // Para usar emuladores locais, rode com: --dart-define=USE_FIREBASE_EMULATORS=true
-    const bool useFirebaseEmulators = bool.fromEnvironment(
+    bool useFirebaseEmulators = const bool.fromEnvironment(
       'USE_FIREBASE_EMULATORS',
       defaultValue: false,
     );
+
+    // Em desenvolvimento web local (localhost) é mais prático usar os emuladores
+    // automaticamente quando o ENV é 'dev'. Permite testar sem depender do Firestore
+    // remoto e evita erros de App Check durante desenvolvimento.
+    if (kIsWeb && isLocalWebHost && env == 'dev') {
+      useFirebaseEmulators = true;
+    }
+
     if (kDebugMode && useFirebaseEmulators) {
       try {
         // '10.0.2.2' é o IP especial para o emulador Android acessar o host.

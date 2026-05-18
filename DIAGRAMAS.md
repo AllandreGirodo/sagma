@@ -142,10 +142,9 @@ classDiagram
 ```
 
 ## 2. Diagrama de Casos de Uso UML
-
 ### 2.1 Visao do Cliente
 
-```plantuml
+```astahuml
 @startuml
 left to right direction
 
@@ -178,7 +177,7 @@ UC6 --> WhatsApp
 
 ### 2.2 Visao da Administradora
 
-```plantuml
+```astahuml
 @startuml
 left to right direction
 
@@ -251,9 +250,9 @@ flowchart TD
     L --> Z
 ```
 
-### Versao PlantUML
+### Versao AstahUML
 
-```plantuml
+```astahuml
 @startuml
 start
 :Autenticar no Sistema (Admin);
@@ -319,9 +318,9 @@ flowchart TD
     R --> Z
 ```
 
-### Versao PlantUML
+### Versao AstahUML
 
-```plantuml
+```astahuml
 @startuml
 start
 :Abrir Aplicativo (Onboarding);
@@ -356,6 +355,20 @@ Para o GitHub, mantenha este arquivo no repositório. O bloco Mermaid do diagram
 
 Para o Word, use uma destas abordagens:
 
-1. Copie o bloco PlantUML do diagrama desejado para um renderizador PlantUML e exporte em PNG.
-2. Use o Mermaid Live Editor para renderizar o bloco Mermaid e baixar a imagem.
-3. Em ferramentas visuais como draw.io, Lucidchart ou Astah, use este arquivo como referencia estrutural para recriar o desenho final.
+1. Use o Mermaid Live Editor para renderizar o bloco Mermaid e baixar a imagem.
+2. Em ferramentas visuais como draw.io, Lucidchart ou Astah, use este arquivo como referencia estrutural para recriar o desenho final.
+
+## 6. Modelo Java para Astah
+
+Se a modelagem for feita diretamente no Astah em Java, a estrutura recomendada e esta:
+
+1. Criar um pacote base como `com.agenda.massoterapia`.
+2. Criar classes principais para `UsuarioModel`, `Cliente`, `Agendamento`, `TransacaoFinanceira`, `ConfigModel`, `ItemEstoque`, `CupomModel`, `ChatMensagem`, `LogModel`, `AppSoftwareConfigModel` e `ChangeLogModel`.
+3. Representar os atributos como campos privados e expor operacoes como metodos publicos, mantendo nomes coerentes com os modelos atuais.
+4. Mapear as relacoes de forma equivalente ao diagrama de classes:
+    - `UsuarioModel` associado a `Cliente` em relacao 1 para 0..1.
+    - `Cliente` associado a `Agendamento`, `TransacaoFinanceira`, `LogModel` e `CupomModel`.
+    - `Agendamento` associado a `ChatMensagem`, `TransacaoFinanceira`, `ItemEstoque` e `CupomModel`.
+    - `ConfigModel` dependente das regras de `Agendamento`, `ItemEstoque` e `UsuarioModel`.
+    - `AppSoftwareConfigModel` ligado a `ChangeLogModel`.
+5. Se desejar gerar o modelo a partir do codigo, usar a importacao/reverse engineering do Astah com as classes Dart apenas como referencia conceitual, mantendo o modelo Java separado da implementacao Flutter.

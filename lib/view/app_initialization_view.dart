@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:agenda/core/services/firestore_service.dart';
-import 'package:agenda/core/models/firestore_structure_helper.dart';
 import 'package:agenda/core/utils/app_strings.dart';
 import 'package:agenda/features/admin/view/admin_senha_setup_view.dart';
 import 'package:agenda/features/auth/view/login_view.dart';
@@ -35,21 +34,6 @@ class _AppInitializationViewState extends State<AppInitializationView> {
   String? _errorMessage;
   Widget? _navigateTo;
 
-  Future<void> _tentarInicializarColecoesEntrada() async {
-    final helper = FirestoreStructureHelper();
-
-    try {
-      await helper.inicializarSistemaCompleto();
-    } on FirebaseException catch (e) {
-      // Em cenários sem sessão/permissão suficiente, segue o fluxo normal.
-      if (e.code != 'permission-denied') {
-        rethrow;
-      }
-      debugPrint(
-        'Sem permissão para criar coleções de entrada agora. Fluxo seguirá com fallback.',
-      );
-    }
-  }
 
   @override
   void initState() {
@@ -217,8 +201,6 @@ class _AppInitializationViewState extends State<AppInitializationView> {
     if (_navigateTo != null) {
       return _navigateTo!;
     }
-
-    final authUser = FirebaseAuth.instance.currentUser;
 
     // Sistema inicializado e sem sessão ativa - prosseguir para o fluxo normal.
     if (!widget.onboardingComplete) {

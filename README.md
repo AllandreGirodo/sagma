@@ -35,6 +35,8 @@ Pasta `lib/` (estado atual):
 - `features/` – modulos de negocio por dominio (auth, agenda, financeiro etc.).
 - `core/` – servicos, utilitarios, configuracoes e infraestrutura compartilhada.
 - `view/` – telas administrativas e ferramentas de apoio.
+- `core/models/` – modelos canônicos do dominio usados pelo app.
+- `features/*/models/` – modelos específicos de cada funcionalidade.
 - `app_localizations.dart` e `core/utils/app_strings.dart` – localizacao e chaves de texto.
 
 ## Como começar
@@ -82,8 +84,8 @@ Pasta `lib/` (estado atual):
 - **20‑28 fev**: setup Flutter/Firebase, modelagem de dados e primeiras classes.
 - **1‑15 mar**: login, CRUD de clientes e agendamento simples.
 - **16‑31 mar**: pacotes/pagamentos, integração WhatsApp, controle de estoque.
-- **1‑15 abr**: refinamento UI, testes de usabilidade e documentação final.
-- **resto de abr**: ajustes e preparação da apresentação.
+- **1‑30 abr**: refinamento UI, testes de usabilidade e documentação final.
+- **maio‑julho**: ajustes da documentação e preparação da apresentação.
 
 ## Documentação acadêmica
 
@@ -95,12 +97,16 @@ contém:
 - Metodologia e cronograma.
 - Estrutura sugerida para o relatório final.
 
+O dossiê técnico de entrevistas e elicitação de requisitos está em [docs/dossie_entrevistas_elicitacao_requisitos.md](docs/dossie_entrevistas_elicitacao_requisitos.md). Ele consolida o histórico das entrevistas e os requisitos funcionais e não funcionais derivados.
+
+Observação de modelagem: o sistema trabalha com o controle de pacotes por meio de `saldo_sessoes` no perfil do cliente, não por uma entidade separada de pacote.
+
 Use-o como base para todo o texto do TCC e atualize conforme o desenvolvimento
 avança.
 
 ## Contribuições e próximas tarefas
 
-- Comece criando as classes em `lib/models/`.
+- Comece criando as classes em `lib/core/models/`.
 - Configure a autenticação e a primeira tela de login.
 - Defina o fluxo de agendamento com aprovação e notificação via WhatsApp.
 - Implemente dashboard administrativo e componentes de calendário.

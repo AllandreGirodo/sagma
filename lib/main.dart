@@ -268,7 +268,11 @@ void main() async {
       useFirebaseEmulators = true;
     }
 
-    if (kDebugMode && useFirebaseEmulators) {
+    // Permite forçar o uso dos emuladores quando `USE_FIREBASE_EMULATORS=true`.
+    // Antes: só ativava em modo debug. Para testes locais com Hosting Emulator
+    // aplicado ao build estático, precisamos ligar os emuladores mesmo em release
+    // quando a flag estiver setada.
+    if (useFirebaseEmulators) {
       try {
         // '10.0.2.2' é o IP especial para o emulador Android acessar o host.
         // Para iOS ou Web, usa-se 'localhost'.

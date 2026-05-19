@@ -14,6 +14,8 @@
 
 Este trabalho propõe o desenvolvimento de uma aplicação multiplataforma (Mobile e Web) para apoiar a gestão de atendimentos de massoterapia, com foco em: (i) agendamento de sessões (fixas e itinerantes), (ii) cadastro de clientes, (iii) controle de pacotes de sessões, e (iv) apoio ao controle de materiais/insumos e registros financeiros básicos. A solução será implementada com Flutter/Dart e Firebase, priorizando um MVP com funcionalidades essenciais e validação com usuários reais.
 
+No estado atual do projeto, o controle de pacotes é tratado como saldo de sessões vinculado ao perfil do cliente, sem uma entidade separada de pacote.
+
 **Palavras-chave:** agendamento; massoterapia; Flutter; Firebase; gestão de serviços.
 
 ---
@@ -26,7 +28,7 @@ Profissionais autônomos e pequenas clínicas de estética corporal frequentemen
 - Como estruturar e validar um MVP de agendamento e gestão para massoterapeutas que reduza conflitos de agenda e melhore o controle de pacotes e insumos, mantendo simplicidade de uso e baixo custo?
 
 **Hipótese/pressuposto (opcional):**
-- A adoção de um fluxo de agendamento com estados (solicitado/aprovado/realizado/cancelado) e registro por sessão tende a reduzir conflitos e aumentar a rastreabilidade dos atendimentos.
+- A adoção de um fluxo de agendamento com estados (pendente/aprovado/recusado/cancelado/cancelado_tardio) e registro por sessão tende a reduzir conflitos e aumentar a rastreabilidade dos atendimentos.
 
 ---
 
@@ -61,10 +63,10 @@ Desenvolver e validar um **MVP funcional** de um sistema de agendamento e gestã
 ### 5.1 Escopo do MVP (entregas obrigatórias)
 
 - **Agenda:** criar/editar/cancelar sessões.
-- **Fluxo de status:** solicitado → aprovado → realizado (ou cancelado).
+- **Fluxo de status:** pendente → aprovado → recusado, com cancelamento operacional tratado como `cancelado` ou `cancelado_tardio` no módulo de agenda.
 - **Conflitos de agenda:** impedir dois atendimentos no mesmo horário para o mesmo profissional.
 - **Clientes:** cadastro e histórico de sessões.
-- **Pacotes:** compra/registro de pacote; consumo por sessão.
+- **Pacotes:** controle de saldo de sessões por cliente; consumo por sessão.
 - **Relatórios simples:** listagem e filtros por data.
 
 ### 5.2 Fora do escopo (neste TCC)
@@ -101,6 +103,8 @@ Desenvolver e validar um **MVP funcional** de um sistema de agendamento e gestã
 - **RNF03 (Performance)** — Listagens devem carregar em **[PREENCHER: meta, ex.: ≤ 2s]** em condições normais.
 - **RNF04 (Confiabilidade)** — Persistência dos dados e histórico de alterações essenciais (ao menos log de status do agendamento).
 - **RNF05 (LGPD)** — Minimização de dados pessoais, consentimento e possibilidade de exclusão/anonimização **[PREENCHER: como será tratado]**.
+
+> Observação de alinhamento: a implementação atual também trabalha com campos de configuração globais em `configuracoes/geral` e com um fallback por tenant em `configuracoes_gerais/{tenantId}`.
 
 ---
 
@@ -150,7 +154,7 @@ Coleções sugeridas:
 - `users` (perfil, permissões)
 - `clients` (dados mínimos)
 - `appointments` (data/hora, local, status, cliente, notas)
-- `packages` (cliente, saldo, validade)
+- `saldo_sessoes` no perfil do cliente, em vez de uma entidade separada `packages`
 - `sessions` (vínculo com appointment, insumos usados)
 - `inventory` (itens e quantidades) **[se entrar no MVP]**
 

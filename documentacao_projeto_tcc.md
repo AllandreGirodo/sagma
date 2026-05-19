@@ -1,6 +1,7 @@
 # Documentação do Projeto de TCC - Agenda Massoterapia
 
-**Aluno:** [Seu Nome]
+**Aluno:** Allandre Ramos Girodo  
+**Orientador:** Prof. Júnior César Bonafim
 **Tema:** Sistema de Agendamento e Gestão para Clínica de Massoterapia
 **Tecnologias:** Flutter, Firebase (Auth, Firestore, Storage), Dart.
 
@@ -9,6 +10,8 @@
 ## 1. Levantamento de Requisitos
 
 O sistema foi projetado para resolver o problema de gestão manual (caderno/WhatsApp) de uma massoterapeuta autônoma.
+
+Observação: o controle de pacotes é implementado como saldo de sessoes no perfil do cliente, sem uma entidade de pacote separada.
 
 ### 1.1. Requisitos Funcionais (RF)
 
@@ -27,6 +30,7 @@ O sistema foi projetado para resolver o problema de gestão manual (caderno/What
     *   O cliente visualiza horários disponíveis e solicita agendamento.
     *   O status inicial é "Pendente".
     *   A administradora aprova ou recusa o agendamento.
+    *   O módulo de agenda também trata cancelamentos como "cancelado" ou "cancelado_tardio" conforme a regra de antecedência.
     *   Cancelamentos devem exigir justificativa e respeitar antecedência configurada.
 
 *   **[RF004] Integração com WhatsApp:**
@@ -35,7 +39,7 @@ O sistema foi projetado para resolver o problema de gestão manual (caderno/What
 
 *   **[RF005] Gestão Administrativa:**
     *   Dashboard com métricas (agendamentos do dia, receita estimada).
-    *   Controle de Estoque (baixa automática de produtos ao aprovar sessão).
+    *   Controle de Estoque (baixa automática de produtos ao encerrar a sessão como realizada).
     *   Configurações globais (preço da sessão, telefone da admin, horário de sono para regras de cancelamento).
 
 *   **[RF006] Conformidade com LGPD (Anonimização):**
@@ -48,18 +52,23 @@ O sistema foi projetado para resolver o problema de gestão manual (caderno/What
 
 *   **[RF008] Retenção e Descarte Automático:**
     *   Os logs de auditoria LGPD devem ser mantidos por um período legal de 5 anos.
-    *   Uma rotina automática (Cloud Function) deve excluir definitivamente logs mais antigos que esse período.
+    *   A automação de descarte definitivo deve ser tratada como trabalho futuro enquanto a Cloud Function correspondente não estiver implementada.
 
 *   **[RF009] Padronização e Integridade de Dados (Audit Trail):**
     *   Todos os registros críticos (agendamentos, pagamentos) devem conter carimbos de tempo (`data_criacao`, `data_atualizacao`) para auditoria.
     *   Para garantir a integridade histórica (especialmente financeira), registros de transações devem armazenar um "snapshot" (cópia estática) dos dados do cliente no momento da operação, prevenindo perda de informação caso o cadastro original seja alterado ou anonimizado.
     *   A nomenclatura dos campos no banco de dados deve seguir o padrão `entidade_id` ou `entidade_uid` para chaves estrangeiras.
+    *   O status do agendamento hoje é tratado em diferentes camadas como `pendente`, `aprovado`, `recusado`, `cancelado` e `cancelado_tardio`; a documentação deve considerar esse conjunto como referência operacional até eventual unificação futura.
 
 ### 1.2. Requisitos Não-Funcionais (RNF)
 
 *   **[RNF001] Disponibilidade:** O sistema deve operar em dispositivos móveis (Android/iOS).
 *   **[RNF002] Usabilidade:** Interface intuitiva para usuários leigos.
 *   **[RNF003] Segurança:** Regras de segurança no banco de dados (Firestore Rules) para impedir acesso não autorizado a dados médicos.
+
+### 1.3. Observação sobre configurações globais
+
+As configurações globais são lidas em `configuracoes/geral`, enquanto a persistência por tenant também usa `configuracoes_gerais/{tenantId}` e `WHATSAPP_ADMIN` como fallback operacional.
 
 ---
 
@@ -132,8 +141,9 @@ Documentação das coleções utilizadas:
 *   **`transacoes`**: Valor bruto, desconto, valor liquido, metodo de pagamento, status e referencia opcional ao agendamento.
 *   **`estoque`**: Produtos, quantidade e flag de consumo automático.
 *   **`cupons`**: Cupons de desconto ativos ou expirados, por percentual ou valor fixo.
-*   **`configuracoes`**: Subdocumentos `geral`, `seguranca`, `servicos`, `notificacoes`, `pagamento` e `log_clientes`.
+*   **`configuracoes/geral`**: Configuração global usada pelas rules e pela leitura do telefone da administradora.
 *   **`configuracoes_gerais`**: Base por tenant para a administradora padrao e parametros da instalacao.
+*   **`configuracoes`**: Coleção histórica/documental citada em fases anteriores do projeto; o código atual utiliza `configuracoes/geral` e `configuracoes_gerais`.
 *   **`app_software`** e **`app_changelog`**: Governanca de versao e historico de mudancas do aplicativo.
 *   **`logs`**: Auditoria de ações críticas e eventos do sistema.
 *   **`lgpd_logs`**: Registro de solicitações de exclusão/anonimização (retenção legal).

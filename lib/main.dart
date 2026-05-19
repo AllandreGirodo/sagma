@@ -275,10 +275,11 @@ void main() async {
     if (useFirebaseEmulators) {
       try {
         // '10.0.2.2' é o IP especial para o emulador Android acessar o host.
-        // Para iOS ou Web, usa-se 'localhost'.
+        // Para iOS ou Web, usamos '127.0.0.1' para evitar conflitos com servidores locais
+        // que possam estar vinculados a 'localhost' em paralelo.
         final String host = defaultTargetPlatform == TargetPlatform.android
             ? '10.0.2.2'
-            : 'localhost';
+          : '127.0.0.1';
 
         // Conecta Auth (Porta 9099)
         await FirebaseAuth.instance.useAuthEmulator(host, 9099);

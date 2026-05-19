@@ -681,19 +681,20 @@ class LoginController {
         await _atualizarTokenAutenticacao(authUser);
 
         // DEBUG: verificar usuário atual e token antes de salvar no Firestore
-        // try {
-          try {
-            final current = FirebaseAuth.instance.currentUser;
-            debugPrint('DEBUG antes de salvarUsuario: currentUser.uid=${current?.uid}, email=${current?.email}');
-            final token = current == null ? null : await current.getIdToken();
-            if (token != null && token.length > 20) {
-              debugPrint('DEBUG ID_TOKEN prefix: ${token.substring(0,20)}...');
-            } else {
-              debugPrint('DEBUG ID_TOKEN: null-or-short');
-            }
-          } catch (debugErr) {
-            debugPrint('DEBUG token error: $debugErr');
+        try {
+          final current = FirebaseAuth.instance.currentUser;
+          debugPrint(
+            'DEBUG antes de salvarUsuario: currentUser.uid=${current?.uid}, email=${current?.email}',
+          );
+          final token = current == null ? null : await current.getIdToken();
+          if (token != null && token.length > 20) {
+            debugPrint('DEBUG ID_TOKEN prefix: ${token.substring(0,20)}...');
+          } else {
+            debugPrint('DEBUG ID_TOKEN: null-or-short');
           }
+        } catch (debugErr) {
+          debugPrint('DEBUG token error: $debugErr');
+        }
 
         // 3. Salvar no Firestore
         try {

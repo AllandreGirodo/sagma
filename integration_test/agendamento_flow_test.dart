@@ -21,8 +21,6 @@ void main() {
 
     setUpAll(() async {
       TestWidgetsFlutterBinding.ensureInitialized();
-      // Não registrar mocks do MethodChannel em ambiente web (Chrome),
-      // pois os plugins web devem ser usados ao executar testes com --platform chrome.
       if (!kIsWeb) {
         setupFirebaseCoreMocks();
       }
@@ -33,16 +31,14 @@ void main() {
     });
 
     tearDownAll(() async {
-      // Limpeza: Remove o agendamento criado após o teste
       if (agendamentoIdCriado != null) {
         await service.cancelarAgendamento(agendamentoIdCriado!, 'Limpeza de Teste', 'cancelado');
       }
     });
 
     testWidgets('Deve criar um agendamento e aprovar com sucesso', (WidgetTester tester) async {
-      // 1. CRIAÇÃO (Simulando Cliente)
       final dataFutura = DateTime.now().add(const Duration(days: 2));
-      
+
       final novoAgendamento = Agendamento(
         clienteId: clienteIdTeste,
         dataHora: dataFutura,
@@ -55,23 +51,17 @@ void main() {
 
       await service.salvarAgendamento(novoAgendamento);
 
-      // 2. VERIFICAÇÃO DA CRIAÇÃO
-      // Busca agendamentos do cliente para encontrar o ID gerado
       final listaAposCriacao = await service.getAgendamentosDoCliente(clienteIdTeste).first;
       final agendamentoSalvo = listaAposCriacao.firstWhere(
         (a) => a.tipo == 'Massagem' && a.status == 'pendente'
       );
-      
+
       expect(agendamentoSalvo, isNotNull);
       agendamentoIdCriado = agendamentoSalvo.id;
       expect(agendamentoSalvo.status, 'pendente');
 
-      // 3. APROVAÇÃO (Simulando Admin)
-      // O método atualizarStatusAgendamento também lida com lógica de estoque e push notification
       await service.atualizarStatusAgendamento(agendamentoIdCriado!, 'aprovado', clienteId: clienteIdTeste);
 
-      // 4. VERIFICAÇÃO DA APROVAÇÃO
-      // Aguarda um pouco para a propagação no Firestore se necessário, ou busca novamente
       final listaAposAprovacao = await service.getAgendamentosDoCliente(clienteIdTeste).first;
       final agendamentoAprovado = listaAposAprovacao.firstWhere((a) => a.id == agendamentoIdCriado);
 

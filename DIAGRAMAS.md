@@ -372,3 +372,43 @@ Se a modelagem for feita diretamente no Astah em Java, a estrutura recomendada e
     - `ConfigModel` dependente das regras de `Agendamento`, `ItemEstoque` e `UsuarioModel`.
     - `AppSoftwareConfigModel` ligado a `ChangeLogModel`.
 5. Se desejar gerar o modelo a partir do codigo, usar a importacao/reverse engineering do Astah com as classes Dart apenas como referencia conceitual, mantendo o modelo Java separado da implementacao Flutter.
+
+## 7. Fluxo de autenticação — Ao clicar em "Entrar com o Google"
+
+A seguir um diagrama de sequência simplificado descrevendo o comportamento observado ao acionar o botão "Entrar com o Google" na versão web do app.
+
+```mermaid
+sequenceDiagram
+  participant Cliente as Navegador
+  participant App as App Web (Flutter)
+  participant FirebaseAuth as Firebase Auth (Emulador/Serviço)
+  participant Google as Google OAuth
+
+  Cliente->>App: Clica 'Entrar com o Google'
+  App->>FirebaseAuth: Solicita fluxo de signInViaRedirect (provider: google.com)
+  note right of FirebaseAuth: Se estiver configurado,
+  FirebaseAuth->>Google: Redireciona para consent screen (ou emulador lida localmente)
+  Google-->>FirebaseAuth: Retorna token / credenciais
+  FirebaseAuth-->>App: Conclui autenticação e retorna user
+  App->>Firestore: Verifica/cria documento do usuário (usuarios/{uid})
+  App-->>Cliente: Redireciona para área autenticada
+
+  Note over FirebaseAuth,App: Observação: se o Firebase Auth estiver apontando para o emulador,
+  o endpoint é http://localhost:9099; certifique-se de rodar `firebase emulators:start`.
+```
+
+Observações operacionais:
+
+- Se o emulador de Auth não estiver ativo, a aplicação web tentará acessar `http://localhost:9099` e falhará com `ERR_CONNECTION_REFUSED` (comportamento observado durante o teste local).  
+- Em ambiente de produção, o fluxo faz redirect ao domínio Google e retorna via OAuth; o app então cria/normaliza o documento do usuário no Firestore.  
+- Para testar localmente sem acesso ao Google real, execute os emuladores (`auth`, `firestore`) e defina `--dart-define=USE_FIREBASE_EMULATORS=true` ao compilar/rodar a web.
+
+Passos rápidos para reproduzir localmente:
+
+```powershell
+# Na raiz do projeto
+firebase emulators:start --only auth,firestore --config firebase.json
+flutter run -d chrome --dart-define=ENV=dev --dart-define=USE_FIREBASE_EMULATORS=true
+```
+
+Se quiser, eu atualizo também o diagrama de atividades do cliente para apontar explicitamente esse passo de autenticação.

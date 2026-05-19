@@ -1,116 +1,217 @@
-# Agenda de Massoterapia
+# SAGMA — Sistema de Agendamento e Gestão para Massoterapia
 
 ![Coverage](https://img.shields.io/badge/Coverage-0%25-red)
 
-## 🚀 Novo no Projeto?
+## 📌 Sobre o Projeto
 
-**→ Leia [BEFORE_STARTING.md](./.github/BEFORE_STARTING.md) PRIMEIRO!**
+O *SAGMA* é uma aplicação multiplataforma desenvolvida em Flutter com o objetivo de auxiliar profissionais e clínicas de massoterapia no gerenciamento de atendimentos, agendamentos e processos administrativos.
 
-Contém setup obrigatório de GitHub Secrets e instruções para começar. (~10 min)
+A plataforma oferece recursos para controle de clientes, organização da agenda, acompanhamento financeiro, gestão de estoque e suporte multilíngue, proporcionando maior eficiência operacional e melhor experiência no atendimento terapêutico.
+
+O sistema utiliza Firebase como infraestrutura principal, empregando autenticação segura e banco de dados NoSQL por meio do Firebase Authentication e Cloud Firestore.
 
 ---
 
-Este repositório contém o código-fonte do aplicativo de agendamento e gestão
-para uma clínica de massoterapia. O objetivo do projeto é criar um sistema
-móvel e web em Flutter que permita:
+## 🚀 Primeiros Passos
 
-- Clientes entrarem com login seguro e visualizarem/agendarem horários.
-- Enviar solicitações de alteração que são recebidas por WhatsApp pela
-  administradora.
-- Administradora gerenciar a agenda em formato de calendário,
-  controlar pagamentos de pacotes de sessões e estoque de materiais (cremes).
-- Aplicação multilíngue (PT-BR, EN-US, ES) com arquitetura preparada para mais
-  idiomas.
-- Banco de dados NoSQL usando Firebase Firestore e autenticação via Firebase
-  Authentication.
+### Novo no projeto?
 
-## Diagramas tecnicos
+Leia o documento abaixo antes de iniciar:
 
-Os diagramas consolidados do sistema ficam em [DIAGRAMAS.md](DIAGRAMAS.md). Esse arquivo traz a versao Mermaid para o GitHub e orientacao para modelagem em Java no Astah.
+➡️ [BEFORE_STARTING.md](./.github/BEFORE_STARTING.md)
 
-## Estrutura do projeto
+O arquivo contém:
 
-Pasta `lib/` (estado atual):
+* configuração inicial do ambiente;
+* setup obrigatório de GitHub Secrets;
+* orientações de execução do projeto.
 
-- `features/` – modulos de negocio por dominio (auth, agenda, financeiro etc.).
-- `core/` – servicos, utilitarios, configuracoes e infraestrutura compartilhada.
-- `view/` – telas administrativas e ferramentas de apoio.
-- `core/models/` – modelos canônicos do dominio usados pelo app.
-- `features/*/models/` – modelos específicos de cada funcionalidade.
-- `app_localizations.dart` e `core/utils/app_strings.dart` – localizacao e chaves de texto.
+Tempo estimado: aproximadamente 10 minutos.
 
-## Como começar
+---
 
-1. **Configure o Firebase**
-   - Crie um projeto no [console do Firebase](https://console.firebase.google.com/).
-   - Ative Authentication (Email/Senha) e Cloud Firestore.
-   - Baixe o `google-services.json`/`GoogleService-Info.plist` e copie para os
-     diretórios nativos (`android/app`, `ios/Runner`).
-   - Adicione dependências no `pubspec.yaml`:
-     ```yaml
-     dependencies:
-       flutter:
-         sdk: flutter
-       firebase_core: ^2.10.0
-       firebase_auth: ^4.2.0
-       cloud_firestore: ^4.5.0
-       flutter_localizations:
-         sdk: flutter
-     ```
+## ✨ Funcionalidades Principais
 
-2. **Inicialize o Git**
-   ```bash
-   git init
-   git add .
-   git commit -m "inicial: projeto Flutter de agendamento"
-   ```
-   Empurre para o GitHub/GitLab e faça commits freqüentes à medida que avança.
+* Autenticação segura de usuários;
+* Agendamento e gerenciamento de sessões;
+* Solicitação de alterações via WhatsApp;
+* Dashboard administrativo;
+* Controle financeiro e de sessões;
+* Controle de estoque de materiais;
+* Aplicação multilíngue:
 
-3. **Execute o app padrão**
-   - Abra um emulador ou conecte um dispositivo (`flutter devices`).
-   - Rode `flutter run` para verificar que o projeto compila.
+  * Português (PT-BR)
+  * Inglês (EN-US)
+  * Espanhol (ES)
+* Arquitetura preparada para expansão de idiomas;
+* Persistência de dados com Firebase Firestore.
 
-4. **Implemente o MVP** (versão mínima viável):
-   - Crie telas de login/cadastro com Firebase Auth.
-   - Modele as coleções Firestore conforme a arquitetura atual:
-  `usuarios/{email_normalizado}` + `usuarios/{email_normalizado}/perfil/cliente`,
-  `agendamentos`, `transacoes`, `estoque`, `configuracoes`, `lgpd_logs`,
-  `app_software` e `app_changelog`.
-   - Adicione internacionalização usando o arquivo de traduções.
-   - Desenvolva a interface de agenda com `table_calendar` ou similar.
+---
 
-## Cronograma sugerido
+## 🏗️ Arquitetura do Projeto
 
-- **20‑28 fev**: setup Flutter/Firebase, modelagem de dados e primeiras classes.
-- **1‑15 mar**: login, CRUD de clientes e agendamento simples.
-- **16‑31 mar**: pacotes/pagamentos, integração WhatsApp, controle de estoque.
-- **1‑30 abr**: refinamento UI, testes de usabilidade e documentação final.
-- **maio‑julho**: ajustes da documentação e preparação da apresentação.
+Estrutura principal da pasta lib/:
 
-## Documentação acadêmica
+text
+lib/
+├── core/        → serviços, infraestrutura e recursos compartilhados
+├── features/    → módulos organizados por domínio de negócio
+├── view/        → telas administrativas e componentes visuais
+└── core/models/ → modelos principais do sistema
 
-Um anteprojeto já está disponível no workspace (`anteprojeto_tcc.md`). Ele
-contém:
 
-- Introdução, justificativa e objetivos.
-- Referencial teórico (Flutter, Firestore, métodos ágeis etc.).
-- Metodologia e cronograma.
-- Estrutura sugerida para o relatório final.
+### Organização por Domínio
 
-O dossiê técnico de entrevistas e elicitação de requisitos está em [docs/dossie_entrevistas_elicitacao_requisitos.md](docs/dossie_entrevistas_elicitacao_requisitos.md). Ele consolida o histórico das entrevistas e os requisitos funcionais e não funcionais derivados.
+* features/auth → autenticação;
+* features/agenda → gerenciamento de agenda;
+* features/financeiro → controle financeiro;
+* features/estoque → gestão de materiais.
 
-Observação de modelagem: o sistema trabalha com o controle de pacotes por meio de `saldo_sessoes` no perfil do cliente, não por uma entidade separada de pacote.
+---
 
-Use-o como base para todo o texto do TCC e atualize conforme o desenvolvimento
-avança.
+## 📊 Diagramas Técnicos
 
-## Contribuições e próximas tarefas
+Os diagramas oficiais do sistema estão disponíveis em:
 
-- Comece criando as classes em `lib/core/models/`.
-- Configure a autenticação e a primeira tela de login.
-- Defina o fluxo de agendamento com aprovação e notificação via WhatsApp.
-- Implemente dashboard administrativo e componentes de calendário.
+➡️ [DIAGRAMAS.md](DIAGRAMAS.md)
 
-Fotos do caderno, esquemas de banco e outros rascunhos podem ser adicionados
-a `docs/` ou anexados ao repositório. Para os diagramas oficiais deste TCC,
-prefira manter a fonte em [DIAGRAMAS.md](DIAGRAMAS.md).
+O documento contém:
+
+* diagramas em Mermaid compatíveis com GitHub;
+* orientações de modelagem;
+* estrutura arquitetural do sistema.
+
+---
+
+## 🔧 Tecnologias Utilizadas
+
+* Flutter
+* Dart
+* Firebase Authentication
+* Cloud Firestore
+* Firebase Core
+* WhatsApp Integration
+* Internacionalização (i18n)
+
+---
+
+## ⚙️ Configuração do Ambiente
+
+### 1. Configuração do Firebase
+
+1. Crie um projeto no Firebase Console;
+2. Ative:
+
+   * Firebase Authentication;
+   * Cloud Firestore;
+3. Adicione os arquivos:
+
+   * google-services.json
+   * GoogleService-Info.plist
+
+nos respectivos diretórios nativos:
+
+text
+android/app
+ios/Runner
+
+
+### Dependências principais
+
+yaml
+dependencies:
+  flutter:
+    sdk: flutter
+  firebase_core: ^2.10.0
+  firebase_auth: ^4.2.0
+  cloud_firestore: ^4.5.0
+  flutter_localizations:
+    sdk: flutter
+
+
+---
+
+## ▶️ Execução do Projeto
+
+Inicialize o repositório:
+
+bash
+git init
+git add .
+git commit -m "inicial: projeto Flutter de agendamento"
+
+
+Execute a aplicação:
+
+bash
+flutter run
+
+
+---
+
+## 📁 Modelagem de Dados
+
+Coleções principais do Firestore:
+
+text
+usuarios/
+agendamentos/
+transacoes/
+estoque/
+configuracoes/
+lgpd_logs/
+app_software/
+app_changelog/
+
+
+Estrutura de usuário:
+
+text
+usuarios/{email_normalizado}/perfil/cliente
+
+
+---
+
+## 📅 Cronograma de Desenvolvimento
+
+| Período    | Atividade                                 |
+| ---------- | ----------------------------------------- |
+| Fev        | Setup Flutter/Firebase e modelagem        |
+| Mar        | Login, CRUD e agendamento                 |
+| Abr        | Financeiro, WhatsApp e estoque            |
+| Maio–Julho | Refinamentos, documentação e apresentação |
+
+---
+
+## 🎓 Documentação Acadêmica
+
+O projeto possui documentação acadêmica complementar disponível no repositório:
+
+* anteprojeto_tcc.md
+* docs/dossie_entrevistas_elicitacao_requisitos.md
+
+Os documentos incluem:
+
+* introdução e justificativa;
+* objetivos gerais e específicos;
+* metodologia;
+* levantamento de requisitos;
+* cronograma;
+* fundamentação teórica.
+
+---
+
+## 📌 Próximas Implementações
+
+* Dashboard administrativo avançado;
+* Sistema de notificações;
+* Aprovação automática de agendamentos;
+* Relatórios financeiros;
+* Melhorias de usabilidade;
+* Expansão de idiomas.
+
+---
+
+## 📄 Licença
+
+Projeto desenvolvido para fins acadêmicos e educacionais.

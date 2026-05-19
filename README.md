@@ -17,7 +17,7 @@ móvel e web em Flutter que permita:
 - Clientes entrarem com login seguro e visualizarem/agendarem horários.
 - Enviar solicitações de alteração que são recebidas por WhatsApp pela
   administradora.
-- Administradora (sua esposa) gerenciar a agenda em formato de calendário,
+- Administradora gerenciar a agenda em formato de calendário,
   controlar pagamentos de pacotes de sessões e estoque de materiais (cremes).
 - Aplicação multilíngue (PT-BR, EN-US, ES) com arquitetura preparada para mais
   idiomas.

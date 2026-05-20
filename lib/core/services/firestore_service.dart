@@ -2569,6 +2569,24 @@ class FirestoreService {
     await usuarioRef.update({'theme': theme});
   }
 
+  /// Atualiza preferências do usuário (tema e/ou locale) no documento do usuário.
+  Future<void> atualizarPreferenciasUsuario(
+    String uid, {
+    String? theme,
+    String? locale,
+  }) async {
+    final usuarioRef = await _buscarUsuarioRefPorUid(uid);
+    if (usuarioRef == null) return;
+
+    final dados = <String, dynamic>{};
+    if (theme != null) dados['theme'] = theme;
+    if (locale != null) dados['locale'] = locale;
+
+    if (dados.isNotEmpty) {
+      await usuarioRef.update(dados);
+    }
+  }
+
   // --- Agendamentos ---
   Future<void> salvarAgendamento(Agendamento agendamento) async {
     // RF009: Snapshotting para Integridade Histórica

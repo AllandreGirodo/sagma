@@ -394,12 +394,12 @@ sequenceDiagram
   App-->>Cliente: Redireciona para área autenticada
 
   Note over FirebaseAuth,App: Observação: se o Firebase Auth estiver apontando para o emulador,
-  o endpoint é http://localhost:9099; certifique-se de rodar `firebase emulators:start`.
+  o endpoint é http://localhost:9199; certifique-se de rodar `firebase emulators:start`.
 ```
 
 Observações operacionais:
 
-- Se o emulador de Auth não estiver ativo, a aplicação web tentará acessar `http://localhost:9099` e falhará com `ERR_CONNECTION_REFUSED` (comportamento observado durante o teste local).  
+- Se o emulador de Auth não estiver ativo, a aplicação web tentará acessar `http://localhost:9199` e falhará com `ERR_CONNECTION_REFUSED` (comportamento observado durante o teste local).  
 - Em ambiente de produção, o fluxo faz redirect ao domínio Google e retorna via OAuth; o app então cria/normaliza o documento do usuário no Firestore.  
 - Para testar localmente sem acesso ao Google real, execute os emuladores (`auth`, `firestore`) e defina `--dart-define=USE_FIREBASE_EMULATORS=true` ao compilar/rodar a web.
 

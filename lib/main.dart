@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/foundation.dart'; // Para kReleaseMode e kDebugMode
+import 'package:agenda/core/utils/logger.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:device_preview/device_preview.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
@@ -26,8 +27,19 @@ import 'package:agenda/app_localizations.dart';
 import 'package:agenda/view/app_initialization_view.dart';
 
 Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
+  // Garantir que o Firebase esteja inicializado no isolate de background
+  try {
+    if (Firebase.apps.isEmpty) {
+      await Firebase.initializeApp(
+        options: DefaultFirebaseOptions.currentPlatform,
+      );
+    }
+  } catch (_) {
+    // Ignora falha de re-inicialização — pode já estar inicializado
+  }
+
   // Manipular mensagens em segundo plano
-  debugPrint(AppStrings.backgroundMessageHandling(message.messageId));
+  Logger.info(AppStrings.backgroundMessageHandling(message.messageId));
 }
 
 void _bootDiag(String message) {
@@ -235,12 +247,12 @@ void main() async {
         ? appCheckDebugToken
         : null;
 
-    _bootDiag(
-      'host=${Uri.base.host} localWeb=$isLocalWebHost '
-      'enableAppCheckInDebug=$enableAppCheckInDebug '
-      'enableAppCheckInRelease=$enableAppCheckInRelease '
-      'debugTokenProvided=${appCheckDebugToken.isNotEmpty}',
-    );
+      _bootDiag(
+        'host=${Uri.base.host} localWeb=$isLocalWebHost '
+        'enableAppCheckInDebug=$enableAppCheckInDebug '
+        'enableAppCheckInRelease=$enableAppCheckInRelease '
+        'debugTokenProvided=${appCheckDebugToken.isNotEmpty}',
+      );
 
     await configureWebAppCheckDebugToken(
       (debugTokenForWeb == null || debugTokenForWeb.isEmpty)
@@ -261,28 +273,38 @@ void main() async {
       defaultValue: false,
     );
 
-    // Em desenvolvimento web local (localhost) é mais prático usar os emuladores
-    // automaticamente quando o ENV é 'dev'. Permite testar sem depender do Firestore
-    // remoto e evita erros de App Check durante desenvolvimento.
-    if (kIsWeb && isLocalWebHost && env == 'dev') {
+    // Se estamos rodando em localhost (web), por padrão assumimos ambiente de desenvolvimento
+    // e forçamos conexões aos emuladores locais para Auth/Firestore/Storage/Functions.
+    // Se você realmente quer apontar para o Firebase online apesar de estar em localhost,
+    // rode com `--dart-define=ALLOW_ONLINE_ON_LOCALHOST=true`.
+    final bool forceEmulatorsOnLocalhost = kIsWeb && (
+      Uri.base.host == 'localhost' ||
+      Uri.base.host == '127.0.0.1' ||
+      Uri.base.host == '0.0.0.0' ||
+      Uri.base.host == '::1'
+    );
+
+    final bool allowOnlineOnLocalhost = const bool.fromEnvironment(
+      'ALLOW_ONLINE_ON_LOCALHOST',
+      defaultValue: false,
+    );
+
+    if (forceEmulatorsOnLocalhost && !allowOnlineOnLocalhost) {
       useFirebaseEmulators = true;
+      Logger.info(AppStrings.firebaseEmulatorAutoEnabled(Uri.base.host));
     }
 
-    // Permite forçar o uso dos emuladores quando `USE_FIREBASE_EMULATORS=true`.
-    // Antes: só ativava em modo debug. Para testes locais com Hosting Emulator
-    // aplicado ao build estático, precisamos ligar os emuladores mesmo em release
-    // quando a flag estiver setada.
+    // O uso de emuladores pode ser ativado por flag ou automaticamente no localhost.
     if (useFirebaseEmulators) {
       try {
         // '10.0.2.2' é o IP especial para o emulador Android acessar o host.
-        // Para iOS ou Web, usamos '127.0.0.1' para evitar conflitos com servidores locais
-        // que possam estar vinculados a 'localhost' em paralelo.
+        // Para iOS ou Web, usamos '127.0.0.1' apenas quando os emuladores foram ativados.
         final String host = defaultTargetPlatform == TargetPlatform.android
             ? '10.0.2.2'
           : '127.0.0.1';
 
-        // Conecta Auth (Porta 9099)
-        await FirebaseAuth.instance.useAuthEmulator(host, 9099);
+        // Conecta Auth (Porta definida em firebase.json)
+        await FirebaseAuth.instance.useAuthEmulator(host, 9199);
         // Conecta Firestore (Porta 8080)
         FirebaseFirestore.instance.useFirestoreEmulator(host, 8080);
         // Conecta Storage (Porta 9199)
@@ -290,12 +312,12 @@ void main() async {
         // Conecta Functions (Porta 5001)
         FirebaseFunctions.instance.useFunctionsEmulator(host, 5001);
 
-        debugPrint(AppStrings.firebaseEmulatorConnected(host));
+          Logger.info(AppStrings.firebaseEmulatorConnected(host));
       } catch (e) {
-        debugPrint(AppStrings.firebaseEmulatorConnectionError(e.toString()));
+          Logger.error(AppStrings.firebaseEmulatorConnectionError(e.toString()));
       }
     } else {
-      debugPrint(AppStrings.firebaseUsingOnline);
+      Logger.info(AppStrings.firebaseUsingOnline);
     }
 
     // 3. App Check para Web
@@ -314,17 +336,17 @@ void main() async {
         );
       } on FirebaseException catch (e) {
         if (e.code == 'already-initialized') {
-          debugPrint(AppStrings.appCheckAlreadyInitialized);
+              Logger.warn(AppStrings.appCheckAlreadyInitialized);
         } else {
-          debugPrint(AppStrings.appCheckActivationFailure(e.toString()));
+          Logger.error(AppStrings.appCheckActivationFailure(e.toString()));
         }
       } catch (e) {
-        debugPrint(AppStrings.appCheckActivationFailure(e.toString()));
+        Logger.error(AppStrings.appCheckActivationFailure(e.toString()));
       }
     } else if (kIsWeb && kDebugMode && !enableAppCheckInDebug) {
-      debugPrint(AppStrings.appCheckDisabledInDebug);
+      Logger.info(AppStrings.appCheckDisabledInDebug);
     } else if (kIsWeb) {
-      debugPrint(AppStrings.appCheckRecaptchaMissing);
+      Logger.warn(AppStrings.appCheckRecaptchaMissing);
     }
 
     // 4. Configurações adicionais
@@ -482,11 +504,12 @@ class _MyAppState extends State<MyApp> {
   }) async {
     final user = FirebaseAuth.instance.currentUser;
     if (user != null) {
-      // O método atualizarPreferenciasUsuario não existe, mas o de tema sim.
-      // Vamos chamar o que existe para não quebrar.
-      if (theme != null) {
-        await FirestoreService().atualizarTemaUsuario(user.uid, theme);
-      }
+      // Usa o método unificado para atualizar preferências do usuário
+      await FirestoreService().atualizarPreferenciasUsuario(
+        user.uid,
+        theme: theme,
+        locale: locale,
+      );
     }
   }
 
@@ -552,7 +575,7 @@ class _MyAppState extends State<MyApp> {
             debugPrint(AppStrings.fcmTokenRefreshError(e.toString())),
       );
     } catch (e) {
-      debugPrint(AppStrings.pushNotificationsInitFailure(e.toString()));
+      Logger.error(AppStrings.pushNotificationsInitFailure(e.toString()));
     }
   }
 

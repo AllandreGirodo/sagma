@@ -201,6 +201,49 @@ Os documentos incluem:
 
 ---
 
+## 🔁 Mudanças recentes (20 de maio de 2026)
+
+Pequenas correções e melhorias aplicadas no código-base:
+
+- Inicializado o `Firebase` de forma segura dentro do handler de mensagens em background (`_firebaseMessagingBackgroundHandler`) para evitar falhas em isolates.
+- Adicionado `FirestoreService.atualizarPreferenciasUsuario(uid, {theme, locale})` para persistir preferências de `theme` e `locale` no documento do usuário.
+
+Próximos passos sugeridos:
+
+- Testar fluxo de notificações push em Android/iOS/Web para validar handler em background.
+- Criar testes unitários/mocks para `FirestoreService` (usar `cloud_firestore_mocks` ou approaches similares).
+- Atualizar documentação de variáveis de ambiente com as chaves Firebase e VAPID.
+
+---
+
+## 🔐 Variáveis de Ambiente Obrigatórias / Principais
+
+As variáveis de ambiente podem ser fornecidas via `.env` ou `--dart-define`.
+
+- `DB_ADMIN_PASSWORD` — senha administrativa para scripts de migração.
+- `ADMIN_EMAIL` — email do administrador principal.
+- `FIREBASE_PROJECT_ID`
+- `FIREBASE_MESSAGING_SENDER_ID`
+- `FIREBASE_STORAGE_BUCKET`
+
+Chaves específicas por plataforma (adicionais quando aplicáveis):
+- `FIREBASE_WEB_API_KEY`, `FIREBASE_WEB_APP_ID`
+- `FIREBASE_ANDROID_API_KEY`, `FIREBASE_ANDROID_APP_ID`
+
+Outras variáveis relevantes:
+- `VAPID_KEY` — chave pública para Web Push (FCM) no Web
+- `FIREBASE_APPCHECK_DEBUG_TOKEN` — token de depuração App Check (web local)
+- `RECAPTCHA_SITE_KEY` (ou `RECAPTCHA_SITE_KEY_CLIENT`) — chave pública reCAPTCHA para App Check Web
+- `USE_FIREBASE_EMULATORS` — `true` para apontar para emuladores locais
+- `ENABLE_APPCHECK_IN_DEBUG`, `ENABLE_APPCHECK_IN_RELEASE` — controlam ativação do App Check
+- `ENABLE_WEB_PUSH_IN_DEBUG` — permite web push em modo debug
+- `FORCE_CONFIG_CHECK` — força verificação de chaves em startup
+- `USE_DEVICE_PREVIEW` — (opcional) se definido como `true` sempre habilita DevicePreview
+
+Coloque essas variáveis em um arquivo `.env` local (não comitar) ou configure via CI/CD/GitHub Secrets.
+
+---
+
 ## 📌 Próximas Implementações
 
 * Dashboard administrativo avançado;

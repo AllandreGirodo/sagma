@@ -32,10 +32,30 @@ class AuthService {
       late UserCredential userCredential;
 
       if (kIsWeb) {
-        // Para Web: usar Firebase Auth popup
+        // Detecta se estamos rodando em localhost (desenvolvimento web)
+        final isLocalWebHost = (Uri.base.host == 'localhost' ||
+            Uri.base.host == '127.0.0.1' ||
+            Uri.base.host == '0.0.0.0' ||
+            Uri.base.host == '::1');
+
+        // Para Web: uso do GoogleSignIn (popup) quando em produção/online.
+        // Em localhost ainda permitimos o popup, mas registramos que estamos
+        // em ambiente local (espera-se uso de emuladores ou credenciais locais).
         final provider = GoogleAuthProvider();
         provider.setCustomParameters({'prompt': 'select_account'});
-        userCredential = await _auth.signInWithPopup(provider);
+
+        if (!isLocalWebHost) {
+          userCredential = await _auth.signInWithPopup(provider);
+        } else {
+          // Ambiente local: tentar popup (deve funcionar com emulador se ativo),
+          // mas capturamos falhas para fornecer mensagem mais clara.
+          try {
+            userCredential = await _auth.signInWithPopup(provider);
+          } catch (e) {
+            debugPrint('[AUTH] Falha no popup Google em localhost: $e');
+            rethrow;
+          }
+        }
       } else {
         // Para Mobile: usar google_sign_in
         // Nota: google_sign_in não está disponível neste serviço centralizado

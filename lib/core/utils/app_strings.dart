@@ -1500,6 +1500,9 @@ Service and package prices are subject to change. Payment must be made as agreed
   static String firebaseEmulatorConnected(String host) => _isPt
       ? 'Conectado ao Firebase Emulator Suite em $host'
       : 'Connected to Firebase Emulator Suite at $host';
+  static String firebaseEmulatorAutoEnabled(String host) => _isPt
+      ? 'Executando em localhost ($host): Emuladores do Firebase ativados automaticamente.'
+      : 'Running on localhost ($host): Firebase emulators auto-enabled.';
   static String firebaseEmulatorConnectionError(String erro) => _isPt
       ? 'Erro ao conectar ao emulador: $erro'
       : 'Error connecting to emulator: $erro';

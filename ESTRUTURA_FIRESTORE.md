@@ -1,5 +1,40 @@
 # Estrutura do Banco de Dados Firebase Firestore
 
+A arquitetura de dados e o isolamento de registros sensíveis também podem ser observados de forma correlacionada diretamente com a interface do usuário. O mapa arquitetural do sistema organiza as informações cadastrais, clínicas e o histórico cronológico de consultas de forma integrada, refletindo detalhadamente a união entre os componentes em Flutter e os campos mapeados no banco de dados Cloud Firestore.
+
+O mapa hierárquico abaixo reproduz textualmente a modelagem NoSQL nas interações na clínica são particionados de forma limpa, utilizando a nomenclatura exata dos campos fictícios e das coleções persistidas em nuvem:
+
+```text
+[Coleção] usuarios
+   └── [Documento] cliente.exemplo@email.com
+          ├── [Campo] nome: "Nome Completo do Cliente"
+          ├── [Campo] telefone: "(16) 99999-XXXX"
+          ├── [Campo] email: "cliente.exemplo@email.com"
+          ├── [Campo] cep: "14000-000"
+          ├── [Campo] endereco: "Rua Exemplo de Ribeirão Preto, 123"
+          ├── [Campo] permissao: "cliente"
+          ├── [Campo] uid: "W8v7B..."
+          │
+          ├── [Subcoleção] anamneses
+          │      └── [Documento] ficha_ativa
+          │             ├── [Campo] historico_medico: "Sem observações clínicas relevantes"
+          │             ├── [Campo] alergias: "Nenhuma"
+          │             ├── [Campo] medicamentos: "Nenhum"
+          │             └── [Campo] cirurgias: "Pós-operatório de cirurgia no ombro devido a queda"
+          │
+          └── [Subcoleção] atendimentos (agendamentos_historico)
+                 ├── [Documento] agendamento_21_05
+                 │      ├── [Campo] data: "21/05/2026"
+                 │      ├── [Campo] tipo_massagem: "Drenagem Linfática"
+                 │      ├── [Campo] status: "Realizado"
+                 │      └── [Campo] valor: 100
+                 │
+                 └── [Documento] agendamento_14_05
+                        ├── [Campo] data: "14/05/2026"
+                        ├── [Campo] tipo_massagem: "Massagem Modeladora"
+                        ├── [Campo] status: "Cancelado"
+                        └── [Campo] valor: 100
+```
 ## Visão Geral da Arquitetura
 
 ```mermaid

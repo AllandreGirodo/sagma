@@ -44,6 +44,17 @@
     For more details:
     * https://docs.flutter.dev/platform-integration/web/initialization
   -->
+  <script>
+  (function(){
+    try{
+      if (typeof Intl !== 'undefined' && typeof Intl.v8BreakIterator === 'undefined' && typeof Intl.Segmenter !== 'undefined') {
+        Intl.v8BreakIterator = function() { this.segmenter = new Intl.Segmenter(); };
+        Intl.v8BreakIterator.prototype.supportedLocalesOf = function() { return []; };
+      }
+    }catch(e){ /* shim must never break app */ }
+  })();
+  </script>
+
   <script src="flutter_bootstrap.js" async></script>
 </body>
 </html>

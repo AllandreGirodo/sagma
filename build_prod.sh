@@ -133,12 +133,23 @@ RECAPTCHA_SITE_KEY="$(read_env RECAPTCHA_SITE_KEY)"
 FIREBASE_ANDROID_API_KEY="$(read_env FIREBASE_ANDROID_API_KEY)"
 FIREBASE_ANDROID_APP_ID="$(read_env FIREBASE_ANDROID_APP_ID)"
 
+INSTAGRAM_ADMIN="$(read_env INSTAGRAM_ADMIN)"
+WHATSAPP_ADMIN="$(read_env WHATSAPP_ADMIN)"
+
 COMMON_DEFINES=(
     "--dart-define=ENV=prod"
     "--dart-define=FIREBASE_PROJECT_ID=${FIREBASE_PROJECT_ID}"
     "--dart-define=FIREBASE_MESSAGING_SENDER_ID=${FIREBASE_MESSAGING_SENDER_ID}"
     "--dart-define=FIREBASE_STORAGE_BUCKET=${FIREBASE_STORAGE_BUCKET}"
 )
+
+if [[ -n "$INSTAGRAM_ADMIN" ]]; then
+    COMMON_DEFINES+=("--dart-define=INSTAGRAM_ADMIN=${INSTAGRAM_ADMIN}")
+fi
+
+if [[ -n "$WHATSAPP_ADMIN" ]]; then
+    COMMON_DEFINES+=("--dart-define=WHATSAPP_ADMIN=${WHATSAPP_ADMIN}")
+fi
 
 if [[ "$DO_CLEAN" == true ]]; then
     echo "Executando flutter clean..."

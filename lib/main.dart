@@ -25,6 +25,7 @@ import 'package:cloud_functions/cloud_functions.dart';
 import 'package:agenda/view/manutencao_view.dart';
 import 'package:agenda/app_localizations.dart';
 import 'package:agenda/view/app_initialization_view.dart';
+import 'package:agenda/features/tools/view/services_view.dart';
 
 Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
   // Garantir que o Firebase esteja inicializado no isolate de background
@@ -242,6 +243,12 @@ void main() async {
       defaultValue: false,
     );
 
+    // Flag global para habilitar/desabilitar o Firebase Storage
+    const bool enableStorage = bool.fromEnvironment(
+      'ENABLE_STORAGE',
+      defaultValue: false, // Como 'false', o Storage fica inativo por padrão
+    );
+
     final String? debugTokenForWeb =
       (kIsWeb && (kReleaseMode || enableAppCheckInDebug || isLocalWebHost))
         ? appCheckDebugToken
@@ -273,42 +280,23 @@ void main() async {
       defaultValue: false,
     );
 
-    // Se estamos rodando em localhost (web), por padrão assumimos ambiente de desenvolvimento
-    // e forçamos conexões aos emuladores locais para Auth/Firestore/Storage/Functions.
-    // Se você realmente quer apontar para o Firebase online apesar de estar em localhost,
-    // rode com `--dart-define=ALLOW_ONLINE_ON_LOCALHOST=true`.
-    final bool forceEmulatorsOnLocalhost = kIsWeb && (
-      Uri.base.host == 'localhost' ||
-      Uri.base.host == '127.0.0.1' ||
-      Uri.base.host == '0.0.0.0' ||
-      Uri.base.host == '::1'
-    );
-
-    final bool allowOnlineOnLocalhost = const bool.fromEnvironment(
-      'ALLOW_ONLINE_ON_LOCALHOST',
-      defaultValue: false,
-    );
-
-    if (forceEmulatorsOnLocalhost && !allowOnlineOnLocalhost) {
-      useFirebaseEmulators = true;
-      Logger.info(AppStrings.firebaseEmulatorAutoEnabled(Uri.base.host));
-    }
-
-    // O uso de emuladores pode ser ativado por flag ou automaticamente no localhost.
+    // O uso de emuladores precisa ser ativado explicitamente por flag.
     if (useFirebaseEmulators) {
       try {
         // '10.0.2.2' é o IP especial para o emulador Android acessar o host.
-        // Para iOS ou Web, usamos '127.0.0.1' apenas quando os emuladores foram ativados.
+        // Para Web, desktop e iOS, usamos 'localhost' para manter o fluxo no mesmo host do app.
         final String host = defaultTargetPlatform == TargetPlatform.android
             ? '10.0.2.2'
-          : '127.0.0.1';
+          : 'localhost';
 
         // Conecta Auth (Porta definida em firebase.json)
         await FirebaseAuth.instance.useAuthEmulator(host, 9199);
         // Conecta Firestore (Porta 8080)
         FirebaseFirestore.instance.useFirestoreEmulator(host, 8080);
         // Conecta Storage (Porta 9199)
-        await FirebaseStorage.instance.useStorageEmulator(host, 9199);
+        if (enableStorage) {
+          await FirebaseStorage.instance.useStorageEmulator(host, 9199);
+        }
         // Conecta Functions (Porta 5001)
         FirebaseFunctions.instance.useFunctionsEmulator(host, 5001);
 
@@ -323,8 +311,10 @@ void main() async {
     // 3. App Check para Web
     final recaptchaKey = _resolveRecaptchaSiteKey();
     // Nunca ativa App Check em localhost (development)
+    // Ativa App Check apenas quando explicitamente habilitado em flags.
+    // Evita ativar automaticamente em builds de release sem configuração adequada.
     final bool shouldEnableWebAppCheck =
-        kIsWeb && (kReleaseMode || enableAppCheckInDebug) && !isLocalWebHost;
+      kIsWeb && (enableAppCheckInRelease || enableAppCheckInDebug) && !isLocalWebHost;
     _bootDiag(
       'webAppCheck shouldEnable=$shouldEnableWebAppCheck '
       'recaptchaConfigured=${recaptchaKey.isNotEmpty}',
@@ -332,7 +322,9 @@ void main() async {
     if (shouldEnableWebAppCheck && recaptchaKey.isNotEmpty) {
       try {
         await FirebaseAppCheck.instance.activate(
-          providerWeb: ReCaptchaV3Provider(recaptchaKey),
+          // Atualizado para reCAPTCHA Enterprise.
+          // Se estiver utilizando reCAPTCHA v3 no Firebase Console, volte para ReCaptchaV3Provider.
+          providerWeb: ReCaptchaEnterpriseProvider(recaptchaKey),
         );
       } on FirebaseException catch (e) {
         if (e.code == 'already-initialized') {
@@ -419,6 +411,8 @@ class _MyAppState extends State<MyApp> {
   AppThemeType _customThemeType = AppThemeType.sistema;
   final GlobalKey<ScaffoldMessengerState> _scaffoldMessengerKey =
       GlobalKey<ScaffoldMessengerState>();
+  final FirestoreService _firestoreService = FirestoreService();
+  late final Stream<bool> _manutencaoStream;
 
   @override
   void initState() {
@@ -436,6 +430,7 @@ class _MyAppState extends State<MyApp> {
         orElse: () => AppThemeType.sistema,
       );
     }
+    _manutencaoStream = _firestoreService.getManutencaoStream();
     _setupNotifications();
   }
 
@@ -555,8 +550,12 @@ class _MyAppState extends State<MyApp> {
 
       String? token;
       if (kIsWeb) {
-        final vapidKey = dotenv.env['VAPID_KEY'];
-        if (vapidKey == null || vapidKey.isEmpty) {
+        // Prioriza VAPID key passada via --dart-define em produção.
+        final vapidKeyFromDefine = const String.fromEnvironment('VAPID_KEY', defaultValue: '');
+        final vapidKeyFromDotenv = dotenv.env['VAPID_KEY'] ?? '';
+        final vapidKey = vapidKeyFromDefine.isNotEmpty ? vapidKeyFromDefine : vapidKeyFromDotenv;
+
+        if (vapidKey.isEmpty) {
           debugPrint(AppStrings.vapidKeyMissing);
         } else {
           token = await messaging.getToken(vapidKey: vapidKey);
@@ -628,6 +627,10 @@ class _MyAppState extends State<MyApp> {
             Locale('fr', 'FR'),
             Locale('ja', 'JP'),
           ],
+          // Rota pública para checagem de serviços (acessível em /services)
+          routes: {
+            '/services': (context) => const ServicesView(),
+          },
           home: AppInitializationView(
             onboardingComplete: widget.onboardingComplete,
           ),
@@ -636,7 +639,7 @@ class _MyAppState extends State<MyApp> {
             final childWithPreview = DevicePreview.appBuilder(context, child);
             // StreamBuilder para verificar manutenção em tempo real
             return StreamBuilder<bool>(
-              stream: FirestoreService().getManutencaoStream(),
+              stream: _manutencaoStream,
               builder: (context, snapshot) {
                 final emManutencao = snapshot.data ?? false;
 

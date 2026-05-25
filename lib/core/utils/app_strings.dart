@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 
 class AppStrings {
   static Locale _currentLocale = const Locale('pt', 'BR');
+    static const String appVersion = '1.0.0.4';
+    static const String appLastUpdate = '22/05/2026';
 
   static void setLocale(Locale locale) {
     _currentLocale = locale;
@@ -417,6 +419,9 @@ Service and package prices are subject to change. Payment must be made as agreed
   }
   static String get onboardingInstagramBtn =>
       _isPt ? 'Instagram' : 'Instagram';
+  static String get onboardingBtn => _isPt
+      ? 'Voltar para tela de entrada'
+      : 'Back to onboarding';
   static String get onboardingInstagramNaoDisponivel => _isPt
       ? 'Link do Instagram não configurado.'
       : 'Instagram link not configured.';

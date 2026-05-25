@@ -1,0 +1,21 @@
+[
+  {
+    "origin": [
+      "https://horario-agenda.web.app",
+      "https://horario-agenda.firebaseapp.com",
+      "http://localhost:5000",
+      "http://localhost:8080",
+      "http://localhost:53703",
+      "http://localhost:9222"
+    ],
+    "method": ["GET", "HEAD", "OPTIONS"],
+    "responseHeader": [
+      "Content-Type",
+      "Authorization",
+      "X-Goog-Upload-Protocol",
+      "X-Requested-With",
+      "x-goog-resumable"
+    ],
+    "maxAgeSeconds": 3600
+  }
+]

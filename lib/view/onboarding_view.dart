@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
@@ -27,6 +28,11 @@ class _OnboardingViewState extends State<OnboardingView> {
   };
 
   String get _instagramAdminUrl {
+    const defineValue = String.fromEnvironment('INSTAGRAM_ADMIN');
+    if (defineValue.trim().isNotEmpty) {
+      return defineValue.trim();
+    }
+
     try {
       return (dotenv.env['INSTAGRAM_ADMIN'] ?? '').trim();
     } catch (_) {
@@ -55,7 +61,13 @@ class _OnboardingViewState extends State<OnboardingView> {
       return;
     }
 
-    final abriu = await launchUrl(uri, mode: LaunchMode.externalApplication);
+    final abriu = kIsWeb
+        ? await launchUrl(
+            uri,
+            mode: LaunchMode.platformDefault,
+            webOnlyWindowName: '_blank',
+          )
+        : await launchUrl(uri, mode: LaunchMode.externalApplication);
     if (!abriu && mounted) {
       messenger.showSnackBar(
         SnackBar(content: Text(AppStrings.onboardingInstagramNaoAbriu)),

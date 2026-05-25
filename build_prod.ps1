@@ -109,12 +109,23 @@ $RECAPTCHA_SITE_KEY = Read-EnvValue -Key "RECAPTCHA_SITE_KEY"
 $FIREBASE_ANDROID_API_KEY = Read-EnvValue -Key "FIREBASE_ANDROID_API_KEY"
 $FIREBASE_ANDROID_APP_ID = Read-EnvValue -Key "FIREBASE_ANDROID_APP_ID"
 
+$INSTAGRAM_ADMIN = Read-EnvValue -Key "INSTAGRAM_ADMIN"
+$WHATSAPP_ADMIN = Read-EnvValue -Key "WHATSAPP_ADMIN"
+
 $commonDefines = @(
     "--dart-define=ENV=prod"
     "--dart-define=FIREBASE_PROJECT_ID=$FIREBASE_PROJECT_ID"
     "--dart-define=FIREBASE_MESSAGING_SENDER_ID=$FIREBASE_MESSAGING_SENDER_ID"
     "--dart-define=FIREBASE_STORAGE_BUCKET=$FIREBASE_STORAGE_BUCKET"
 )
+
+if (-not [string]::IsNullOrWhiteSpace($INSTAGRAM_ADMIN)) {
+    $commonDefines += "--dart-define=INSTAGRAM_ADMIN=$INSTAGRAM_ADMIN"
+}
+
+if (-not [string]::IsNullOrWhiteSpace($WHATSAPP_ADMIN)) {
+    $commonDefines += "--dart-define=WHATSAPP_ADMIN=$WHATSAPP_ADMIN"
+}
 
 if ($Clean) {
     Write-Host "Executando flutter clean..."

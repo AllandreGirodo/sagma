@@ -14,6 +14,7 @@ import 'package:agenda/features/auth/view/signup_view.dart';
 import 'package:agenda/core/widgets/language_selector.dart';
 import 'package:agenda/core/services/firestore_service.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:agenda/features/tools/view/services_view.dart';
 
 class LoginView extends StatefulWidget {
   const LoginView({super.key});
@@ -345,44 +346,8 @@ class _LoginViewState extends State<LoginView> {
         final provider = GoogleAuthProvider();
         provider.setCustomParameters({'prompt': 'select_account'});
 
-        // Em ambiente local (emulador), preferir redirect para evitar popups
-        // abrindo handlers inesperados ou sendo bloqueados pelo navegador.
-        final isLocalhost = Uri.base.host == 'localhost' || Uri.base.host == '127.0.0.1';
-        if (isLocalhost) {
-          _authDiag('googleLogin: ambiente local detectado -> usar redirect');
-          await FirebaseAuth.instance.signInWithRedirect(provider);
-          _authDiag('googleLogin: signInWithRedirect disparado (local)');
-          return;
-        }
-
-        try {
-          final userCredential = await FirebaseAuth.instance
-              .signInWithPopup(provider)
-              .timeout(const Duration(seconds: 20));
-
-          if (!mounted) return;
-          await _loginController.logarComGoogleAutenticado(
-            context,
-            authUser: userCredential.user,
-          );
-          _authDiag('googleLogin: signInWithPopup concluido');
-          return;
-        } on TimeoutException {
-          _authDiag('googleLogin: popup timeout -> fallback redirect');
-        } on FirebaseAuthException catch (e) {
-          if (_isGoogleCancelCode(e.code)) {
-            _authDiag('googleLogin: popup cancelado code=${e.code}');
-            return;
-          }
-          _authDiag(
-            'googleLogin: popup falhou code=${e.code} -> fallback redirect',
-          );
-        } catch (e) {
-          _authDiag('googleLogin: popup erro=$e -> fallback redirect');
-        }
-
+        _authDiag('googleLogin: web -> redirect');
         await FirebaseAuth.instance.signInWithRedirect(provider);
-        _authDiag('googleLogin: signInWithRedirect disparado');
         return;
       }
 
@@ -561,9 +526,23 @@ class _LoginViewState extends State<LoginView> {
                                 mainAxisSize: MainAxisSize.min,
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                                  Text(loc?.softwareVersion ?? 'Versão do software: 1.0.0'),
+                                  Text(loc?.softwareVersion ?? 'Versão do software: ${AppStrings.appVersion}'),
                                   const SizedBox(height: 8),
-                                  Text(loc?.lastUpdate ?? 'Última alteração: 14/05/2026'),
+                                  Text(loc?.lastUpdate ?? 'Última alteração: ${AppStrings.appLastUpdate}'),
+                                  const SizedBox(height: 12),
+                                  SizedBox(
+                                    width: double.infinity,
+                                    child: ElevatedButton.icon(
+                                      icon: const Icon(Icons.settings),
+                                      label: const Text('Health App Check ⚙️'),
+                                      onPressed: () {
+                                        Navigator.pop(ctx);
+                                        Navigator.of(context).push(MaterialPageRoute(
+                                          builder: (_) => const ServicesView(),
+                                        ));
+                                      },
+                                    ),
+                                  ),
                                 ],
                               ),
                               actions: [

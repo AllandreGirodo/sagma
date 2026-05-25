@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/foundation.dart';
+import 'package:agenda/core/utils/app_strings.dart';
 
 class AppLocalizations {
   final Locale locale;
@@ -25,9 +26,39 @@ class AppLocalizations {
       'loginSuccess': 'Login realizado com sucesso (Simulação)',
       'forgotPasswordButton': 'Esqueci minha senha',
       'aboutAppTitle': 'Sobre o Aplicativo',
-      'softwareVersion': 'Versão do software: 1.0.0',
-      'lastUpdate': 'Última alteração: 14/05/2026',
+    'softwareVersion': 'Versão do software: ${AppStrings.appVersion}',
+    'lastUpdate': 'Última alteração: ${AppStrings.appLastUpdate}',
       'closeButton': 'Fechar',
+            // Services Health Check
+            'servicesCheckTitle': 'Verificação de Serviços',
+            'servicesResultsTitle': 'Resultados',
+            'servicesRunning': 'Executando...',
+            'servicesRerun': 'Reexecutar checagens',
+            'servicesOpenWhatsApp': 'Abrir WhatsApp',
+            'servicesOpenWhatsAppHint': 'Abra em nova aba: https://web.whatsapp.com/',
+            'serviceWhatsappWeb': 'WhatsApp Web (site)',
+            'serviceFirestore': 'Cloud Firestore',
+            'serviceAuth': 'Authentication',
+            'serviceAppCheck': 'App Check (reCAPTCHA)',
+            'serviceStorage': 'Firebase Storage',
+            'serviceSql': 'SQL Connect',
+            'serviceFunctions': 'Cloud Functions',
+            'serviceStatusPending': 'Pendente',
+            'serviceStatusChecking': 'Verificando...',
+            'serviceStatusOk': 'OK',
+            'serviceStatusFail': 'Falha',
+            'serviceStatusUnverified': 'Não verificado',
+            'serviceStatusNotApplicable': 'Não aplicável',
+            'serviceStatusTokenEmpty': 'token vazio',
+            'serviceStatusDocumentNotFound': 'documento não encontrado',
+            'serviceStatusProgress': '{done} / {total}',
+            'serviceStatusHttp': 'HTTP {code}',
+            'servicesSectionSuccess': 'Serviços OK',
+            'servicesSectionFail': 'Serviços com falha',
+            'servicesSectionPending': 'Pendentes / em execução',
+            'servicesSectionUnverified': 'Não verificados',
+            'servicesNoItems': 'Nenhum item por enquanto',
+            'servicesWhatsappLink': 'Link WhatsApp Web',
       // Cadastro
       'signupTitle': 'Criar Conta',
       'fullNameLabel': 'Nome Completo',
@@ -124,9 +155,39 @@ class AppLocalizations {
       'loginSuccess': 'Login successful (Simulation)',
       'forgotPasswordButton': 'Forgot password?',
       'aboutAppTitle': 'About the App',
-      'softwareVersion': 'Software version: 1.0.0',
-      'lastUpdate': 'Last update: 05/14/2026',
+    'softwareVersion': 'Software version: ${AppStrings.appVersion}',
+    'lastUpdate': 'Last update: ${AppStrings.appLastUpdate}',
       'closeButton': 'Close',
+            // Services Health Check
+            'servicesCheckTitle': 'Services Check',
+            'servicesResultsTitle': 'Results',
+            'servicesRunning': 'Running...',
+            'servicesRerun': 'Run checks again',
+            'servicesOpenWhatsApp': 'Open WhatsApp',
+            'servicesOpenWhatsAppHint': 'Open in a new tab: https://web.whatsapp.com/',
+            'serviceWhatsappWeb': 'WhatsApp Web (site)',
+            'serviceFirestore': 'Cloud Firestore',
+            'serviceAuth': 'Authentication',
+            'serviceAppCheck': 'App Check (reCAPTCHA)',
+            'serviceStorage': 'Firebase Storage',
+            'serviceSql': 'SQL Connect',
+            'serviceFunctions': 'Cloud Functions',
+            'serviceStatusPending': 'Pending',
+            'serviceStatusChecking': 'Checking...',
+            'serviceStatusOk': 'OK',
+            'serviceStatusFail': 'Failed',
+            'serviceStatusUnverified': 'Unverified',
+            'serviceStatusNotApplicable': 'Not applicable',
+            'serviceStatusTokenEmpty': 'empty token',
+            'serviceStatusDocumentNotFound': 'document not found',
+            'serviceStatusProgress': '{done} / {total}',
+            'serviceStatusHttp': 'HTTP {code}',
+            'servicesSectionSuccess': 'Healthy services',
+            'servicesSectionFail': 'Failed services',
+            'servicesSectionPending': 'Pending / running',
+            'servicesSectionUnverified': 'Unverified',
+            'servicesNoItems': 'No items yet',
+            'servicesWhatsappLink': 'WhatsApp Web link',
       // Signup
       'signupTitle': 'Create Account',
       'fullNameLabel': 'Full Name',
@@ -216,8 +277,8 @@ class AppLocalizations {
       'loginSuccess': 'Inicio de sesión exitoso (Simulación)',
       'forgotPasswordButton': '¿Olvidó su contraseña?',
       'aboutAppTitle': 'Sobre la Aplicación',
-      'softwareVersion': 'Versión del software: 1.0.0',
-      'lastUpdate': 'Última actualización: 14/05/2026',
+    'softwareVersion': 'Versión del software: ${AppStrings.appVersion}',
+    'lastUpdate': 'Última actualización: ${AppStrings.appLastUpdate}',
       'closeButton': 'Cerrar',
       // Signup
       'signupTitle': 'Crear Cuenta',
@@ -308,8 +369,8 @@ class AppLocalizations {
       'loginSuccess': 'ログイン成功（シミュレーション）',
       'forgotPasswordButton': 'パスワードを忘れた場合',
       'aboutAppTitle': 'アプリについて',
-      'softwareVersion': 'ソフトウェアバージョン: 1.0.0',
-      'lastUpdate': '最終更新日: 2026/05/14',
+    'softwareVersion': 'ソフトウェアバージョン: ${AppStrings.appVersion}',
+    'lastUpdate': '最終更新日: ${AppStrings.appLastUpdate}',
       'closeButton': '閉じる',
       // Signup
       'signupTitle': 'アカウント作成',
@@ -393,8 +454,8 @@ class AppLocalizations {
       'loginSuccess': 'Connexion réussie (Simulation)',
       'forgotPasswordButton': 'Mot de passe oublié?',
       'aboutAppTitle': 'À propos de l\'application',
-      'softwareVersion': 'Version du logiciel: 1.0.0',
-      'lastUpdate': 'Dernière mise à jour: 14/05/2026',
+    'softwareVersion': 'Version du logiciel: ${AppStrings.appVersion}',
+    'lastUpdate': 'Dernière mise à jour: ${AppStrings.appLastUpdate}',
       'closeButton': 'Fermer',
       // Signup
       'signupTitle': 'Créer un compte',
@@ -499,6 +560,38 @@ class AppLocalizations {
   String get softwareVersion => _t('softwareVersion');
   String get lastUpdate => _t('lastUpdate');
   String get closeButton => _t('closeButton');
+  String get servicesCheckTitle => _t('servicesCheckTitle');
+  String get servicesResultsTitle => _t('servicesResultsTitle');
+  String get servicesRunning => _t('servicesRunning');
+  String get servicesRerun => _t('servicesRerun');
+  String get servicesOpenWhatsApp => _t('servicesOpenWhatsApp');
+  String get servicesOpenWhatsAppHint => _t('servicesOpenWhatsAppHint');
+  String get serviceWhatsappWeb => _t('serviceWhatsappWeb');
+  String get serviceFirestore => _t('serviceFirestore');
+  String get serviceAuth => _t('serviceAuth');
+  String get serviceAppCheck => _t('serviceAppCheck');
+  String get serviceStorage => _t('serviceStorage');
+  String get serviceSql => _t('serviceSql');
+  String get serviceFunctions => _t('serviceFunctions');
+  String get serviceStatusPending => _t('serviceStatusPending');
+  String get serviceStatusChecking => _t('serviceStatusChecking');
+  String get serviceStatusOk => _t('serviceStatusOk');
+  String get serviceStatusFail => _t('serviceStatusFail');
+  String get serviceStatusUnverified => _t('serviceStatusUnverified');
+  String get serviceStatusNotApplicable => _t('serviceStatusNotApplicable');
+  String get serviceStatusTokenEmpty => _t('serviceStatusTokenEmpty');
+  String get serviceStatusDocumentNotFound => _t('serviceStatusDocumentNotFound');
+  String serviceStatusProgress(int done, int total) => _t('serviceStatusProgress')
+      .replaceAll('{done}', '$done')
+      .replaceAll('{total}', '$total');
+  String serviceStatusHttp(int code) =>
+      _t('serviceStatusHttp').replaceAll('{code}', '$code');
+  String get servicesSectionSuccess => _t('servicesSectionSuccess');
+  String get servicesSectionFail => _t('servicesSectionFail');
+  String get servicesSectionPending => _t('servicesSectionPending');
+  String get servicesSectionUnverified => _t('servicesSectionUnverified');
+  String get servicesNoItems => _t('servicesNoItems');
+  String get servicesWhatsappLink => _t('servicesWhatsappLink');
 
   // Signup
   String get signupTitle => _t('signupTitle');

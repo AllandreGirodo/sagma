@@ -144,7 +144,7 @@ classDiagram
 ## 2. Diagrama de Casos de Uso UML
 ### 2.1 Visao do Cliente
 
-```astahuml
+```javauml
 @startuml
 left to right direction
 
@@ -177,7 +177,7 @@ UC6 --> WhatsApp
 
 ### 2.2 Visao da Administradora
 
-```astahuml
+```javauml
 @startuml
 left to right direction
 
@@ -250,9 +250,9 @@ flowchart TD
     L --> Z
 ```
 
-### Versao AstahUML
+### Versao javaUML
 
-```astahuml
+```javauml
 @startuml
 start
 :Autenticar no Sistema (Admin);
@@ -318,9 +318,9 @@ flowchart TD
     R --> Z
 ```
 
-### Versao AstahUML
+### Versao javaUML
 
-```astahuml
+```javauml
 @startuml
 start
 :Abrir Aplicativo (Onboarding);
@@ -410,5 +410,3 @@ Passos rápidos para reproduzir localmente:
 firebase emulators:start --only auth,firestore --config firebase.json
 flutter run -d chrome --dart-define=ENV=dev --dart-define=USE_FIREBASE_EMULATORS=true
 ```
-
-Se quiser, eu atualizo também o diagrama de atividades do cliente para apontar explicitamente esse passo de autenticação.

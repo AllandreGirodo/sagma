@@ -32,7 +32,7 @@ Future<void> main() async {
   );
 
   try {
-    print('Runner: salvando agendamento...');
+    stdout.writeln('Runner: salvando agendamento...');
     await service.salvarAgendamento(novo);
 
     // Aguarda o Firestore propagar e captura o agendamento salvo
@@ -42,19 +42,19 @@ Future<void> main() async {
       orElse: () => throw StateError('Agendamento salvo nao encontrado'),
     );
 
-    print('Runner: agendamento salvo id=${salvo.id}');
+    stdout.writeln('Runner: agendamento salvo id=${salvo.id}');
 
-    print('Runner: aprovando agendamento...');
+    stdout.writeln('Runner: aprovando agendamento...');
     await service.atualizarStatusAgendamento(salvo.id!, 'aprovado', clienteId: clienteId);
 
     final lista2 = await service.getAgendamentosDoCliente(clienteId).first;
     final aprovado = lista2.firstWhere((a) => a.id == salvo.id);
 
-    print('AGENDAMENTO_ID:${aprovado.id}');
-    print('CLIENTE_ID:${aprovado.idCliente}');
-    print('DATA:${aprovado.dataHora.toIso8601String()}');
-    print('TIPO:${aprovado.tipo}');
-    print('STATUS:${aprovado.status}');
+    stdout.writeln('AGENDAMENTO_ID:${aprovado.id}');
+    stdout.writeln('CLIENTE_ID:${aprovado.idCliente}');
+    stdout.writeln('DATA:${aprovado.dataHora.toIso8601String()}');
+    stdout.writeln('TIPO:${aprovado.tipo}');
+    stdout.writeln('STATUS:${aprovado.status}');
 
     // If running in a VM (desktop), exit explicitly. On web this will be ignored.
     try {
@@ -63,8 +63,8 @@ Future<void> main() async {
       // ignore - web build can't exit
     }
   } catch (e, st) {
-    print('Runner: erro -> $e');
-    print(st);
+    stdout.writeln('Runner: erro -> $e');
+    stdout.writeln(st);
     try {
       exit(1);
     } catch (_) {}

@@ -1,11 +1,11 @@
-# ✅ IMPORTACAO DE DADOS MELHORADA - RESUMO FINAL
+# ✅ IMPORTAÇÃO DE DADOS MELHORADA - RESUMO FINAL
 
 ## O que foi feito?
 
-Implementei uma **importacao de dados totalmente refatorada** para o Dev Tools que:
+Implementei uma **importação de dados totalmente refatorada** para o Dev Tools que:
 
-### ✅ Aceita e Valida o Cabecalho
-- Verifica se os campos obrigatorios estão presentes
+### ✅ Aceita e Valida o Cabeçalho
+- Verifica se os campos obrigatórios estão presentes
 - Oferece mensagens claras de erro se faltar algo
 - Aceita variações de nomes (Telefone, WhatsApp, Tel, etc)
 
@@ -15,10 +15,10 @@ Implementei uma **importacao de dados totalmente refatorada** para o Dev Tools q
 - Exibe primeiros 3 registros com seus valores
 - Permite visualizar exatamente o que será importado
 
-### ✅ Validacao em Tempo Real
+### ✅ Validação em Tempo Real
 - Normaliza dados automaticamente
 - Remove formataçoes desnecessárias
-- Ignora registros invalidos com relatorio claro
+- Ignora registros inválidos com relatório claro
 - Mostra resultado detalhado (importados, ignorados, erros)
 
 ---
@@ -27,24 +27,24 @@ Implementei uma **importacao de dados totalmente refatorada** para o Dev Tools q
 
 ### 1. **lib/view/import_preview_dialog.dart** ⭐
 Helper stateless com:
-- Validacao de cabecalho
+- Validação de cabeçalho
 - Dialog de preview interativo
-- Normalizacao de campos
+- Normalização de campos
 
 ### 2. **IMPORT_DATA_GUIDE.md** 📖
-Documentacao completa:
+Documentação completa:
 - Guia passo-a-passo de uso
 - Formato de arquivo CSV esperado
-- Regras de importacao
-- Troubleshooting
+- Regras de importação
+- Solução de Problemas (Troubleshooting)
 - Roadmap
 
 ### 3. **IMPORT_CHANGES_SUMMARY.md** 📋
-Sumario tecnico:
+Sumário técnico:
 - Arquivos criados/modificados
 - Fluxo de uso
-- Validacoes implementadas
-- Proximas melhorias
+- Validações implementadas
+- Próximas melhorias
 
 ### 4. **exemplo_importacao_clientes.csv** 📄
 Template de exemplo:
@@ -58,13 +58,13 @@ Template de exemplo:
 
 ### 1. **lib/view/dev_tools_view.dart**
 - ✅ Adicionado import do helper
-- ✅ Novo metodo: `importarPlanilhaClientes()`
+- ✅ Novo método: `importarPlanilhaClientes()`
 - ✅ Integrado com Firestore
 
 ### 2. **lib/core/utils/app_strings.dart**
 - ✅ Adicionadas 21 novas strings de UI
 - ✅ Suporte a i18n (PT-BR e EN)
-- ✅ Campos para validacao, preview, botoes
+- ✅ Campos para validação, preview, botões
 
 ---
 

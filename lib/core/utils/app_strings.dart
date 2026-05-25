@@ -639,6 +639,15 @@ Service and package prices are subject to change. Payment must be made as agreed
   static String get jaExisteAgendamentoNoHorario => _isPt
       ? 'Você já possui um agendamento ativo neste horário.'
       : 'You already have an active appointment in this time slot.';
+  static String get selecioneUmTipo => _isPt
+      ? 'Selecione um tipo de massagem.'
+      : 'Please select a massage type.';
+  static String get selecioneUmHorario => _isPt
+      ? 'Selecione um horário.'
+      : 'Please select a time slot.';
+  static String get agendamentoRealizadoPendenteAprovacao => _isPt
+      ? 'Agendamento realizado! Aguardando aprovação da administradora.'
+      : 'Appointment scheduled! Awaiting administrator approval.';
   static String horarioPreenchido(String horario) => _isPt
       ? '$horario (preenchido)'
       : '$horario (filled)';

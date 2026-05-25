@@ -1,35 +1,35 @@
-# Sumario de Mudancas - Importacao de Dados Melhorada
+# Sumário de Mudanças - Importação de Dados Melhorada
 
 ## Arquivos Criados
 
 ### 1. `lib/view/import_preview_dialog.dart`
-**Novo arquivo** - Helper para preview e validacao de importacao
+**Novo arquivo** - Helper para preview e validação de importação
 
 **Funcionalidades**:
-- Validacao automatica de cabecalho (campos obrigatorios)
+- Validação automática de cabeçalho (campos obrigatórios)
 - Dialog com preview dos primeiros 3 registros
-- Normalizacao de nomes de campos
+- Normalização de nomes de campos
 - Suporte a CSV
 
-**Metodos principais**:
-- `validarCabecalho()` - Valida campos obrigatorios
+**Métodos principais**:
+- `validarCabecalho()` - Valida campos obrigatórios
 - `mostrarPreview()` - Mostra dialog de preview
 - `_buildPreviewRecord()` - Constrói widget de registro
 
 ### 2. `IMPORT_DATA_GUIDE.md`
-**Novo arquivo** - Documentacao completa da funcionalidade
+**Novo arquivo** - Documentação completa da funcionalidade
 
-**Conteudo**:
+**Conteúdo**:
 - Guia de uso passo-a-passo
 - Formato esperado de arquivo CSV
-- Regras de importacao
+- Regras de importação
 - Troubleshooting
 - Roadmap futuro
 
 ### 3. `exemplo_importacao_clientes.csv`
 **Novo arquivo** - Template de exemplo para usuarios
 
-**Conteudo**:
+**Conteúdo**:
 - 3 registros de exemplo com dados realistas
 - Todos os campos suportados
 - Espaço para entender o formato
@@ -38,15 +38,15 @@
 
 ### 1. `lib/view/dev_tools_view.dart`
 
-**Adicoes**:
+**Adições**:
 - Import do novo helper: `import 'import_preview_dialog.dart';`
-- Novo metodo: `importarPlanilhaClientes()`
+- Novo método: `importarPlanilhaClientes()`
 
 **Funcionalidades**:
 - Parse de arquivo CSV
-- Validacao de cabecalho usando helper
+- Validação de cabeçalho usando helper
 - Mostrar preview dialog
-- Executar importacao completa
+- Executar importação completa
 - Mostrar resultado final
 
 **Linha aprox**: ~570-680
@@ -55,7 +55,7 @@
 
 **Strings adicionadas**:
 ```dart
-// Validacao e Preview
+// Validação e Preview
 static String get validacaoArquivo
 static String get cabecalhoValido
 static String get camposObrigatorios
@@ -80,7 +80,7 @@ static String get previewRegistro
 static String get totalRegistrosValidos
 static String get totalRegistrosComErro
 
-// Botoes
+// Botões
 static String get sim
 static String get nao
 ```

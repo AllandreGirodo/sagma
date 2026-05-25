@@ -2,7 +2,7 @@
 
 Se você **clonou este repositório**, siga este checklist **antes de fazer qualquer coisa**.
 
-## ✅ paso a Paso - Configuração Inicial
+## ✅ Passo a Passo - Configuração Inicial
 
 ### 1️⃣ Configure os GitHub Secrets
 

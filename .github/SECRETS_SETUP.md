@@ -1,24 +1,24 @@
-# Configuracao de GitHub Secrets
+# Configuração de GitHub Secrets
 
 Este documento descreve o que deve ficar em GitHub Secrets para CI/CD e o que
-nao deve permanecer no app cliente.
+não deve permanecer no app cliente.
 
 ## Regra principal
 
-- Variaveis client-safe podem existir no .env do app e no secret ENV_FILE.
-- Segredos reais de servidor nao devem ir para o .env do app cliente.
-- FCM server key, conta de servico do Firebase e senhas de
+- Variáveis client-safe podem existir no .env do app e no secret ENV_FILE.
+- Segredos reais de servidor não devem ir para o .env do app cliente.
+- FCM server key, conta de serviço do Firebase e senhas de
   banco devem ficar somente no backend, Cloud Functions ou GitHub Secrets.
 
-## Como cadastrar
+## Como Cadastrar
 
 1. Acesse Settings > Secrets and variables > Actions.
 2. Clique em New repository secret.
 3. Cadastre apenas placeholders/valores do seu ambiente, nunca os exemplos deste repo.
 
-## Secrets do app cliente
+## Secrets do App Cliente
 
-Cadastre os valores equivalentes ao seu .env local ou use um unico ENV_FILE.
+Cadastre os valores equivalentes ao seu .env local ou use um único ENV_FILE.
 
 - DB_ADMIN_PASSWORD=sua_senha_devtools
 - ADMIN_EMAIL=admin@seu-dominio.com
@@ -47,11 +47,11 @@ Esses valores geram o `.env` do app no workflow Flutter.
 - FIREBASE_APP_ID_ANDROID
 - FIREBASE_SERVICE_ACCOUNT_JSON
 
-Estes secrets sao usados apenas pela etapa de distribuicao no Firebase App Distribution.
+Estes secrets são usados apenas pela etapa de distribuição no Firebase App Distribution.
 
 ## Secrets somente backend
 
-Estes valores nao devem permanecer no .env do app cliente:
+Estes valores não devem permanecer no .env do app cliente:
 
 - FIREBASE_SERVICE_ACCOUNT_JSON
 - FCM_SERVER_KEY
@@ -64,22 +64,22 @@ Estes valores nao devem permanecer no .env do app cliente:
 - DB_HOST
 - DB_PORT
 
-Estes valores nao sao mais injetados no `.env` do app cliente pelo `flutter_ci.yml`.
+Estes valores não são mais injetados no `.env` do app cliente pelo `flutter_ci.yml`.
 
-## Seguranca
+## Segurança
 
 1. Nunca commite .env.
 2. Nunca versione serviceAccountKey.json, google-services.json ou GoogleService-Info.plist se houver dados privados do seu ambiente.
-3. Se alguma chave real ja apareceu em commit, PR, issue ou conversa publica, faca rotacao.
-4. Prefira backend/Cloud Functions para qualquer operacao que exija segredo.
+3. Se alguma chave real já apareceu em commit, PR, issue ou conversa pública, faça rotação.
+4. Prefira backend/Cloud Functions para qualquer operação que exija segredo.
 
-## Opcao ENV_FILE
+## Opção ENV_FILE
 
-Se preferir um unico secret para CI, crie ENV_FILE com o conteudo do .env do app:
+Se preferir um único secret para CI, crie ENV_FILE com o conteúdo do .env do app:
 
 ```yaml
 - name: Create .env from secret
   run: echo "${{ secrets.ENV_FILE }}" > .env
 ```
 
-Mantenha os segredos de backend em secrets separados do backend, nao dentro do ENV_FILE do app cliente.
+Mantenha os segredos de backend em secrets separados do backend, não dentro do ENV_FILE do app cliente.

@@ -345,19 +345,7 @@ class _ServicesViewState extends State<ServicesView> {
       leading: _statusIcon(status),
       title: Text(_serviceName(id, loc)),
       subtitle: Text(_statusText(status, loc)),
-      trailing: id == _idAppCheck
-          ? ElevatedButton(
-              onPressed: () {
-                Navigator.of(context).pushAndRemoveUntil(
-                  MaterialPageRoute(
-                    builder: (_) => const OnboardingView(),
-                  ),
-                  (route) => false,
-                );
-              },
-              child: Text(AppStrings.onboardingBtn),
-            )
-          : null,
+      trailing: null,
     );
   }
 
@@ -446,6 +434,17 @@ class _ServicesViewState extends State<ServicesView> {
                   ],
                 ),
               ),
+              ElevatedButton(
+              onPressed: () {
+                Navigator.of(context).pushAndRemoveUntil(
+                  MaterialPageRoute(
+                    builder: (_) => const OnboardingView(),
+                  ),
+                  (route) => false,
+                );
+              },
+              child: Text(AppStrings.onboardingBtn),
+            ),
               Padding(
                 padding: const EdgeInsets.all(12.0),
                 child: Row(

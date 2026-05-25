@@ -1,19 +1,19 @@
-# Guia de Importação Melhorada de Dados - Dev Tools
+# Guia de Importação de Dados - Dev Tools
 
 ## Visão Geral
 
 Implementamos uma nova funcionalidade de importação de dados no Dev Tools que oferece:
 
-✅ **Validacao de Cabecalho**: Verifica se os campos obrigatórios estão presentes
+✅ **Validação de Cabeçalho**: Verifica se os campos obrigatórios estão presentes
 ✅ **Preview de Dados**: Mostra os primeiros registros antes de importar
-✅ **Melhor UX**: Dialog com abas e informations claras
-✅ **Suporte a CSV**: Importacao de planilhas em formato CSV
+✅ **Melhor UX**: Dialog com abas e informações claras
+✅ **Suporte a CSV**: Importação de planilhas em formato CSV
 
 ---
 
 ## Como Usar
 
-### 1. Acessar a Importacao
+### 1. Acessar a Importação
 
 No Dev Tools, localize o setor de "Clientes" e clique em **"Importar"** (ícone de planilha/tabela).
 
@@ -22,36 +22,36 @@ No Dev Tools, localize o setor de "Clientes" e clique em **"Importar"** (ícone 
 - Selecione um arquivo `.csv` com seus dados de clientes
 - O sistema suporta apenas CSV por enquanto (XLSX em desenvolvimento)
 
-### 3. Validar Cabecalho
+### 3. Validar Cabeçalho
 
 O sistema valida automaticamente se:
 - ✅ Existe um campo "Telefone Principal" (ou similar)
 - ✅ Existe um campo "Nome Principal" (ou similar)
 
-**Se faltar algum**, você recebera mensagem de erro indicando qual campo esta faltando.
+**Se faltar algum**, você receberá uma mensagem de erro indicando qual campo está faltando.
 
 ### 4. Revisar Preview
 
 Uma dialog aparecera com:
 
-- **Secao 1: Campos encontrados**
+- **Seção 1: Campos encontrados**
   - Lista de todos os campos detectados
   - Formatados como chips coloridos para fácil leitura
 
-- **Secao 2: Preview de dados**
+- **Seção 2: Preview de dados**
   - Primeiros 3 registros
   - Mostra os valores de cada campo
   - +X registros se houver mais
 
-### 5. Confirmar Importacao
+### 5. Confirmar Importação
 
-Clique em **"Importar"** para proceed ou **"Cancelar"** para desistir.
+Clique em **"Importar"** para prosseguir ou **"Cancelar"** para desistir.
 
 ---
 
 ## Formato Esperado do Arquivo CSV
 
-### Campos Obrigatorios
+### Campos Obrigatórios
 
 | Campo | Tipo | Exemplo | Formato |
 |-------|------|---------|---------|
@@ -60,34 +60,34 @@ Clique em **"Importar"** para proceed ou **"Cancelar"** para desistir.
 
 ### Campos Opcionais
 
-| Campo | Tipo | Exemplo | Descricao |
+| Campo | Tipo | Exemplo | Descrição |
 |-------|------|---------|-----------|
 | Nome Preferido | String | João | Como ele gosta de ser chamado |
 | DDI | String | 55 | Prefixo internacional |
 | CPF | String | 12345678901 | Com ou sem formatacao |
-| Data Nascimento | Date | 15/01/1990 | Formato DD/MM/YYYY |
-| Endereco | String | Rua A, 123 | Endereco completo |
+| Data Nascimento | Date | 15/01/1990 | Formato DD/MM/AAAA |
+| Endereco | String | Rua A, 123 | Endereço completo |
 | CEP | String | 01234567 | Com ou sem hífen |
 | Nome Contato Secundario | String | Maria | Nome do contato alternativo |
 | Telefone Secundário | String | 1133334444 | Apenas números |
-| Nome Indicacao | String | Maria | Quem indicou |
+| Nome Indicacao | String | Maria | Quem indicou (Indicação) |
 | Telefone Indicacao | String | 11988776655 | Contato de quem indicou |
 | Categoria Origem | String | indicacao | Como conheceu (web, whatsapp, etc) |
-| Historico Medico | String | ... | Informacoes médicas relevantes |
+| Historico Medico | String | ... | Informações médicas relevantes |
 | Alergias | String | Dipirona | Alergias conhecidas |
 | Medicamentos | String | ... | Medicamentos em uso |
 | Cirurgias | String | ... | Cirurgias recentes |
 | Anamnese Ok | Boolean | true | Se anamnese está validada |
-| Presenca Agenda | Boolean | false | Sinal histórico de presença |
-| Frequencia Historica Agenda | Int | 3 | Frequência de recorrência |
-| Ultimo Horario Agendado | String | 18:00 | Último horário conhecido |
-| Ultimo Dia Semana Agendado | String | quarta_feira | Último dia recorrente |
-| Sugestao Cliente Fixo | Boolean | true | Heurística para cliente fixo |
+| Presenca Agenda | Boolean | false | Sinal histórico de presença na agenda |
+| Frequencia Historica Agenda | Int | 3 | Frequência histórica na agenda |
+| Ultimo Horario Agendado | String | 18:00 | Último horário agendado |
+| Ultimo Dia Semana Agendado | String | quarta_feira | Último dia da semana agendado |
+| Sugestao Cliente Fixo | Boolean | true | Sugestão de cliente fixo |
 | Saldo Sessoes | Int | 10 | Créditos de sessões |
 | Favoritos | String | relaxante;terapeutica | Lista separada por `;` ou `,` |
-| Horarios Recorrentes | String | seg 18h \| qua 18h | Resumo livre de recorrência |
-| Outro Horario 1..5 | String | sexta 18h | Preferências adicionais |
-| Domingo/Segunda/.../Sabado Fixo | Boolean | true/false | Agenda fixa semanal |
+| Horarios Recorrentes | String | seg 18h \| qua 18h | Horários recorrentes |
+| Outro Horario 1..5 | String | sexta 18h | Outro horário de preferência |
+| Domingo/Segunda/.../Sabado Fixo | Boolean | true/false | Dia fixo na agenda |
 
 ---
 

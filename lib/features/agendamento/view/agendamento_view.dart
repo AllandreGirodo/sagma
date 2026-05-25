@@ -79,6 +79,38 @@ class _AgendamentoViewState extends State<AgendamentoView> {
     return MassageTypeCatalog.localize(localizations, tipoIdOuLegado);
   }
 
+  String _obterDiaSemanaExtenso(DateTime data, BuildContext ctx) {
+    final diasPt = [
+      'Segunda-feira',
+      'Terça-feira',
+      'Quarta-feira',
+      'Quinta-feira',
+      'Sexta-feira',
+      'Sábado',
+      'Domingo'
+    ];
+    final diasEn = [
+      'Monday',
+      'Tuesday',
+      'Wednesday',
+      'Thursday',
+      'Friday',
+      'Saturday',
+      'Sunday'
+    ];
+    try {
+      final locale = Localizations.localeOf(ctx);
+      final isPt = locale.languageCode == 'pt';
+      final dias = isPt ? diasPt : diasEn;
+      final index = (data.weekday - 1).clamp(0, dias.length - 1);
+      return dias[index];
+    } catch (e) {
+      // Fallback para inglês em caso de erro
+      final index = (data.weekday - 1).clamp(0, diasEn.length - 1);
+      return diasEn[index];
+    }
+  }
+
   bool _isStatusCancelado(String status) {
     return status == 'cancelado' || status == 'cancelado_tardio';
   }
@@ -448,8 +480,24 @@ class _AgendamentoViewState extends State<AgendamentoView> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   ListTile(
-                    title: Text(
-                      "${AppLocalizations.of(context)!.dateLabel}: ${DateFormat('dd/MM/yyyy').format(_dataSelecionada)}",
+                    title: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          "${AppLocalizations.of(context)!.dateLabel}: ${DateFormat('dd/MM/yyyy').format(_dataSelecionada)}",
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.only(top: 4.0),
+                          child: Text(
+                            _obterDiaSemanaExtenso(_dataSelecionada, context),
+                            style: TextStyle(
+                              fontSize: 12,
+                              color: Colors.grey.shade600,
+                              fontWeight: FontWeight.w500,
+                            ),
+                          ),
+                        ),
+                      ],
                     ),
                     trailing: const Icon(Icons.calendar_month),
                     onTap: () async {
@@ -727,12 +775,23 @@ class _AgendamentoViewState extends State<AgendamentoView> {
                 ),
                 ElevatedButton(
                   onPressed: () async {
-                    if (_horarioSelecionado != null &&
-                        _tipoSelecionado != null) {
-                      final nav = Navigator.of(context);
-                      await _salvarAgendamento();
-                      if (context.mounted) nav.pop();
+                    if (_horarioSelecionado == null ||
+                        _tipoSelecionado == null) {
+                      final messenger = ScaffoldMessenger.of(context);
+                      messenger.showSnackBar(
+                        SnackBar(
+                          content: Text(
+                            _tipoSelecionado == null
+                                ? AppStrings.selecioneUmTipo
+                                : AppStrings.selecioneUmHorario,
+                          ),
+                        ),
+                      );
+                      return;
                     }
+                    final nav = Navigator.of(context);
+                    await _salvarAgendamento();
+                    if (context.mounted) nav.pop();
                   },
                   child: Text(AppLocalizations.of(context)!.scheduleButton),
                 ),
@@ -853,9 +912,8 @@ class _AgendamentoViewState extends State<AgendamentoView> {
 
     final user = FirebaseAuth.instance.currentUser;
     final messenger = ScaffoldMessenger.of(context);
-    final appointmentSuccessMessage = AppLocalizations.of(
-      context,
-    )!.appointmentSuccess;
+    final appointmentSuccessMessage =
+        AppStrings.agendamentoRealizadoPendenteAprovacao;
 
     if (user == null) {
       messenger.showSnackBar(

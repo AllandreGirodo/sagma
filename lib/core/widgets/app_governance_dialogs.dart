@@ -214,7 +214,9 @@ class AppGovernanceDialogs {
     final manterExibicaoAutomatica = await showChangelogDialog(
       context,
       changelog: resultado.changelog!,
-      initialShowAuto: usuario.showChangelogAuto,
+      initialShowAuto:
+          usuario.showChangelogAuto ||
+          (usuario.lastChangelogSeen ?? '').trim() != resultado.currentVersion,
     );
 
     if (!context.mounted) return;

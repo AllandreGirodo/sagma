@@ -62,32 +62,33 @@ class _LoginViewState extends State<LoginView> {
         normalizado == 'cancelled';
   }
 
-        bool _isGoogleAuthLikelyAppCheckError(Object e) {
-          final message = e.toString().toLowerCase();
-          return message.contains('app check') ||
-          message.contains('appcheck') ||
-          message.contains('firebase-app-check-token-is-invalid');
-        }
+  bool _isGoogleAuthLikelyAppCheckError(Object e) {
+    final message = e.toString().toLowerCase();
+    return message.contains('app check') ||
+        message.contains('appcheck') ||
+        message.contains('firebase-app-check-token-is-invalid');
+  }
 
   Future<void> _initializeGoogleSignInIfNeeded() async {
     _googleSignInInitFuture ??= GoogleSignIn.instance.initialize();
     await _googleSignInInitFuture;
   }
 
-        bool _isFirestorePermissionLikelyAppCheck(Object e) {
-          if (e is! FirebaseException) return false;
-          
-          // Desabilita detecção de App Check em desenvolvimento local web
-          if (kIsWeb && (Uri.base.host == 'localhost' || Uri.base.host == '127.0.0.1')) {
-            return false;
-          }
+  bool _isFirestorePermissionLikelyAppCheck(Object e) {
+    if (e is! FirebaseException) return false;
 
-          final message = (e.message ?? '').toLowerCase();
-          return message.contains('app check') ||
-          message.contains('app-check') ||
-          message.contains('appcheck') ||
-          message.contains('firebase app check token is invalid');
-        }
+    // Desabilita detecção de App Check em desenvolvimento local web
+    if (kIsWeb &&
+        (Uri.base.host == 'localhost' || Uri.base.host == '127.0.0.1')) {
+      return false;
+    }
+
+    final message = (e.message ?? '').toLowerCase();
+    return message.contains('app check') ||
+        message.contains('app-check') ||
+        message.contains('appcheck') ||
+        message.contains('firebase app check token is invalid');
+  }
 
   @override
   void initState() {
@@ -104,7 +105,8 @@ class _LoginViewState extends State<LoginView> {
     try {
       _authDiag('redirect: chamando getRedirectResult');
       final resultado = await FirebaseAuth.instance.getRedirectResult();
-      final usuarioAutenticado = resultado.user ?? FirebaseAuth.instance.currentUser;
+      final usuarioAutenticado =
+          resultado.user ?? FirebaseAuth.instance.currentUser;
       final temRetornoValido =
           resultado.user != null ||
           resultado.credential != null ||
@@ -127,7 +129,9 @@ class _LoginViewState extends State<LoginView> {
       _authDiag('redirect: timeout');
       debugPrint('Timeout ao processar retorno do Google Redirect.');
     } on FirebaseAuthException catch (e) {
-      _authDiag('redirect: FirebaseAuthException code=${e.code} message=${e.message}');
+      _authDiag(
+        'redirect: FirebaseAuthException code=${e.code} message=${e.message}',
+      );
       if (_isGoogleCancelCode(e.code)) {
         if (FirebaseAuth.instance.currentUser == null) {
           await FirebaseAuth.instance.signOut();
@@ -209,14 +213,14 @@ class _LoginViewState extends State<LoginView> {
     if (motivos.isNotEmpty) {
       unawaited(
         _loginController.auditarTentativaCredencial(
-        origem: 'login_formulario',
-        emailDigitado: email,
-        senhaInformada: senha,
-        inconformidade: true,
-        lgpdConsentido: true,
-        motivos: motivos,
-        emailValido: emailValido,
-        senhaForte: senhaValida,
+          origem: 'login_formulario',
+          emailDigitado: email,
+          senhaInformada: senha,
+          inconformidade: true,
+          lgpdConsentido: true,
+          motivos: motivos,
+          emailValido: emailValido,
+          senhaForte: senhaValida,
         ),
       );
 
@@ -338,17 +342,58 @@ class _LoginViewState extends State<LoginView> {
 
   Future<void> _googleLogin() async {
     if (_isLoading) return;
-    _authDiag('googleLogin: start currentUser=${FirebaseAuth.instance.currentUser?.uid ?? '-'}');
+    _authDiag(
+      'googleLogin: start currentUser=${FirebaseAuth.instance.currentUser?.uid ?? '-'}',
+    );
     _setLoadingSafely(true);
     final messenger = ScaffoldMessenger.of(context);
     try {
       if (kIsWeb) {
-        final provider = GoogleAuthProvider();
-        provider.setCustomParameters({'prompt': 'select_account'});
+        final googleProvider = GoogleAuthProvider()
+          ..setCustomParameters({'prompt': 'select_account'});
 
-        _authDiag('googleLogin: web -> redirect');
-        await FirebaseAuth.instance.signInWithRedirect(provider);
-        return;
+        _authDiag('googleLogin: web -> try popup');
+
+        try {
+          final resultado = await FirebaseAuth.instance.signInWithPopup(
+            googleProvider,
+          );
+          final usuario = resultado.user ?? FirebaseAuth.instance.currentUser;
+          _authDiag('googleLogin: popup result user=${usuario?.uid ?? '-'}');
+
+          if (!mounted) return;
+          await _loginController.logarComGoogleAutenticado(
+            context,
+            authUser: usuario,
+          );
+          return;
+        } on FirebaseAuthException catch (e) {
+          _authDiag(
+            'googleLogin: popup error code=${e.code} message=${e.message}',
+          );
+          if (_isGoogleCancelCode(e.code)) {
+            if (FirebaseAuth.instance.currentUser == null) {
+              await FirebaseAuth.instance.signOut();
+            }
+            _setLoadingSafely(false);
+            return;
+          }
+
+          // Fallback para redirect quando popup for bloqueado ou falhar
+          _authDiag('googleLogin: popup failed, falling back to redirect');
+          await FirebaseAuth.instance.signInWithRedirect(googleProvider);
+          _setLoadingSafely(
+            false,
+          ); // getRedirectResult será processado no initState
+          return;
+        } catch (e) {
+          _authDiag(
+            'googleLogin: popup generic error=$e, fallback to redirect',
+          );
+          await FirebaseAuth.instance.signInWithRedirect(googleProvider);
+          _setLoadingSafely(false);
+          return;
+        }
       }
 
       await _initializeGoogleSignInIfNeeded();
@@ -368,7 +413,6 @@ class _LoginViewState extends State<LoginView> {
       if (!mounted) return;
       await _loginController.logarComGoogleAutenticado(context);
       _authDiag('googleLogin: logarComGoogleAutenticado concluido');
-
     } on TimeoutException {
       _authDiag('googleLogin: timeout -> signOut');
       await FirebaseAuth.instance.signOut();
@@ -408,9 +452,7 @@ class _LoginViewState extends State<LoginView> {
             : (_isGoogleAuthLikelyAppCheckError(e)
                   ? AppStrings.erroLoginAppCheck
                   : AppStrings.erroGoogleLogin('$e'));
-        messenger.showSnackBar(
-          SnackBar(content: Text(mensagemErro)),
-        );
+        messenger.showSnackBar(SnackBar(content: Text(mensagemErro)));
       }
     } finally {
       _setLoadingSafely(false);
@@ -514,21 +556,33 @@ class _LoginViewState extends State<LoginView> {
                     children: [
                       IconButton(
                         icon: const Icon(Icons.info_outline, size: 22),
-                        color: theme.colorScheme.onSurface.withValues(alpha: 0.5),
-                        tooltip: AppLocalizations.of(context)?.aboutAppTitle ?? 'Sobre o Aplicativo',
+                        color: theme.colorScheme.onSurface.withValues(
+                          alpha: 0.5,
+                        ),
+                        tooltip:
+                            AppLocalizations.of(context)?.aboutAppTitle ??
+                            'Sobre o Aplicativo',
                         onPressed: () {
                           final loc = AppLocalizations.of(context);
                           showDialog(
                             context: context,
                             builder: (ctx) => AlertDialog(
-                              title: Text(loc?.aboutAppTitle ?? 'Sobre o Aplicativo'),
+                              title: Text(
+                                loc?.aboutAppTitle ?? 'Sobre o Aplicativo',
+                              ),
                               content: Column(
                                 mainAxisSize: MainAxisSize.min,
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                                  Text(loc?.softwareVersion ?? 'Versão do software: ${AppStrings.appVersion}'),
+                                  Text(
+                                    loc?.softwareVersion ??
+                                        'Versão do software: ${AppStrings.appVersion}',
+                                  ),
                                   const SizedBox(height: 8),
-                                  Text(loc?.lastUpdate ?? 'Última alteração: ${AppStrings.appLastUpdate}'),
+                                  Text(
+                                    loc?.lastUpdate ??
+                                        'Última alteração: ${AppStrings.appLastUpdate}',
+                                  ),
                                   const SizedBox(height: 12),
                                   SizedBox(
                                     width: double.infinity,
@@ -537,9 +591,12 @@ class _LoginViewState extends State<LoginView> {
                                       label: const Text('Health App Check ⚙️'),
                                       onPressed: () {
                                         Navigator.pop(ctx);
-                                        Navigator.of(context).push(MaterialPageRoute(
-                                          builder: (_) => const ServicesView(),
-                                        ));
+                                        Navigator.of(context).push(
+                                          MaterialPageRoute(
+                                            builder: (_) =>
+                                                const ServicesView(),
+                                          ),
+                                        );
                                       },
                                     ),
                                   ),

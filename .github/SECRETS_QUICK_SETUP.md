@@ -1,6 +1,6 @@
-# GitHub Secrets - Setup Rapido
+# GitHub Secrets - Setup Rápido
 
-Use este checklist com placeholders. Nao copie valores reais para o repositorio.
+Use este checklist com placeholders. Não copie valores reais para o repositório.
 
 ## Onde cadastrar
 
@@ -35,7 +35,7 @@ RANDOM_MESSAGES_FUNCTION_NAME
 
 ## Secrets de deploy (workflow CI)
 
-Necessarios para a etapa de Firebase App Distribution:
+Necessários para a etapa de Firebase App Distribution:
 
 ```text
 FIREBASE_APP_ID_ANDROID
@@ -44,7 +44,7 @@ FIREBASE_SERVICE_ACCOUNT_JSON
 
 ## Secrets somente backend ou secret manager
 
-Nao colocar no .env do app cliente:
+Não colocar no .env do app cliente:
 
 ```text
 FIREBASE_SERVICE_ACCOUNT_JSON
@@ -59,7 +59,7 @@ DB_HOST
 DB_PORT
 ```
 
-## Rotacao de chaves expostas (antes de publicar)
+## Rotação de chaves expostas (antes de publicar)
 
 1. Firebase Service Account
 - Firebase Console > Project settings > Service accounts
@@ -72,11 +72,11 @@ DB_PORT
 - Configure somente no backend/Cloud Functions/secret manager
 
 3. Banco e credenciais infra
-- Troque senhas e usuarios tecnicos comprometidos
+- Troque senhas e usuários técnicos comprometidos
 - Atualize apenas backend e secret manager
 
 4. Auditoria final
-- Garanta que nenhuma chave real entrou em commit, PR, issue ou chat publico
+- Garanta que nenhuma chave real entrou em commit, PR, issue ou chat público
 
 ## Checklist final
 
@@ -85,4 +85,4 @@ DB_PORT
 - [ ] Secrets backend-only cadastrados somente no backend/secret manager
 - [ ] Chaves antigas revogadas
 - [ ] Novas chaves testadas em ambiente de backend
-- [ ] Nenhum segredo real no repositorio
+- [ ] Nenhum segredo real no repositório

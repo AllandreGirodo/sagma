@@ -2692,7 +2692,7 @@ class FirestoreService {
   Stream<List<Agendamento>> getAgendamentosDoCliente(String uid) {
     return _db
         .collection('agendamentos')
-        .where('cliente_id', isEqualTo: uid)
+        .where('cliente_uid', isEqualTo: uid)
         .orderBy('data_hora', descending: true)
         .snapshots()
         .map(

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:agenda/app_localizations.dart';
 
 class AppStrings {
   static Locale _currentLocale = const Locale('pt', 'BR');
@@ -7,9 +8,35 @@ class AppStrings {
 
   static void setLocale(Locale locale) {
     _currentLocale = locale;
+    AppLocalizations(locale); // Mantem a instacia global de localizacao sincronizada.
   }
 
   static bool get _isPt => _currentLocale.languageCode == 'pt';
+  
+  static String _t(String key, [Map<String, String>? params, String? ptFallback, String? enFallback]) {
+    try {
+      final translated = AppLocalizations.current.translate(key, params);
+      if (translated != key) return translated;
+    } catch (_) {}
+    return _isPt ? (ptFallback ?? key) : (enFallback ?? ptFallback ?? key);
+  }
+  
+  static String _tMultiLang(
+    String pt,
+    String en,
+    String es,
+    String fr,
+    String ja,
+  ) {
+    final langCode = _currentLocale.languageCode;
+    return {
+      'pt': pt,
+      'en': en,
+      'es': es,
+      'fr': fr,
+      'ja': ja,
+    }[langCode] ?? en;
+  }
 
   // Validators
   static String get dataNascimentoObrigatoria =>
@@ -271,9 +298,7 @@ Service and package prices are subject to change. Payment must be made as agreed
 
   // Login
   static String get loginTitulo => _isPt ? 'Bem-vindo(a)' : 'Welcome';
-  static String get loginSubtitulo => _isPt
-      ? 'Faça login para agendar sua sessão'
-      : 'Sign in to schedule your session';
+  static String get loginSubtitulo => _t('loginSubtitle', null, 'Faça login para agendar sua sessão', 'Sign in to schedule your session');
   static String get emailLabel => _isPt ? 'E-mail' : 'Email';
   static String get senhaLabel => _isPt ? 'Senha' : 'Password';
   static String get entrarBtn => _isPt ? 'Entrar' : 'Sign In';
@@ -369,6 +394,9 @@ Service and package prices are subject to change. Payment must be made as agreed
   static String get erroLoginPermissaoFirestore => _isPt
       ? 'Login bloqueado pelas regras do Firestore para este usuário. Verifique permissões e vínculo do cadastro.'
       : 'Login blocked by Firestore rules for this user. Check permissions and account linkage.';
+  static String erroOperacaoBloqueada(String? detalhe) => _isPt
+      ? 'Operação bloqueada: ${detalhe ?? 'Verifique as permissões ou dados enviados.'}'
+      : 'Operation blocked: ${detalhe ?? 'Check permissions or submitted data.'}';
   static String get biometriaBtn =>
       _isPt ? 'Entrar com Biometria' : 'Login with Biometrics';
   static String get biometriaErro => _isPt
@@ -578,14 +606,11 @@ Service and package prices are subject to change. Payment must be made as agreed
           'Light daily stretching helps prolong massage benefits.',
           'Always report any new pain or recent discomfort.',
         ];
-  static String get favoritos => _isPt ? 'Favoritos:' : 'Favorites:';
-  static String get selecioneTipo => _isPt ? 'Selecione o Tipo' : 'Select Type';
-  static String get adicionarFavoritos =>
-      _isPt ? 'Adicionar aos favoritos' : 'Add to favorites';
-  static String get removerFavoritos =>
-      _isPt ? 'Remover dos favoritos' : 'Remove from favorites';
-  static String descontoResumo(String valor) =>
-      _isPt ? 'Desconto: $valor' : 'Discount: $valor';
+  static String get favoritos => _t('favorites', null, 'Favoritos:', 'Favorites:');
+  static String get selecioneTipo => _t('selectMassageType', null, 'Selecione o Tipo', 'Select Type');
+  static String get adicionarFavoritos => _t('addFavorite', null, 'Adicionar aos favoritos', 'Add to favorites');
+  static String get removerFavoritos => _t('removeFavorite', null, 'Remover dos favoritos', 'Remove from favorites');
+  static String descontoResumo(String valor) => _t('discountAmount', {'value': valor}, 'Desconto: $valor', 'Discount: $valor');
   static String dataResumo(String data) =>
       _isPt ? 'Data: $data' : 'Date: $data';
   static String horarioResumo(String horario) =>
@@ -639,21 +664,15 @@ Service and package prices are subject to change. Payment must be made as agreed
   static String get jaExisteAgendamentoNoHorario => _isPt
       ? 'Você já possui um agendamento ativo neste horário.'
       : 'You already have an active appointment in this time slot.';
-  static String get selecioneUmTipo => _isPt
-      ? 'Selecione um tipo de massagem.'
-      : 'Please select a massage type.';
-  static String get selecioneUmHorario => _isPt
-      ? 'Selecione um horário.'
-      : 'Please select a time slot.';
+  static String get selecioneUmTipo => _t('selectMassageType', null, 'Selecione um tipo de massagem.', 'Please select a massage type.');
+  static String get selecioneUmHorario => _t('selectTime', null, 'Selecione um horário.', 'Please select a time slot.');
   static String get agendamentoRealizadoPendenteAprovacao => _isPt
       ? 'Agendamento realizado! Aguardando aprovação da administradora.'
       : 'Appointment scheduled! Awaiting administrator approval.';
   static String horarioPreenchido(String horario) => _isPt
       ? '$horario (preenchido)'
       : '$horario (filled)';
-  static String get nenhumHorarioDisponivelData => _isPt
-      ? 'Não há horários disponíveis para esta data.'
-      : 'There are no available time slots for this date.';
+  static String get nenhumHorarioDisponivelData => _t('noAvailableTimes', null, 'Não há horários disponíveis para esta data.', 'There are no available time slots for this date.');
   static String get listaEsperaEntradaSucesso => _isPt
       ? 'Você será notificado se este horário vagar.'
       : 'You will be notified if this slot becomes available.';
@@ -662,8 +681,13 @@ Service and package prices are subject to change. Payment must be made as agreed
   static String limiteSolicitacoesListaEspera(int limite) => _isPt
       ? 'Você já solicitou $limite horários na lista de espera. Cancele um para solicitar outro.'
       : 'You have already requested $limite time slots on the waitlist. Cancel one to request another.';
-  static String totalResumo(String valor) =>
-      _isPt ? 'Total: $valor' : 'Total: $valor';
+  static String totalResumo(String valor) => _tMultiLang(
+    'Total: $valor',
+    'Total: $valor',
+    'Total: $valor',
+    'Total: $valor',
+    '合計: $valor',
+  );
   static String cancelamentoTardioResumo(
     double horasNecessarias,
     double horasValidas,
@@ -673,14 +697,10 @@ Service and package prices are subject to change. Payment must be made as agreed
   static String get fazerCheckIn => _isPt ? 'Fazer Check-in' : 'Check in';
   static String get avaliarAtendimento =>
       _isPt ? 'Avaliar Atendimento' : 'Rate Service';
-  static String get buscarPorTipo =>
-      _isPt ? 'Buscar por tipo...' : 'Search by type...';
-  static String get cupomDesconto =>
-      _isPt ? 'Cupom de Desconto' : 'Discount Coupon';
-  static String get cupomAplicado =>
-      _isPt ? 'Cupom aplicado!' : 'Coupon applied!';
-  static String get cupomInvalido =>
-      _isPt ? 'Cupom inválido ou expirado.' : 'Invalid or expired coupon.';
+  static String get buscarPorTipo => _t('searchByType', null, 'Buscar por tipo...', 'Search by type...');
+  static String get cupomDesconto => _t('discountCoupon', null, 'Cupom de Desconto', 'Discount Coupon');
+  static String get cupomAplicado => _t('couponApplied', null, 'Cupom aplicado!', 'Coupon applied!');
+  static String get cupomInvalido => _t('invalidCoupon', null, 'Cupom inválido ou expirado.', 'Invalid or expired coupon.');
   static String get avaliarSessao => _isPt ? 'Avaliar Sessão' : 'Rate Session';
   static String get comoFoiExperiencia =>
       _isPt ? 'Como foi sua experiência?' : 'How was your experience?';
@@ -695,23 +715,17 @@ Service and package prices are subject to change. Payment must be made as agreed
   static String get naoPodeCancelarPassado => _isPt
       ? 'Não é possível cancelar agendamentos passados.'
       : 'Cannot cancel past appointments.';
-  static String get cancelamentoTardio =>
-      _isPt ? 'Cancelamento Tardio' : 'Late Cancellation';
-  static String get cancelarAgendamento =>
-      _isPt ? 'Cancelar Agendamento' : 'Cancel Appointment';
-  static String get informeMotivoCancelamento => _isPt
-      ? 'Por favor, informe o motivo do cancelamento:'
-      : 'Please inform the reason for cancellation:';
-  static String get exemploMotivo =>
-      _isPt ? 'Ex: Imprevisto de saúde' : 'E.g.: Health emergency';
-  static String get voltar => _isPt ? 'Voltar' : 'Back';
-  static String get detalhesAgendamento =>
-      _isPt ? 'Detalhes do Agendamento' : 'Appointment Details';
+  static String get cancelamentoTardio => _t('lateCancellation', null, 'Cancelamento Tardio', 'Late Cancellation');
+  static String get cancelarAgendamento => _t('cancelAppointment', null, 'Cancelar Agendamento', 'Cancel Appointment');
+  static String get informeMotivoCancelamento => _t('informCancelReason', null, 'Por favor, informe o motivo do cancelamento:', 'Please inform the reason for cancellation:');
+  static String get exemploMotivo => _t('cancelReasonExample', null, 'Ex: Imprevisto de saúde', 'E.g.: Health emergency');
+  static String get voltar => _t('backButton', null, 'Voltar', 'Back');
+  static String get detalhesAgendamento => _t('appointmentDetails', null, 'Detalhes do Agendamento', 'Appointment Details');
   static String get motivoCancelamento =>
       _isPt ? 'Motivo do Cancelamento:' : 'Cancellation Reason:';
 
   // Admin Agendamentos
-  static String get administracao => _isPt ? 'Administração' : 'Administration';
+  static String get administracao => _t('adminTitle', null, 'Administração', 'Administration');
   static String get relatorios => _isPt ? 'Relatórios' : 'Reports';
   static String get configuracoes => _isPt ? 'Configurações' : 'Settings';
   static String get devToolsDb => _isPt ? 'Dev Tools (DB)' : 'Dev Tools (DB)';
@@ -750,50 +764,32 @@ Service and package prices are subject to change. Payment must be made as agreed
   static String erroCarregarConfigContatoAprovacao(String erro) => _isPt
       ? 'Erro ao carregar configuração de contato: $erro'
       : 'Failed to load contact settings: $erro';
-  static String get dash => _isPt ? 'Dash' : 'Dash';
-  static String get agenda => _isPt ? 'Agenda' : 'Schedule';
-  static String get clientes => _isPt ? 'Clientes' : 'Clients';
-  static String get pendentes => _isPt ? 'Pendentes' : 'Pending';
-  static String get agendamentosDia =>
-      _isPt ? 'Agendamentos (Dia)' : 'Appointments (Day)';
-  static String get receitaEstimadaMes =>
-      _isPt ? 'Receita Est. (Mês)' : 'Est. Revenue (Month)';
+  static String get dash => _t('dashTab', null, 'Dash', 'Dash');
+  static String get agenda => _t('agendaTab', null, 'Agenda', 'Schedule');
+  static String get clientes => _t('clientsTab', null, 'Clientes', 'Clients');
+  static String get pendentes => _t('pendingTab', null, 'Pendentes', 'Pending');
+  static String get agendamentosDia => _t('appointmentsDay', null, 'Agendamentos (Dia)', 'Appointments (Day)');
+  static String get receitaEstimadaMes => _t('estRevenueMonth', null, 'Receita Est. (Mês)', 'Est. Revenue (Month)');
   static String get aprovados => _isPt ? 'Aprovados' : 'Approved';
   static String get cancelRec => _isPt ? 'Cancel/Rec' : 'Cancel/Rej';
-  static String get hoje => _isPt ? 'Hoje' : 'Today';
-  static String get semana => _isPt ? 'Semana' : 'Week';
-  static String get statusDoDia => _isPt ? 'Status do Dia' : 'Daily Status';
-  static String get taxaCancelamento =>
-      _isPt ? 'Taxa de Cancelamento' : 'Cancellation Rate';
-  static String get mes => _isPt ? 'Mês' : 'Month';
-  static String get tiposMaisAgendados =>
-      _isPt ? 'Tipos Mais Agendados (Mês)' : 'Most Scheduled Types (Month)';
-  static String get semDadosGrafico =>
-      _isPt ? 'Sem dados para gráfico.' : 'No data for chart.';
-  static String get ativarGravacaoHistorico => _isPt
-      ? 'Dev: Ativar Gravação de Histórico'
-      : 'Dev: Enable History Logging';
-  static String get permiteSalvarMetricas => _isPt
-      ? 'Permite salvar as métricas de hoje no banco de dados.'
-      : 'Allows saving today\'s metrics to the database.';
-  static String get gravarSnapshot => _isPt
-      ? 'Gravar Snapshot do Dia (metricas_diarias)'
-      : 'Save Daily Snapshot (daily_metrics)';
-  static String get metricasSalvasSucesso => _isPt
-      ? 'Métricas do dia salvas com sucesso!'
-      : 'Daily metrics saved successfully!';
-  static String erroSalvarMetricas(String erro) =>
-      _isPt ? 'Erro ao salvar métricas: $erro' : 'Error saving metrics: $erro';
+  static String get hoje => _t('today', null, 'Hoje', 'Today');
+  static String get semana => _t('week', null, 'Semana', 'Week');
+  static String get statusDoDia => _t('dailyStatus', null, 'Status do Dia', 'Daily Status');
+  static String get taxaCancelamento => _t('cancelRate', null, 'Taxa de Cancelamento', 'Cancellation Rate');
+  static String get mes => _t('month', null, 'Mês', 'Month');
+  static String get tiposMaisAgendados => _t('topTypes', null, 'Tipos Mais Agendados (Mês)', 'Most Scheduled Types (Month)');
+  static String get semDadosGrafico => _t('noChartData', null, 'Sem dados para gráfico.', 'No data for chart.');
+  static String get ativarGravacaoHistorico => _t('devEnableMetrics', null, 'Dev: Ativar Gravação de Histórico', 'Dev: Enable History Logging');
+  static String get permiteSalvarMetricas => _t('allowSaveMetrics', null, 'Permite salvar as métricas de hoje no banco de dados.', 'Allows saving today\'s metrics to the database.');
+  static String get gravarSnapshot => _t('saveSnapshot', null, 'Gravar Snapshot do Dia', 'Save Daily Snapshot');
+  static String get metricasSalvasSucesso => _t('metricsSaved', null, 'Métricas do dia salvas com sucesso!', 'Daily metrics saved successfully!');
+  static String erroSalvarMetricas(String erro) => _t('metricsSaveError', {'error': erro}, 'Erro ao salvar métricas: $erro', 'Error saving metrics: $erro');
   static String erroAbrirSwagger(String erro) =>
       _isPt ? 'Erro ao abrir Swagger: $erro' : 'Error opening Swagger: $erro';
-  static String get nenhumAgendamentoPendente =>
-      _isPt ? 'Nenhum agendamento pendente.' : 'No pending appointments.';
-  static String get nenhumUsuarioPendente =>
-      _isPt ? 'Nenhum usuário pendente.' : 'No pending users.';
-  static String get pesquisarCliente =>
-      _isPt ? 'Pesquisar Cliente' : 'Search Client';
-  static String get nenhumClienteEncontrado =>
-      _isPt ? 'Nenhum cliente encontrado.' : 'No clients found.';
+  static String get nenhumAgendamentoPendente => _t('noPendingAppointments', null, 'Nenhum agendamento pendente.', 'No pending appointments.');
+  static String get nenhumUsuarioPendente => _t('noPendingUsers', null, 'Nenhum usuário pendente.', 'No pending users.');
+  static String get pesquisarCliente => _t('searchClient', null, 'Pesquisar Cliente', 'Search Client');
+  static String get nenhumClienteEncontrado => _t('noClientFound', null, 'Nenhum cliente encontrado.', 'No clients found.');
   static String get erroPermissaoLerClientes => _isPt
       ? 'Sem permissao para ler clientes. Verifique as regras do Firestore para o usuario admin.'
       : 'No permission to read clients. Check Firestore rules for the admin user.';
@@ -815,22 +811,17 @@ Service and package prices are subject to change. Payment must be made as agreed
     ) => _isPt
             ? 'Email: $email\nTelefone: $telefone\nCadastrado em: $dataCadastro'
             : 'Email: $email\nPhone: $telefone\nRegistered on: $dataCadastro';
-  static String get aprovarCadastro =>
-      _isPt ? 'Aprovar Cadastro' : 'Approve Registration';
-  static String get permitirVerTodosHorarios =>
-      _isPt ? 'Permitir ver todos os horários' : 'Allow viewing all times';
-  static String get alterarTemaUsuario =>
-      _isPt ? 'Alterar Tema do Usuário' : 'Change User Theme';
+  static String get aprovarCadastro => _t('approveRegistration', null, 'Aprovar Cadastro', 'Approve Registration');
+  static String get permitirVerTodosHorarios => _t('allowAllTimes', null, 'Permitir ver todos os horários', 'Allow viewing all times');
+  static String get alterarTemaUsuario => _t('changeUserTheme', null, 'Alterar Tema do Usuário', 'Change User Theme');
   static String resumoClienteTipo(String clienteId, String tipo) => _isPt
       ? 'Cliente: $clienteId\nTipo: $tipo'
       : 'Client: $clienteId\nType: $tipo';
-  static String esperaLabel(int quantidade) =>
-      _isPt ? 'Espera: $quantidade' : 'Waitlist: $quantidade';
-  static String get aprovar => _isPt ? 'Aprovar' : 'Approve';
-  static String get recusar => _isPt ? 'Recusar' : 'Reject';
+  static String esperaLabel(int quantidade) => _t('waitlistLabel', {'amount': quantidade.toString()}, 'Espera: $quantidade', 'Waitlist: $quantidade');
+  static String get aprovar => _t('approve', null, 'Aprovar', 'Approve');
+  static String get recusar => _t('reject', null, 'Recusar', 'Reject');
   static String get pacote => _isPt ? 'Pacote' : 'Package';
-  static String get alterarPacotes =>
-      _isPt ? 'Alterar Pacotes' : 'Change Packages';
+  static String get alterarPacotes => _t('changePackages', null, 'Alterar Pacotes', 'Change Packages');
   static String get naoDisponivelCurto => _isPt ? 'Não Disponível' : 'Not Available';
   static String clienteResumoUltimoDiaFinanceiroPago(String data) => _isPt
       ? 'Último dia financeiro pago: $data'
@@ -861,12 +852,8 @@ Service and package prices are subject to change. Payment must be made as agreed
   static String pacoteAdicionadoPara(String nome) => _isPt
       ? 'Pacote de 10 sessões adicionado para $nome!'
       : '10-session package added for $nome!';
-  static String agendamentoStatusSucesso(String status) => _isPt
-      ? 'Agendamento ${agendamentoStatusLabel(status)} com sucesso!'
-      : 'Appointment ${agendamentoStatusLabel(status)} successfully!';
-  static String usuarioAprovadoSucesso(String nome) => _isPt
-      ? 'Usuário $nome aprovado com sucesso!'
-      : 'User $nome approved successfully!';
+  static String agendamentoStatusSucesso(String status) => _t('appointmentStatusSuccess', {'status': status}, 'Agendamento $status com sucesso!', 'Appointment $status successfully!');
+  static String usuarioAprovadoSucesso(String nome) => _t('userApprovedSuccess', {'name': nome}, 'Usuário $nome aprovado com sucesso!', 'User $nome approved successfully!');
 
   // Chat Agendamento
   static String erroEnvio(String erro) =>
@@ -1385,7 +1372,13 @@ Service and package prices are subject to change. Payment must be made as agreed
       _isPt ? 'Selecione um tema' : 'Select a theme';
   static String temaBloqueado(String label) =>
       _isPt ? '$label (Bloqueado)' : '$label (Locked)';
-  static String get aplicar => _isPt ? 'Aplicar' : 'Apply';
+  static String get aplicar => _tMultiLang(
+    'Aplicar',
+    'Apply',
+    'Aplicar',
+    'Appliquer',
+    '適用',
+  );
   static String get dispararLembretes =>
       _isPt ? 'Disparar Lembretes 🔔' : 'Send Reminders 🔔';
   static String get confirmarDisparoLembretes => _isPt
@@ -1474,8 +1467,7 @@ Service and package prices are subject to change. Payment must be made as agreed
       _isPt ? 'Ações de administração' : 'Administration actions';
 
   // Geral
-  static String erroGenerico(String erro) =>
-      _isPt ? 'Erro: $erro' : 'Error: $erro';
+  static String erroGenerico(String erro) => _t('genericError', {'error': erro}, 'Erro: $erro', 'Error: $erro');
   static String get administracaoAgendamentos =>
       _isPt ? 'Administração de Agendamentos' : 'Appointment Administration';
   static String get telaAdministracao =>

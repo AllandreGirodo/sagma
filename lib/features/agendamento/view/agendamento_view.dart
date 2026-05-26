@@ -98,12 +98,47 @@ class _AgendamentoViewState extends State<AgendamentoView> {
       'Saturday',
       'Sunday'
     ];
+    final diasES = [
+      'Lunes',
+      'Martes',
+      'Miércoles',
+      'Jueves',
+      'Viernes',
+      'Sábado',
+      'Domingo'
+    ];
+    final diasFr = [
+      'Lundi',
+      'Mardi',
+      'Mercredi',
+      'Jeudi',
+      'Vendredi',
+      'Samedi',
+      'Dimanche'
+    ];
+    final diasJa = [
+      '月曜日',
+      '火曜日',
+      '水曜日',
+      '木曜日',
+      '金曜日',
+      '土曜日',
+      '日曜日'
+    ];
     try {
       final locale = Localizations.localeOf(ctx);
-      final isPt = locale.languageCode == 'pt';
-      final dias = isPt ? diasPt : diasEn;
-      final index = (data.weekday - 1).clamp(0, dias.length - 1);
-      return dias[index];
+      final languageCode = locale.languageCode;
+      
+      final diasDaSemana = {
+        'pt': diasPt,
+        'en': diasEn,
+        'es': diasES,
+        'fr': diasFr,
+        'ja': diasJa,
+      }[languageCode] ?? diasEn;
+      
+      final index = (data.weekday - 1).clamp(0, diasDaSemana.length - 1);
+      return diasDaSemana[index];
     } catch (e) {
       // Fallback para inglês em caso de erro
       final index = (data.weekday - 1).clamp(0, diasEn.length - 1);
@@ -962,12 +997,36 @@ class _AgendamentoViewState extends State<AgendamentoView> {
       valorFinal: _valorFinalSessao,
     );
 
-    await _firestoreService.salvarAgendamento(novoAgendamento);
+    try {
+      await _firestoreService.salvarAgendamento(novoAgendamento);
 
-    if (mounted) {
-      messenger.showSnackBar(
-        SnackBar(content: Text(appointmentSuccessMessage)),
-      );
+      if (mounted) {
+        messenger.showSnackBar(
+          SnackBar(
+            content: Text(appointmentSuccessMessage),
+            backgroundColor: Colors.green,
+          ),
+        );
+      }
+    } on FirebaseException catch (e) {
+      if (mounted) {
+        messenger.showSnackBar(
+          SnackBar(
+            content: Text(AppStrings.erroOperacaoBloqueada(e.message)),
+            backgroundColor: Colors.red,
+            duration: const Duration(seconds: 5),
+          ),
+        );
+      }
+    } catch (e) {
+      if (mounted) {
+        messenger.showSnackBar(
+          SnackBar(
+            content: Text(AppStrings.erroGenerico(e.toString())),
+            backgroundColor: Colors.red,
+          ),
+        );
+      }
     }
   }
 

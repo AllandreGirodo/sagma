@@ -80,7 +80,7 @@ function Read-EnvValue {
     return $value.Trim()
 }
 
-function Require-EnvValue {
+function Assert-EnvValue {
     param([Parameter(Mandatory = $true)][string]$Key)
 
     $value = Read-EnvValue -Key $Key
@@ -89,13 +89,13 @@ function Require-EnvValue {
     }
 }
 
-Require-EnvValue -Key "FIREBASE_PROJECT_ID"
-Require-EnvValue -Key "FIREBASE_MESSAGING_SENDER_ID"
-Require-EnvValue -Key "FIREBASE_STORAGE_BUCKET"
-Require-EnvValue -Key "FIREBASE_WEB_API_KEY"
-Require-EnvValue -Key "FIREBASE_WEB_APP_ID"
-Require-EnvValue -Key "FIREBASE_ANDROID_API_KEY"
-Require-EnvValue -Key "FIREBASE_ANDROID_APP_ID"
+Assert-EnvValue -Key "FIREBASE_PROJECT_ID"
+Assert-EnvValue -Key "FIREBASE_MESSAGING_SENDER_ID"
+Assert-EnvValue -Key "FIREBASE_STORAGE_BUCKET"
+Assert-EnvValue -Key "FIREBASE_WEB_API_KEY"
+Assert-EnvValue -Key "FIREBASE_WEB_APP_ID"
+Assert-EnvValue -Key "FIREBASE_ANDROID_API_KEY"
+Assert-EnvValue -Key "FIREBASE_ANDROID_APP_ID"
 
 $FIREBASE_PROJECT_ID = Read-EnvValue -Key "FIREBASE_PROJECT_ID"
 $FIREBASE_MESSAGING_SENDER_ID = Read-EnvValue -Key "FIREBASE_MESSAGING_SENDER_ID"

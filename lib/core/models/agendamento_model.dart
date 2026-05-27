@@ -48,6 +48,7 @@ class Agendamento {
 
     return {
       'cliente_id': clienteId,
+      'cliente_uid': clienteId,
       'data_hora': Timestamp.fromDate(dataHora),
       'tipo': tipoId,
       'tipo_id': tipoId,
@@ -90,7 +91,7 @@ class Agendamento {
   factory Agendamento.fromMap(Map<String, dynamic> map, {String? id}) {
     return Agendamento(
       id: id,
-      clienteId: map['cliente_id'] ?? '',
+      clienteId: (map['cliente_uid'] ?? map['cliente_id'] ?? '').toString(),
       dataHora: _asDateTime(map['data_hora']),
       tipo: MassageTypeCatalog.normalizeId(
         (map['tipo_id'] ?? map['tipo'] ?? map['tipo_massagem'] ?? '').toString(),

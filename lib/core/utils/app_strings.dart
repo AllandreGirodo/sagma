@@ -136,6 +136,9 @@ Service and package prices are subject to change. Payment must be made as agreed
   static String get configCamposObrigatorios => _isPt
       ? 'Marque os campos que devem ser OBRIGATÓRIOS para o cliente:'
       : 'Check the fields that must be MANDATORY for the client:';
+  static String get configCamposObrigatoriosDescricao => _isPt
+      ? 'WhatsApp, Data de Nascimento e Termos de Uso permanecem sempre obrigatórios por segurança e conformidade.'
+      : 'WhatsApp, Date of Birth, and Terms of Use remain always mandatory for safety and compliance.';
   static String get configCampoCritico => _isPt
       ? 'Campo crítico (Sempre obrigatório)'
       : 'Critical field (Always mandatory)';
@@ -299,6 +302,7 @@ Service and package prices are subject to change. Payment must be made as agreed
   // Login
   static String get loginTitulo => _isPt ? 'Bem-vindo(a)' : 'Welcome';
   static String get loginSubtitulo => _t('loginSubtitle', null, 'Faça login para agendar sua sessão', 'Sign in to schedule your session');
+    static String get entrando => _isPt ? 'Entrando...' : 'Signing in...';
   static String get emailLabel => _isPt ? 'E-mail' : 'Email';
   static String get senhaLabel => _isPt ? 'Senha' : 'Password';
   static String get entrarBtn => _isPt ? 'Entrar' : 'Sign In';
@@ -649,9 +653,15 @@ Service and package prices are subject to change. Payment must be made as agreed
                 return status;
         }
     }
-    static String registroTelaRodape(String dataHora, String usuarioId) => _isPt
-            ? 'Registro de Tela: $dataHora\nID: $usuarioId'
-            : 'Screen Log: $dataHora\nID: $usuarioId';
+        static String registroTelaRodape(
+            String dataHora,
+            String usuarioId,
+            String usuarioNomeCompleto,
+            String usuarioEmail,
+        ) =>
+            _isPt
+                ? 'Registro de Tela: $dataHora\nID: $usuarioId\nNome completo: $usuarioNomeCompleto\nEmail: $usuarioEmail'
+                : 'Screen Log: $dataHora\nID: $usuarioId\nFull name: $usuarioNomeCompleto\nEmail: $usuarioEmail';
     static String get usuarioNaoDisponivelCurto => _isPt ? 'N/D' : 'N/A';
     static String prefixoCancelamentoForaDoPrazo(String motivo) => _isPt
             ? '[FORA DO PRAZO] $motivo'
@@ -694,7 +704,25 @@ Service and package prices are subject to change. Payment must be made as agreed
   ) => _isPt
       ? 'Atenção: Você está cancelando com menos de ${horasNecessarias.toStringAsFixed(0)} horas úteis de antecedência (considerando o horário de descanso da administradora).\n\nTempo útil restante: ${horasValidas.toStringAsFixed(1)}h.'
       : 'Warning: You are cancelling with less than ${horasNecessarias.toStringAsFixed(0)} business hours of notice (considering the administrator\'s rest period).\n\nRemaining business time: ${horasValidas.toStringAsFixed(1)}h.';
+    static String prazoMaximoCancelamento(String dataHora) => _isPt
+                ? 'Cancelar até às: $dataHora'
+            : 'Cancel until: $dataHora';
+      static String get whatsappAdminNaoConfigurado => _isPt
+          ? 'WhatsApp da administradora não configurado.'
+          : 'Administrator WhatsApp is not configured.';
+    static String get cancelamentoEncerrado => _isPt
+            ? 'Prazo de cancelamento encerrado.'
+            : 'Cancellation period ended.';
   static String get fazerCheckIn => _isPt ? 'Fazer Check-in' : 'Check in';
+  static String detalhesAgendamentoResumo(String nome, String data, String diaSemana, String tipo, String status) => _isPt
+      ? 'Cliente: $nome\nData: $data\nDia da semana: $diaSemana\nTipo: $tipo\nStatus atual: $status'
+      : 'Client: $nome\nDate: $data\nDay of week: $diaSemana\nType: $tipo\nCurrent status: $status';
+  static String get confirmarAprovacaoAgendamento => _isPt
+      ? 'Confirme a aprovação do agendamento com os dados abaixo:'
+      : 'Confirm the approval of the appointment with the data below:';
+  static String get informarValorAprovacao => _isPt
+      ? 'Informe o valor que será exibido ao cliente após a aprovação.'
+      : 'Enter the value that will be displayed to the client after approval.';
   static String get avaliarAtendimento =>
       _isPt ? 'Avaliar Atendimento' : 'Rate Service';
   static String get buscarPorTipo => _t('searchByType', null, 'Buscar por tipo...', 'Search by type...');
@@ -855,6 +883,12 @@ Service and package prices are subject to change. Payment must be made as agreed
   static String agendamentoStatusSucesso(String status) => _t('appointmentStatusSuccess', {'status': status}, 'Agendamento $status com sucesso!', 'Appointment $status successfully!');
   static String usuarioAprovadoSucesso(String nome) => _t('userApprovedSuccess', {'name': nome}, 'Usuário $nome aprovado com sucesso!', 'User $nome approved successfully!');
 
+  static String get confirmarRecusaAgendamento => _isPt
+      ? 'Confirme a recusa do agendamento com os dados abaixo:'
+      : 'Confirm the refusal of the appointment with the data below:';
+  static String statusFinal(String status) => _isPt
+      ? 'Status final: $status'
+      : 'Final status: $status';
   // Chat Agendamento
   static String erroEnvio(String erro) =>
       _isPt ? 'Erro no envio: $erro' : 'Send error: $erro';
@@ -1632,6 +1666,7 @@ Service and package prices are subject to change. Payment must be made as agreed
       _isPt ? 'Confirmar Reprovação' : 'Confirm Rejection';
   static String get confirmarAprovacao =>
       _isPt ? 'Confirmar Aprovação' : 'Confirm Approval';
+  static String get boasVindasLabel => _isPt ? 'Boas-vindas' : 'Welcome';
   static String get mensagemConfirmarReprovacao => _isPt
       ? 'Tem certeza que deseja reprovar este cadastro? Esta ação não pode ser desfeita.'
       : 'Are you sure you want to reject this registration? This action cannot be undone.';

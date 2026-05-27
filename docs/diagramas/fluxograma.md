@@ -55,4 +55,6 @@ Dessa forma, é possível entender como as diferentes partes do sistema se conec
 ## 2. Diagrama do Processo de Agendamento quando em desenvolvimento do aplicativo no Flutter
 Este diagrama detalha o fluxo específico do processo de agendamento, desde a ação do usuário até a criação do documento no Firestore, incluindo as validações e possíveis falhas.
 
+Link para o fluxo detalhado do procedimento de agendamento: [Fluxo detalhado do procedimento de agendamento](fluxo_agendamento_detalhado.md), que descreve o processo de forma minuciosa, com separação entre o fluxo do cliente e o fluxo da profissional.
+
 Link para falha silenciosa no processo de agendamento: [Falha Silenciosa no Processo de Agendamento](falha_silenciosa_agendamento.md) que detalha um cenário específico de falha no fluxo de agendamento, onde as regras de segurança do Firestore bloqueiam a criação do documento sem fornecer feedback ao usuário.

@@ -2510,6 +2510,41 @@ class FirestoreService {
       tipo: 'cliente',
       aprovado: true,
     );
+
+    await _criarAgendamentoBoasVindas(
+      clienteId: uid,
+      nomeCliente: nomeCliente,
+      administradoraAtreladaId: adminAtreladaId,
+    );
+  }
+
+  Future<void> _criarAgendamentoBoasVindas({
+    required String clienteId,
+    required String nomeCliente,
+    required String administradoraAtreladaId,
+  }) async {
+    try {
+      await _db.collection('agendamentos').add({
+        'cliente_id': clienteId,
+        'cliente_uid': clienteId,
+        'cliente_nome_snapshot': nomeCliente,
+        'cliente_telefone_snapshot': '',
+        'data_hora': Timestamp.fromDate(DateTime.now()),
+        'tipo': MassageTypeCatalog.boasVindas,
+        'tipo_id': MassageTypeCatalog.boasVindas,
+        'tipo_massagem': MassageTypeCatalog.boasVindas,
+        'status': 'aprovado',
+        'lista_espera': <String>[],
+        'data_criacao': FieldValue.serverTimestamp(),
+        'valor_original': 0,
+        'valor_final': 0,
+        'preco': 0,
+        'administradora_atrelada': administradoraAtreladaId,
+        'origem': 'boas_vindas',
+      });
+    } catch (e) {
+      debugPrint('Falha ao criar agendamento de boas-vindas: $e');
+    }
   }
 
   Future<void> reprovarUsuario(String uid) async {
@@ -2597,6 +2632,10 @@ class FirestoreService {
     final administradoraPadrao = await getAdministradoraPadraoAtreladaId();
 
     final dadosParaSalvar = agendamento.toMap();
+
+    // Garantia extra de compatibilidade: alguns fluxos antigos gravavam
+    // 'cliente_id' enquanto as regras e consultas atuais esperam 'cliente_uid'.
+    dadosParaSalvar['cliente_uid'] = agendamento.clienteId;
 
     if (clienteData != null) {
       dadosParaSalvar['cliente_nome_snapshot'] =
@@ -2692,7 +2731,7 @@ class FirestoreService {
   Stream<List<Agendamento>> getAgendamentosDoCliente(String uid) {
     return _db
         .collection('agendamentos')
-        .where('cliente_uid', isEqualTo: uid)
+        .where('cliente_id', isEqualTo: uid)
         .orderBy('data_hora', descending: true)
         .snapshots()
         .map(
@@ -2707,6 +2746,7 @@ class FirestoreService {
     String id,
     String novoStatus, {
     String? clienteId,
+    double? valorFinal,
   }) async {
     // Se estiver aprovando, tenta descontar do pacote
     if (novoStatus == 'aprovado' && clienteId != null) {
@@ -2726,9 +2766,11 @@ class FirestoreService {
         }
 
         final agendamentoRef = _db.collection('agendamentos').doc(id);
-        transaction.update(agendamentoRef, {
-          'status': novoStatus,
-        }); // statusAgendamento no map
+        final updateMap = <String, dynamic>{'status': novoStatus};
+        if (valorFinal != null) {
+          updateMap['valor_final'] = valorFinal;
+        }
+        transaction.update(agendamentoRef, updateMap); // statusAgendamento no map
 
         // NOTA: O envio de notificação push foi movido para Cloud Functions (Backend)
         // para evitar expor a FCM Server Key no aplicativo e garantir segurança.
@@ -2768,10 +2810,12 @@ class FirestoreService {
         }
       }
       await batch.commit();
-    } else {
-      await _db.collection('agendamentos').doc(id).update({
-        'status': novoStatus,
-      });
+      } else {
+      final updateMap = <String, dynamic>{'status': novoStatus};
+      if (valorFinal != null) {
+        updateMap['valor_final'] = valorFinal;
+      }
+      await _db.collection('agendamentos').doc(id).update(updateMap);
     }
   }
 

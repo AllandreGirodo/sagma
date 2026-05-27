@@ -35,6 +35,7 @@ class _LoginViewState extends State<LoginView> {
   bool _isLoading = false;
   bool _isObscure = true;
   bool _lembrarCredenciais = false;
+  String? _loginErrorMessage;
   final LocalAuthentication auth = LocalAuthentication();
   Future<void>? _googleSignInInitFuture;
 
@@ -199,6 +200,11 @@ class _LoginViewState extends State<LoginView> {
     final emailValido = Validadores.isEmailValido(email);
     final senhaValida = senha.length >= 6;
     final motivos = <String>[];
+    final mensagemValidacao = (email.isEmpty || senha.isEmpty)
+        ? AppStrings.preenchaEmailSenhaLogin
+        : !emailValido
+        ? AppStrings.emailInvalidoLogin
+        : AppStrings.senhaMinimaLogin;
 
     if (email.isEmpty || senha.isEmpty) {
       motivos.add('campos_obrigatorios_login');
@@ -211,6 +217,10 @@ class _LoginViewState extends State<LoginView> {
     }
 
     if (motivos.isNotEmpty) {
+      if (mounted) {
+        setState(() => _loginErrorMessage = mensagemValidacao);
+      }
+
       unawaited(
         _loginController.auditarTentativaCredencial(
           origem: 'login_formulario',
@@ -226,21 +236,24 @@ class _LoginViewState extends State<LoginView> {
 
       if (!mounted) return;
 
-      final mensagem = (email.isEmpty || senha.isEmpty)
-          ? AppStrings.preenchaEmailSenhaLogin
-          : !emailValido
-          ? AppStrings.emailInvalidoLogin
-          : AppStrings.senhaMinimaLogin;
-
       ScaffoldMessenger.of(
         context,
-      ).showSnackBar(SnackBar(content: Text(mensagem)));
+      ).showSnackBar(SnackBar(content: Text(mensagemValidacao)));
       return;
     }
 
-    setState(() => _isLoading = true);
+    setState(() {
+      _isLoading = true;
+      _loginErrorMessage = null;
+    });
     try {
       final sucesso = await _loginController.logar(context, email, senha);
+
+      if (!sucesso && mounted) {
+        setState(() {
+          _loginErrorMessage = AppStrings.credenciaisInvalidas;
+        });
+      }
 
       await _persistirPreferenciasLogin(
         sucesso: sucesso,
@@ -647,6 +660,11 @@ class _LoginViewState extends State<LoginView> {
                       border: const OutlineInputBorder(),
                     ),
                     keyboardType: TextInputType.emailAddress,
+                    onChanged: (_) {
+                      if (_loginErrorMessage != null) {
+                        setState(() => _loginErrorMessage = null);
+                      }
+                    },
                   ),
                   const SizedBox(height: 16),
                   TextField(
@@ -664,6 +682,11 @@ class _LoginViewState extends State<LoginView> {
                       ),
                     ),
                     obscureText: _isObscure,
+                    onChanged: (_) {
+                      if (_loginErrorMessage != null) {
+                        setState(() => _loginErrorMessage = null);
+                      }
+                    },
                   ),
                   const SizedBox(height: 8),
                   CheckboxListTile(
@@ -678,7 +701,21 @@ class _LoginViewState extends State<LoginView> {
                   ),
                   const SizedBox(height: 24),
                   if (_isLoading)
-                    const CircularProgressIndicator()
+                    Column(
+                      children: [
+                        const CircularProgressIndicator(),
+                        const SizedBox(height: 8),
+                        Text(
+                          AppStrings.entrando,
+                          style: TextStyle(
+                            color: theme.colorScheme.onSurface.withValues(
+                              alpha: 0.7,
+                            ),
+                            fontSize: 12,
+                          ),
+                        ),
+                      ],
+                    )
                   else
                     Column(
                       children: [
@@ -728,6 +765,28 @@ class _LoginViewState extends State<LoginView> {
                         ),
                       ],
                     ),
+                  if (_loginErrorMessage != null) ...[
+                    const SizedBox(height: 12),
+                    Container(
+                      width: double.infinity,
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 12,
+                        vertical: 10,
+                      ),
+                      decoration: BoxDecoration(
+                        color: Colors.red.withValues(alpha: 0.08),
+                        borderRadius: BorderRadius.circular(8),
+                        border: Border.all(color: Colors.red.shade200),
+                      ),
+                      child: Text(
+                        _loginErrorMessage!,
+                        style: TextStyle(
+                          color: Colors.red.shade700,
+                          fontSize: 12,
+                        ),
+                      ),
+                    ),
+                  ],
                 ],
               ),
             ),

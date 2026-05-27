@@ -126,6 +126,21 @@ class _AdminAgendamentosViewState extends State<AdminAgendamentosView> {
         .join(' | ');
   }
 
+  Future<String> _obterNomeClienteParaAgendamento(Agendamento agendamento) async {
+    final nomeSnapshot = (agendamento.clienteNomeSnapshot ?? '').trim();
+    if (nomeSnapshot.isNotEmpty) {
+      return nomeSnapshot;
+    }
+
+    final cliente = await _firestoreService.getCliente(agendamento.clienteId);
+    final nomeCliente = (cliente?.nomeExibicao ?? cliente?.nome ?? '').trim();
+    if (nomeCliente.isNotEmpty) {
+      return nomeCliente;
+    }
+
+    return agendamento.clienteId;
+  }
+
   String _extrairRotuloResumo(String linhaComValor) {
     final linha = linhaComValor.trim();
     if (!linha.endsWith(':')) return linha;
@@ -1307,17 +1322,20 @@ class _AdminAgendamentosViewState extends State<AdminAgendamentosView> {
               margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
               child: ListTile(
                 title: Text(
-                  DateFormat('dd/MM/yyyy HH:mm').format(agendamento.dataHora),
+                  '${DateFormat('EEEE', Localizations.localeOf(context).toString()).format(agendamento.dataHora)} • ${DateFormat('dd/MM/yyyy HH:mm').format(agendamento.dataHora)}',
                   style: const TextStyle(fontWeight: FontWeight.bold),
                 ),
-                subtitle: Text(
-                  AppStrings.resumoClienteTipo(
-                    agendamento.clienteId,
-                    MassageTypeCatalog.localize(
-                      AppLocalizations.of(context)!,
-                      agendamento.tipo,
-                    ),
-                  ),
+                subtitle: FutureBuilder<String>(
+                  future: _obterNomeClienteParaAgendamento(agendamento),
+                  builder: (context, nomeSnapshot) {
+                    final nomeCliente = nomeSnapshot.data?.trim().isNotEmpty == true
+                        ? nomeSnapshot.data!.trim()
+                        : agendamento.clienteId;
+
+                    return Text(
+                      'Cliente: $nomeCliente\nTipo: ${MassageTypeCatalog.localize(AppLocalizations.of(context)!, agendamento.tipo)}',
+                    );
+                  },
                 ),
                 trailing: Row(
                   mainAxisSize: MainAxisSize.min,
@@ -1694,10 +1712,137 @@ class _AdminAgendamentosViewState extends State<AdminAgendamentosView> {
   }) async {
     if (agendamento.id == null) return;
 
+    double? valorFinal;
+    final localizations = AppLocalizations.of(context)!;
+
+    String detalhesAgendamento() {
+      final nomeCliente = (agendamento.clienteNomeSnapshot ?? '').trim().isNotEmpty
+          ? agendamento.clienteNomeSnapshot!.trim()
+          : agendamento.clienteId;
+      final dataHora = DateFormat('dd/MM/yyyy HH:mm').format(agendamento.dataHora);
+      final diaSemana = DateFormat('EEEE', Localizations.localeOf(context).toString())
+          .format(agendamento.dataHora);
+      final tipo = MassageTypeCatalog.localize(localizations, agendamento.tipo);
+      return AppStrings.detalhesAgendamentoResumo(
+        nomeCliente,
+        dataHora,
+        diaSemana,
+        tipo,
+        AppStrings.agendamentoStatusLabel(agendamento.status),
+      );
+    }
+
+    if (novoStatus == 'aprovado') {
+      final controller = TextEditingController(
+        text: agendamento.valorFinal != null
+            ? agendamento.valorFinal!.toStringAsFixed(2)
+            : '',
+      );
+
+      final confirmed = await showDialog<bool>(
+        context: context,
+        builder: (context) => AlertDialog(
+          title: Text(AppStrings.aprovar),
+          content: SingleChildScrollView(
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  AppStrings.confirmarAprovacaoAgendamento,
+                  style: Theme.of(context).textTheme.bodyMedium,
+                ),
+                const SizedBox(height: 12),
+                Text(detalhesAgendamento()),
+                const SizedBox(height: 16),
+                TextField(
+                  controller: controller,
+                  keyboardType:
+                      const TextInputType.numberWithOptions(decimal: true),
+                  decoration: InputDecoration(
+                    labelText: AppStrings.precoSessaoCampo,
+                    hintText: AppStrings.precoPadraoCampo,
+                  ),
+                ),
+                Text(
+                  AppStrings.informarValorAprovacao,
+                  style: Theme.of(context).textTheme.bodySmall,
+                ),
+              ],
+            ),
+          ),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.of(context).pop(false),
+              child: Text(AppStrings.cancelButton),
+            ),
+            ElevatedButton(
+              onPressed: () {
+                Navigator.of(context).pop(true);
+              },
+              child: Text(AppStrings.confirmar),
+            ),
+          ],
+        ),
+      );
+
+      if (confirmed != true) return;
+
+      final raw = controller.text.trim().replaceAll(',', '.');
+      if (raw.isNotEmpty) {
+        try {
+          valorFinal = double.parse(raw);
+        } catch (_) {
+          valorFinal = null;
+        }
+      }
+      controller.dispose();
+      if (confirmed == false) return;
+    } else if (novoStatus == 'recusado') {
+      final confirmed = await showDialog<bool>(
+        context: context,
+        builder: (dialogContext) => AlertDialog(
+          title: Text(AppStrings.recusar),
+          content: SingleChildScrollView(
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  AppStrings.confirmarRecusaAgendamento,
+                  style: Theme.of(dialogContext).textTheme.bodyMedium,
+                ),
+                const SizedBox(height: 12),
+                Text(detalhesAgendamento()),
+                const SizedBox(height: 8),
+                Text(
+                  AppStrings.statusFinal(AppStrings.agendamentoStatusLabel(novoStatus)),
+                  style: Theme.of(dialogContext).textTheme.bodySmall,
+                ),
+              ],
+            ),
+          ),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.of(dialogContext).pop(false),
+              child: Text(AppStrings.cancelButton),
+            ),
+            ElevatedButton(
+              onPressed: () => Navigator.of(dialogContext).pop(true),
+              child: Text(AppStrings.confirmar),
+            ),
+          ],
+        ),
+      );
+
+      if (confirmed != true) return;
+    }
+
     await _firestoreService.atualizarStatusAgendamento(
       agendamento.id!,
       novoStatus,
       clienteId: clienteId,
+      valorFinal: valorFinal,
     );
 
     if (mounted) {

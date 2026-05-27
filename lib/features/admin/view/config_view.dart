@@ -1202,6 +1202,14 @@ class _AdminConfigViewState extends State<AdminConfigView> {
                     fontWeight: FontWeight.bold,
                   ),
                 ),
+                const SizedBox(height: 6),
+                Text(
+                  AppStrings.configCamposObrigatoriosDescricao,
+                  style: TextStyle(
+                    fontSize: 12,
+                    color: Colors.grey.shade700,
+                  ),
+                ),
                 const SizedBox(height: 16),
                 ..._labels.keys.map((key) {
                   final isCritico = _camposCriticos.contains(key);

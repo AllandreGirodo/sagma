@@ -1,4 +1,5 @@
 import 'package:agenda/app_localizations.dart';
+import 'package:agenda/core/utils/app_strings.dart';
 
 class MassageTypeCatalog {
   static const String relaxante = 'relaxante';
@@ -6,6 +7,7 @@ class MassageTypeCatalog {
   static const String terapeutica = 'terapeutica';
   static const String desportiva = 'desportiva';
   static const String pedrasQuentes = 'pedras_quentes';
+  static const String boasVindas = 'boas_vindas';
 
   static const List<String> defaultIds = <String>[
     relaxante,
@@ -76,6 +78,8 @@ class MassageTypeCatalog {
         return localizations.massageTypeDesportiva;
       case pedrasQuentes:
         return localizations.massageTypePedrasQuentes;
+      case boasVindas:
+        return AppStrings.boasVindasLabel;
       default:
         return idOrLegacyName;
     }

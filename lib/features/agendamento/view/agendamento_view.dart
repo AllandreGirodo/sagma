@@ -19,6 +19,73 @@ import 'package:agenda/core/models/cliente_model.dart';
 import 'package:agenda/core/utils/app_strings.dart';
 import 'package:agenda/core/utils/massage_type_catalog.dart';
 import 'package:agenda/core/widgets/app_governance_dialogs.dart';
+import 'package:agenda/features/agendamento/widgets/calendar_color_picker.dart';
+import 'package:url_launcher/url_launcher.dart';
+
+String _obterDiaSemanaExtensoGlobal(DateTime data, BuildContext ctx) {
+  final diasPt = [
+    'Segunda-feira',
+    'Terça-feira',
+    'Quarta-feira',
+    'Quinta-feira',
+    'Sexta-feira',
+    'Sábado',
+    'Domingo',
+  ];
+  final diasEn = [
+    'Monday',
+    'Tuesday',
+    'Wednesday',
+    'Thursday',
+    'Friday',
+    'Saturday',
+    'Sunday',
+  ];
+  final diasES = [
+    'Lunes',
+    'Martes',
+    'Miércoles',
+    'Jueves',
+    'Viernes',
+    'Sábado',
+    'Domingo',
+  ];
+  final diasFr = [
+    'Lundi',
+    'Mardi',
+    'Mercredi',
+    'Jeudi',
+    'Vendredi',
+    'Samedi',
+    'Dimanche',
+  ];
+  final diasJa = [
+    '月曜日',
+    '火曜日',
+    '水曜日',
+    '木曜日',
+    '金曜日',
+    '土曜日',
+    '日曜日',
+  ];
+
+  try {
+    final languageCode = Localizations.localeOf(ctx).languageCode;
+    final diasDaSemana = {
+      'pt': diasPt,
+      'en': diasEn,
+      'es': diasES,
+      'fr': diasFr,
+      'ja': diasJa,
+    }[languageCode] ?? diasEn;
+
+    final index = (data.weekday - 1).clamp(0, diasDaSemana.length - 1);
+    return diasDaSemana[index];
+  } catch (_) {
+    final index = (data.weekday - 1).clamp(0, diasEn.length - 1);
+    return diasEn[index];
+  }
+}
 
 class AgendamentoView extends StatefulWidget {
   const AgendamentoView({super.key});
@@ -80,70 +147,7 @@ class _AgendamentoViewState extends State<AgendamentoView> {
   }
 
   String _obterDiaSemanaExtenso(DateTime data, BuildContext ctx) {
-    final diasPt = [
-      'Segunda-feira',
-      'Terça-feira',
-      'Quarta-feira',
-      'Quinta-feira',
-      'Sexta-feira',
-      'Sábado',
-      'Domingo'
-    ];
-    final diasEn = [
-      'Monday',
-      'Tuesday',
-      'Wednesday',
-      'Thursday',
-      'Friday',
-      'Saturday',
-      'Sunday'
-    ];
-    final diasES = [
-      'Lunes',
-      'Martes',
-      'Miércoles',
-      'Jueves',
-      'Viernes',
-      'Sábado',
-      'Domingo'
-    ];
-    final diasFr = [
-      'Lundi',
-      'Mardi',
-      'Mercredi',
-      'Jeudi',
-      'Vendredi',
-      'Samedi',
-      'Dimanche'
-    ];
-    final diasJa = [
-      '月曜日',
-      '火曜日',
-      '水曜日',
-      '木曜日',
-      '金曜日',
-      '土曜日',
-      '日曜日'
-    ];
-    try {
-      final locale = Localizations.localeOf(ctx);
-      final languageCode = locale.languageCode;
-      
-      final diasDaSemana = {
-        'pt': diasPt,
-        'en': diasEn,
-        'es': diasES,
-        'fr': diasFr,
-        'ja': diasJa,
-      }[languageCode] ?? diasEn;
-      
-      final index = (data.weekday - 1).clamp(0, diasDaSemana.length - 1);
-      return diasDaSemana[index];
-    } catch (e) {
-      // Fallback para inglês em caso de erro
-      final index = (data.weekday - 1).clamp(0, diasEn.length - 1);
-      return diasEn[index];
-    }
+      return _obterDiaSemanaExtensoGlobal(data, ctx);
   }
 
   bool _isStatusCancelado(String status) {
@@ -369,6 +373,8 @@ class _AgendamentoViewState extends State<AgendamentoView> {
                             agendamento: agendamento,
                             currentUser:
                                 currentUser, // Passamos o User do Firebase diretamente ou adaptamos
+                            horasAntecedenciaCancelamento:
+                                _config?.horasAntecedenciaCancelamento,
                             onTap: () => Navigator.push(
                               context,
                               MaterialPageRoute(
@@ -399,13 +405,21 @@ class _AgendamentoViewState extends State<AgendamentoView> {
                     width: double.infinity,
                     color: Colors.grey.shade200,
                     padding: const EdgeInsets.symmetric(
-                      vertical: 4,
+                      vertical: 6,
                       horizontal: 8,
                     ),
                     child: Text(
                       AppStrings.registroTelaRodape(
                         DateFormat('dd/MM/yyyy HH:mm:ss').format(now),
                         currentUser?.uid ?? AppStrings.usuarioNaoDisponivelCurto,
+                        usuario?.nomePreferido?.trim().isNotEmpty == true
+                            ? usuario!.nomePreferido!.trim()
+                            : usuario?.nomeCliente?.trim().isNotEmpty == true
+                                ? usuario!.nomeCliente!.trim()
+                                : usuario?.nome.trim().isNotEmpty == true
+                                    ? usuario!.nome.trim()
+                                    : currentUser?.displayName ?? AppStrings.usuarioNaoDisponivelCurto,
+                        currentUser?.email ?? AppStrings.usuarioNaoDisponivelCurto,
                       ),
                       textAlign: TextAlign.center,
                       style: TextStyle(
@@ -418,13 +432,17 @@ class _AgendamentoViewState extends State<AgendamentoView> {
               ),
             ],
           ),
-          floatingActionButton: FloatingActionButton(
+          floatingActionButton: FloatingActionButton.extended(
             onPressed: () {
               HapticFeedback.selectionClick(); // Vibração leve ao clicar
               _mostrarDialogoNovoAgendamento();
             },
             backgroundColor: Colors.teal,
-            child: const Icon(Icons.add, color: Colors.white),
+            icon: const Icon(Icons.add, color: Colors.white),
+            label: Text(
+              AppLocalizations.of(context)!.scheduleButton,
+              style: const TextStyle(color: Colors.white),
+            ),
           ),
         );
       },
@@ -437,6 +455,32 @@ class _AgendamentoViewState extends State<AgendamentoView> {
       color: Theme.of(context).cardColor.withValues(alpha: 0.5),
       child: Row(
         children: [
+          // Exibe a data de hoje ao lado do campo de busca
+          Padding(
+            padding: const EdgeInsets.only(right: 8.0),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  'Hoje',
+                  style: TextStyle(
+                    fontSize: 12,
+                    color: Colors.teal.shade900,
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
+                const SizedBox(height: 2),
+                Text(
+                  '${DateFormat('dd/MM/yyyy').format(DateTime.now())} • ${_obterDiaSemanaExtenso(DateTime.now(), context)}',
+                  style: TextStyle(
+                    fontSize: 11,
+                    color: Colors.grey.shade700,
+                  ),
+                ),
+              ],
+            ),
+          ),
           Expanded(
             child: TextField(
               controller: _searchController,
@@ -463,30 +507,54 @@ class _AgendamentoViewState extends State<AgendamentoView> {
               if (_filtroData != null) {
                 setState(() => _filtroData = null);
               } else {
-                final picked = await showDatePicker(
+                // Abre diálogo customizado com calendário colorido
+                await showDialog<DateTime>(
                   context: context,
-                  initialDate: DateTime.now(),
-                  firstDate: DateTime(2020),
-                  lastDate: DateTime(2030),
+                  builder: (ctx) {
+                    return AlertDialog(
+                      content: SizedBox(
+                        width: 420,
+                        child: CalendarColorPicker(
+                          initialDate: DateTime.now(),
+                          agendamentosStream: _firestoreService.getAgendamentos(),
+                          onDateSelected: (selected) {
+                            setState(() => _filtroData = selected);
+                            Navigator.of(ctx).pop(selected);
+                          },
+                        ),
+                      ),
+                    );
+                  },
                 );
-                if (picked != null) {
-                  setState(() => _filtroData = picked);
-                }
               }
             },
             child: Container(
-              padding: const EdgeInsets.all(10),
+              padding: const EdgeInsets.all(6),
               decoration: BoxDecoration(
                 color: _filtroData != null
                     ? Colors.teal
                     : Colors.white.withValues(alpha: 0.7),
                 borderRadius: BorderRadius.circular(8),
               ),
-              child: Icon(
-                _filtroData != null
-                    ? Icons.event_available
-                    : Icons.calendar_today,
-                color: _filtroData != null ? Colors.white : Colors.grey,
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Icon(
+                    _filtroData != null ? Icons.event_available : Icons.calendar_today,
+                    color: _filtroData != null ? Colors.white : Colors.grey,
+                    size: 20,
+                  ),
+                  const SizedBox(height: 4),
+                  // Mostra a data selecionada abaixo do ícone (quando aplicável)
+                  if (_filtroData != null)
+                    Text(
+                      DateFormat('dd/MM/yyyy').format(_filtroData!),
+                      style: TextStyle(
+                        fontSize: 10,
+                        color: _filtroData != null ? Colors.white : Colors.grey,
+                      ),
+                    ),
+                ],
               ),
             ),
           ),
@@ -498,6 +566,7 @@ class _AgendamentoViewState extends State<AgendamentoView> {
   void _mostrarDialogoNovoAgendamento() {
     final user = FirebaseAuth.instance.currentUser;
     if (user == null) return;
+    final scaffoldContext = context;
 
     // Resetar variáveis do cupom ao abrir o diálogo
     _cupomAplicado = null;
@@ -536,17 +605,28 @@ class _AgendamentoViewState extends State<AgendamentoView> {
                     ),
                     trailing: const Icon(Icons.calendar_month),
                     onTap: () async {
-                      final picked = await showDatePicker(
+                      // Abre calendário customizado com legendas e círculos coloridos
+                      await showDialog<DateTime>(
                         context: context,
-                        initialDate: _dataSelecionada,
-                        firstDate: DateTime.now(),
-                        lastDate: DateTime.now().add(const Duration(days: 30)),
+                        builder: (ctx) {
+                          return AlertDialog(
+                            content: SizedBox(
+                              width: 420,
+                              child: CalendarColorPicker(
+                                initialDate: _dataSelecionada,
+                                agendamentosStream: _firestoreService.getAgendamentos(),
+                                onDateSelected: (selected) {
+                                  setState(() {
+                                    _dataSelecionada = selected;
+                                  });
+                                  setStateDialog(() {});
+                                  Navigator.of(ctx).pop(selected);
+                                },
+                              ),
+                            ),
+                          );
+                        },
                       );
-                      if (picked != null) {
-                        setStateDialog(() {
-                          _dataSelecionada = picked;
-                        });
-                      }
                     },
                   ),
                   const SizedBox(height: 16),
@@ -812,7 +892,7 @@ class _AgendamentoViewState extends State<AgendamentoView> {
                   onPressed: () async {
                     if (_horarioSelecionado == null ||
                         _tipoSelecionado == null) {
-                      final messenger = ScaffoldMessenger.of(context);
+                      final messenger = ScaffoldMessenger.of(scaffoldContext);
                       messenger.showSnackBar(
                         SnackBar(
                           content: Text(
@@ -934,7 +1014,20 @@ class _AgendamentoViewState extends State<AgendamentoView> {
   }
 
   Future<void> _salvarAgendamento() async {
-    if (_horarioSelecionado == null || _tipoSelecionado == null) return;
+    if (_horarioSelecionado == null || _tipoSelecionado == null) {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(
+              _tipoSelecionado == null
+                  ? AppStrings.selecioneUmTipo
+                  : AppStrings.selecioneUmHorario,
+            ),
+          ),
+        );
+      }
+      return;
+    }
 
     final horasMinutos = _horarioSelecionado!.split(':');
     final dataHoraFinal = DateTime(
@@ -1265,8 +1358,8 @@ class AgendamentoDetalhesView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     // Formatação de data e hora
-    final dateStr = DateFormat('dd/MM/yyyy').format(agendamento.dataHora);
-    final timeStr = DateFormat('HH:mm').format(agendamento.dataHora);
+    final dataHoraStr =
+        '${_obterDiaSemanaExtensoGlobal(agendamento.dataHora, context)} • ${DateFormat('dd/MM/yyyy HH:mm').format(agendamento.dataHora)}';
     final tipoLocalizado = MassageTypeCatalog.localize(
       AppLocalizations.of(context)!,
       agendamento.tipo,
@@ -1324,16 +1417,8 @@ class AgendamentoDetalhesView extends StatelessWidget {
                         const Divider(),
                         const SizedBox(height: 10),
                         Text(
-                          AppStrings.dataResumo(dateStr),
+                          AppStrings.dataResumo(dataHoraStr),
                           style: const TextStyle(fontSize: 18),
-                        ),
-                        Text(
-                          AppStrings.horarioResumo(timeStr),
-                          style: const TextStyle(
-                            fontSize: 18,
-                            fontWeight: FontWeight.bold,
-                            color: Colors.teal,
-                          ),
                         ),
                         if (agendamento.administradoraAtrelada != null &&
                             agendamento.administradoraAtrelada!.isNotEmpty)
@@ -1343,7 +1428,7 @@ class AgendamentoDetalhesView extends StatelessWidget {
                             ),
                             style: const TextStyle(fontSize: 16),
                           ),
-                        if (agendamento.valorFinal != null)
+                        if (agendamento.valorFinal != null && agendamento.status == 'aprovado')
                           Text(
                             AppStrings.valorResumo(
                               'R\$ ${agendamento.valorFinal!.toStringAsFixed(2)}',
@@ -1473,6 +1558,7 @@ class _AgendamentoCard extends StatefulWidget {
   final Function(bool) onToggleWaitList;
   final VoidCallback onCancel;
   final VoidCallback onRate;
+  final double? horasAntecedenciaCancelamento;
 
   const _AgendamentoCard({
     required this.agendamento,
@@ -1481,6 +1567,7 @@ class _AgendamentoCard extends StatefulWidget {
     required this.onToggleWaitList,
     required this.onCancel,
     required this.onRate,
+    required this.horasAntecedenciaCancelamento,
   });
 
   @override
@@ -1489,6 +1576,7 @@ class _AgendamentoCard extends StatefulWidget {
 
 class _AgendamentoCardState extends State<_AgendamentoCard>
     with SingleTickerProviderStateMixin {
+  final FirestoreService _firestoreService = FirestoreService();
   late AnimationController _checkController;
   late Animation<double> _scaleAnimation;
   late Animation<double> _opacityAnimation;
@@ -1530,6 +1618,57 @@ class _AgendamentoCardState extends State<_AgendamentoCard>
   void _handleCheckIn() {
     HapticFeedback.mediumImpact();
     _checkController.forward(from: 0.0);
+  }
+
+  Future<void> _abrirContatoAdministradora() async {
+    final messenger = ScaffoldMessenger.of(context);
+
+    try {
+      final config = await _firestoreService.getContatoAprovacaoConfig();
+      final telefone = config.whatsappRedirecionamento.trim();
+      if (telefone.isEmpty) {
+        if (!mounted) return;
+        messenger.showSnackBar(
+          SnackBar(content: Text(AppStrings.whatsappAdminNaoConfigurado)),
+        );
+        return;
+      }
+
+      final usuario = FirebaseAuth.instance.currentUser;
+      final nomeCliente = usuario?.displayName?.trim().isNotEmpty == true
+          ? usuario!.displayName!.trim()
+          : usuario?.email?.trim().isNotEmpty == true
+              ? usuario!.email!.trim()
+              : 'Cliente';
+
+      final mensagem = _firestoreService.montarMensagemContatoAprovacao(
+        config: config,
+        clienteNome: nomeCliente,
+        clienteTelefone: usuario?.phoneNumber ?? '',
+        clienteEmail: usuario?.email ?? '',
+        dataHora: DateTime.now(),
+      );
+
+      final uri = Uri.parse(
+        'https://wa.me/$telefone?text=${Uri.encodeComponent(mensagem)}',
+      );
+
+      final abriu = await launchUrl(
+        uri,
+        mode: LaunchMode.externalApplication,
+      );
+
+      if (!abriu && mounted) {
+        messenger.showSnackBar(
+          SnackBar(content: Text(AppStrings.erroGenerico('não foi possível abrir o WhatsApp'))),
+        );
+      }
+    } catch (e) {
+      if (!mounted) return;
+      messenger.showSnackBar(
+        SnackBar(content: Text(AppStrings.erroGenerico('$e'))),
+      );
+    }
   }
 
   @override
@@ -1587,6 +1726,19 @@ class _AgendamentoCardState extends State<_AgendamentoCard>
     final bool isInWaitList =
         currentUser != null &&
         agendamento.listaEspera.contains(currentUser.uid);
+    final DateTime? prazoMaximoCancelamentoData =
+        widget.horasAntecedenciaCancelamento == null
+        ? null
+        : agendamento.dataHora.subtract(
+            Duration(hours: widget.horasAntecedenciaCancelamento!.toInt()),
+          );
+    final String? prazoMaximoCancelamento = prazoMaximoCancelamentoData == null
+        ? null
+        : DateFormat('dd/MM/yyyy HH:mm').format(prazoMaximoCancelamentoData);
+    final bool passouPrazoCancelamento = prazoMaximoCancelamentoData != null &&
+        DateTime.now().isAfter(prazoMaximoCancelamentoData);
+    final String dataHoraSolicitada =
+        '${_obterDiaSemanaExtensoGlobal(agendamento.dataHora, context)} • ${DateFormat('dd/MM/yyyy HH:mm').format(agendamento.dataHora)}';
 
     return Stack(
       alignment: Alignment.center,
@@ -1636,9 +1788,7 @@ class _AgendamentoCardState extends State<_AgendamentoCard>
                           size: cardCompacto ? 20 : 24,
                         ),
                         title: Text(
-                          DateFormat(
-                            'dd/MM/yyyy HH:mm',
-                          ).format(agendamento.dataHora),
+                          dataHoraSolicitada,
                           style: TextStyle(
                             fontWeight: FontWeight.bold,
                             fontSize: cardCompacto ? 14 : 16,
@@ -1699,13 +1849,82 @@ class _AgendamentoCardState extends State<_AgendamentoCard>
                                 onPressed: () =>
                                     widget.onToggleWaitList(!isInWaitList),
                               ),
-                            if (isMyAppointment && podeCancelar)
-                              IconButton(
-                                icon: const Icon(
-                                  Icons.delete_forever,
-                                  color: Colors.red,
-                                ),
-                                onPressed: widget.onCancel,
+                            if (isMyAppointment && podeCancelar && !passouPrazoCancelamento)
+                              Column(
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  IconButton(
+                                    icon: const Icon(
+                                      Icons.delete_forever,
+                                      color: Colors.red,
+                                    ),
+                                    onPressed: widget.onCancel,
+                                  ),
+                                  if (prazoMaximoCancelamento != null)
+                                    SizedBox(
+                                      width: 88,
+                                      child: Text(
+                                        AppStrings.prazoMaximoCancelamento(
+                                          prazoMaximoCancelamento,
+                                        ),
+                                        textAlign: TextAlign.center,
+                                        style: const TextStyle(
+                                          color: Colors.grey,
+                                          fontSize: 10,
+                                        ),
+                                        maxLines: 2,
+                                        overflow: TextOverflow.ellipsis,
+                                      ),
+                                    ),
+                                ],
+                              )
+                            else if (isMyAppointment && passouPrazoCancelamento)
+                              Column(
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  IconButton(
+                                    icon: const Icon(
+                                      Icons.delete_forever,
+                                      color: Colors.grey,
+                                    ),
+                                    onPressed: null,
+                                  ),
+                                  SizedBox(
+                                    width: 96,
+                                    child: Text(
+                                      AppStrings.cancelamentoEncerrado,
+                                      textAlign: TextAlign.center,
+                                      style: const TextStyle(
+                                        color: Colors.grey,
+                                        fontSize: 10,
+                                      ),
+                                      maxLines: 2,
+                                      overflow: TextOverflow.ellipsis,
+                                    ),
+                                  ),
+                                  TextButton.icon(
+                                    onPressed: _abrirContatoAdministradora,
+                                    icon: const Icon(
+                                      Icons.support_agent_outlined,
+                                      size: 18,
+                                    ),
+                                    label: Text(
+                                      AppLocalizations.of(context)!
+                                          .contactAdminButton,
+                                      style: const TextStyle(fontSize: 10),
+                                    ),
+                                    style: TextButton.styleFrom(
+                                      tapTargetSize:
+                                          MaterialTapTargetSize.shrinkWrap,
+                                      visualDensity: VisualDensity.compact,
+                                      padding: const EdgeInsets.symmetric(
+                                        horizontal: 6,
+                                        vertical: 0,
+                                      ),
+                                      minimumSize: const Size(0, 28),
+                                    ),
+                                  ),
+                                ],
                               )
                             else if (!(!isMyAppointment && isOccupied) &&
                                 !(isMyAppointment &&

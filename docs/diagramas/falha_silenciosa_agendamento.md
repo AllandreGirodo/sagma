@@ -4,36 +4,36 @@
 
 ```mermaid
 graph TD
-    A["1. Usuário clica 'Agendar'agendamento_view.dart:828"] --> B["2. _salvarAgendamento()"]
-    
-    B --> C{ValidaçãoLocal}
-    C -->|Sem tipo ou horário| C1["❌ RetornaSnackBar"]
-    C -->|OK| D["3. Busca usuário FirebaseFirebaseAuth.instance.currentUser"]
-    
-    D --> E{Usuárioexiste?}
-    E -->|Não| E1["❌ Erro:erroUsuarioNaoAutenticado"]
-    E -->|Sim| F["4. Verifica se horáriojá existe"]
-    
-    F --> G["buscarAgendamentoAtivoNoHorario()"]
-    G --> H{Horárioocupado?}
-    H -->|Mesmo cliente| H1["❌ jaExisteAgendamentoNoHorario"]
-    H -->|Outro cliente| H2["⚠️ Adiciona à lista de espera"]
-    H -->|Livre| I["5. Monta Agendamento objectcom status=pendente"]
-    
-    I --> J["6. Chama FirestoreService.salvarAgendamento()"]
-    
-    J --> K["7. Busca dados do cliente_perfilClienteRefPorUid()"]
-    K --> L["8. Prepara dados com snapshots"]
-    
-    L --> M["9. Chama Firestore CREATE_db.collection'agendamentos'.add"]
-    
-    M --> N{FirestoreRulesAccept?}
-    N -->|❌ ERRO| N1["🔴 BLOQUEADO!Regra falha:cliente_uid não existemas regra procura por isso"]
-    N -->|✅ OK| O["10. Documento criadoRetorna doc ID"]
-    
-    O --> P["11. SnackBar SucessoagendamentoRealizadoPendenteAprovacao"]
-    
-    N1 --> Q["❌ FALHA SILENCIOSASem mensagem de erroSem SnackBar de erro"]
+  A["1. Usuário clica em Agendar\nagendamento_view.dart:828"] --> B["2. Executa _salvarAgendamento()"]
+
+  B --> C{Validação local}
+  C -->|Sem tipo ou horário| C1["Retorna SnackBar de validação"]
+  C -->|OK| D["3. Busca usuário autenticado\nFirebaseAuth.instance.currentUser"]
+
+  D --> E{Usuário existe?}
+  E -->|Não| E1["Erro: usuário não autenticado"]
+  E -->|Sim| F["4. Verifica se o horário já existe"]
+
+  F --> G["buscarAgendamentoAtivoNoHorario()"]
+  G --> H{Horário ocupado?}
+  H -->|Mesmo cliente| H1["Bloqueia duplicidade\nJá existe agendamento no horário"]
+  H -->|Outro cliente| H2["Adiciona à lista de espera"]
+  H -->|Livre| I["5. Monta Agendamento\nstatus = pendente"]
+
+  I --> J["6. Chama método salvarAgendamento"]
+
+  J --> K["7. Busca dados do cliente\nperfilClienteRefPorUid()"]
+  K --> L["8. Prepara snapshots históricos"]
+
+  L --> M["9. Chama _db.collection('agendamentos').add()"]
+
+  M --> N{Firestore Rules aprovam?}
+  N -->|Não| N1["Bloqueado por permissão\nRegra falha ao validar cliente_uid"]
+  N -->|Sim| O["10. Documento criado\nRetorna doc ID"]
+
+  O --> P["11. SnackBar de sucesso\nAgendamento realizado com pendência"]
+
+  N1 --> Q["Falha silenciosa\nSem mensagem de erro"]
     
     style A fill:#e1f5ff
     style M fill:#fff9c4

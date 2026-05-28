@@ -656,7 +656,6 @@ Este sistema garante:
 ✅ Valores padrão consistentes  
 ✅ Zero erros por dados não inicializados  
 
----
+---## 2. Fluxo de Agendamento Detalhado
 
-**Última atualização:** Março 2026 (revisado com rules vigentes)  
-**Versão do documento:** 1.1
+Link: [Diagrama de Fluxo Detalhado](docs/diagramas/fluxo_agendamento_detalhado.md)

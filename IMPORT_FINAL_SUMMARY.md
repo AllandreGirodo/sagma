@@ -195,3 +195,8 @@ Para usar **agora mesmo**:
 ✅ Pronto para **producao**
 
 Obrigado! 🚀
+
+## Links Relacionados
+
+- Apêndice de imagens complementares: [docs/complementares/APÊNDICE_imagens_complementares_SAGMA.md](docs/complementares/APÊNDICE_imagens_complementares_SAGMA.md)
+- Guia de importação detalhado: [IMPORT_DATA_GUIDE.md](IMPORT_DATA_GUIDE.md)

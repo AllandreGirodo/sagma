@@ -41,4 +41,8 @@ Apesar das correções de erro de código, recomenda-se:
 2. **Configurar o Firebase**: Certifique-se de que o arquivo `google-services.json` (Android) e `GoogleService-Info.plist` (iOS) estejam presentes, pois são necessários para a execução.
 3. **Verificar Variáveis de Ambiente**: O arquivo `.env` deve conter as chaves mencionadas no `main.dart` para o funcionamento pleno das notificações e segurança.
 
+## Links Relacionados
+
+- Apêndice de imagens complementares: [docs/complementares/APÊNDICE_imagens_complementares_SAGMA.md](../../docs/complementares/APÊNDICE_imagens_complementares_SAGMA.md)
+
 ---

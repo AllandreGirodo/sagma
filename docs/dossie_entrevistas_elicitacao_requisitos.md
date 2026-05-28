@@ -89,6 +89,90 @@ O sistema deve dar baixa automática de estoque ao encerrar uma sessão e vincul
 
 ---
 
-## 5. Encaminhamento para documentação do projeto
+## 5. Diagramas de apoio aos requisitos
+
+Os dois últimos diagramas consolidados também foram registrados neste dossiê para correlacionar os requisitos com os fluxos de uso do sistema.
+
+**Diagrama 1. Casos de uso do cliente**
+<br>
+![Casos de uso do cliente](diagramas/diagrama_casos_uso_cliente_agenda_massoterapia.png)
+<br>
+**Fonte: Autores (2026).**
+<br>
+Cumprido: o diagrama cobre autenticação, agendamento, acompanhamento de status e gestão de perfil do cliente.
+
+**Diagrama 2. Casos de uso da administradora**
+<br>
+![Casos de uso da administradora](diagramas/diagrama_casos_uso_admin_agenda_massoterapia.png)
+<br>
+**Fonte: Autores (2026).**
+<br>
+Cumprido: o diagrama cobre aprovação de agendamentos, gestão operacional e apoio à administração da agenda.
+
+Os diagramas completos também podem ser consultados nos manuais correlatos: [Manual do Cliente](MANUAL_CLIENTE.md) e [Manual Administrativo](MANUAL_ADMINISTRATIVO.md).
+
+---
+
+## 6. Recursos visuais, logos e mensagens padrão (consentimento)
+
+Para facilitar a correlação entre requisitos, interfaces e material de comunicação, registramos abaixo os recursos visuais utilizados no projeto, o consentimento da profissional para seu uso e as mensagens-padrão geradas pelo sistema que interagem com o WhatsApp.
+
+**Logos e ícones**
+<br>
+![Logo do projeto](../assets/Logo.jpg)
+<br>
+**Tela de Onboarding (apresentação)**
+<br>
+![Tela Onboarding - Apresentação](complementares/Tela_Onboarding_Bem_Vindo_Principal.png)
+<br>
+**Favicon / Ícone da aplicação**
+<br>
+- `windows/runner/resources/app_icon.ico` (ícone usado no pacote Windows / instalador)
+<br>
+Fonte: Autores (2026). A entrevistada autorizou expressamente o uso dos logos e do ícone como material ilustrativo na documentação e como ícone/favico do sistema, mediante consentimento explícito e registrado.
+
+**Telas iniciais utilizadas como referência**
+<br>
+As três primeiras telas usadas para validar fluxos com a profissional foram incluídas como evidência visual:
+
+- Tela de Onboarding (Boas-vindas): `docs/complementares/Tela_Onboarding_Bem_Vindo_Principal.png`
+- Tela de Login do Cliente: `docs/complementares/Tela_Login_Cliente_Completo_Principal.png`
+- Tela de Resumo / Dashboard: `docs/complementares/Tela_DevTools_DB_Manager_Logs_Sistema_Tempo_Real.png`
+<br>
+Estas telas foram fornecidas e aprovadas pela profissional e documentam a orientação visual inicial do cliente ao utilizar o aplicativo.
+
+**Privacidade entre clientes**
+<br>
+A entrevistada confirmou explicitamente durante as entrevistas que "uma cliente não vê a outra" — ou seja, não há visualização de terceiros na interface do cliente. Complementando esse ponto: o sistema deve garantir que cada cliente só tenha acesso aos seus próprios agendamentos, histórico e dados pessoais (visibilidade de agenda restrita por UID). Qualquer listagem ou relatório que possua informações de terceiros deverá ser acessível apenas por perfis administrativos com autenticação reforçada. Essa separação também implica que notificações e mensagens exibidas ao cliente não devem conter nomes, contatos ou detalhes de outras clientes.
+
+**Horário de descanso (bloqueio de grade)**
+<br>
+A profissional relatou possuir um período de descanso diário que deve ser automaticamente bloqueado pela grade da agenda. Exemplo configurável: `12:30–13:30` (valor parametrizável no painel administrativo). O requisito funcional resultante é que o sistema permita definir janelas fixas de indisponibilidade por dia/semana que impeçam a reserva de horários no intervalo configurado.
+
+**Mensagens-padrão (templates) — fluxo WhatsApp**
+<br>
+O sistema suporta envio de mensagens automáticas e templates via integração com WhatsApp (gatilhos: reserva solicitada, confirmação, lembrete, cancelamento). Abaixo exemplos de templates padronizados sugeridos e aprovados pela profissional:
+
+- Mensagem recebida do cliente (entrada no histórico, não enviada pelo sistema):
+
+> "Olá, gostaria de agendar uma sessão de massagem relaxante — qual melhor horário para esta semana?"
+
+- Mensagem automática enviada pelo sistema para confirmação (cliente ← sistema → WhatsApp):
+
+> "Olá {primeiro_nome}, sua solicitação de agendamento para {data} às {hora} foi registrada como *PENDENTE*. Você será notificada quando for aprovada. Obrigada! — {nome_clinica}"
+
+- Mensagem automática enviada pelo sistema como lembrete (24h antes):
+
+> "Lembrete: sua sessão de {procedimento} está agendada para {data} às {hora}. Caso precise reagendar, responda a esta mensagem ou acesse o app."
+
+- Mensagem enviada pela profissional via sistema (quando a profissional precisa comunicar algo pelo WhatsApp):
+
+> "Olá {primeiro_nome}, aqui é a {nome_profissional}. Confirmei seu horário para {data} às {hora}. Trazer documento e chegar 10 minutos antes. Obrigada."
+
+Os templates acima são exemplos recomendados. Todos os envios via WhatsApp devem respeitar o consentimento de comunicação do cliente e as regras da LGPD, mantendo opt-in explícito para mensagens promocionais.
+
+---
+
+## 7. Encaminhamento para documentação do projeto
 
 Este dossiê pode ser usado como base para o capítulo de levantamento de requisitos e para a seção de metodologia no relatório final. Para continuidade da documentação técnica do projeto, ele deve ser associado aos diagramas consolidados em [DIAGRAMAS.md](../DIAGRAMAS.md).

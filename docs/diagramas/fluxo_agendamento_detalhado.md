@@ -35,7 +35,7 @@ flowchart TD
     L3 -->|Não| L5[Registrar nome do cliente na fila\nAtualizar lista_espera e lista_espera_detalhes]
     L5 --> M[Salvar solicitação vinculada ao horário ocupado]
 
-    J --> N[Chamar FirestoreService.salvarAgendamento()]
+    J --> N[Chamar método salvarAgendamento]
     M --> N
 
     N --> O[Buscar perfil do cliente\nCriar snapshots históricos de nome e telefone]

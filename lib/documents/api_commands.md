@@ -57,3 +57,7 @@ curl -X POST \
   }
 }'
 ```
+
+## Links Relacionados
+
+- Apêndice de imagens complementares: [docs/complementares/APÊNDICE_imagens_complementares_SAGMA.md](../../docs/complementares/APÊNDICE_imagens_complementares_SAGMA.md)

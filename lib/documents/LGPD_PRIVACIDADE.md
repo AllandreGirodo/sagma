@@ -37,5 +37,9 @@ Todas as solicitações de exclusão e alterações sensíveis são registradas 
 *   Tipo de ação (Ex: "Anonimização de Conta").
 *   ID do usuário afetado.
 
+## Links Relacionados
+
+- Apêndice de imagens complementares: [docs/complementares/APÊNDICE_imagens_complementares_SAGMA.md](../../docs/complementares/APÊNDICE_imagens_complementares_SAGMA.md)
+
 ---
 *Documento técnico para fins de desenvolvimento e auditoria do sistema.*

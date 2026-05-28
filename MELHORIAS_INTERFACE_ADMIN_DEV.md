@@ -388,6 +388,11 @@ HelpButton(
 )
 ```
 
+## Links Relacionados
+
+- Apêndice de imagens complementares: [docs/complementares/APÊNDICE_imagens_complementares_SAGMA.md](docs/complementares/APÊNDICE_imagens_complementares_SAGMA.md)
+- Guia de implementação: [IMPLEMENTATION_GUIDE.md](IMPLEMENTATION_GUIDE.md)
+
 ---
 
 ## 7️⃣ **Hierarquia de Permissões Visível**

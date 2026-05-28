@@ -109,3 +109,8 @@ if (collection == 'clientes')
 
 **Data**: 18/03/2026
 **Status**: ✅ CONCLUÍDO
+
+## Links Relacionados
+
+- Apêndice de imagens complementares: [docs/complementares/APÊNDICE_imagens_complementares_SAGMA.md](docs/complementares/APÊNDICE_imagens_complementares_SAGMA.md)
+- Resumo final da importação: [IMPORT_FINAL_SUMMARY.md](IMPORT_FINAL_SUMMARY.md)

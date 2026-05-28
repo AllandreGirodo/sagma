@@ -9,11 +9,27 @@ As funcionalidades de diagnóstico foram totalmente isoladas das áreas de negó
 1. É necessário ter perfil de administrador do sistema.
 2. É obrigatório informar senhas de segurança (`DB_ADMIN_PASSWORD`) carregadas a partir das variáveis de ambiente (`.env`).
 
+**Figura 1. Tela Firebase Emulator Firestore Data**
+<br>
+![Tela Firebase Emulator Firestore Data](complementares/Tela_Firebase_Fluxo_Total_Infra_Nuvem.png)
+<br>
+**Fonte: Autores (2026).**
+<br>
+A presente figura apresenta o painel do Firebase Emulator com a coleção Firestore em modo de diagnóstico, evidenciando a inspeção de dados em ambiente local.
+
 ### 1.1 DB Manager e Operações
 Interface embarcada no app para monitoramento do NoSQL (Firestore):
 - **Monitoramento de Volumetria:** Quantifica os documentos em tempo real de coleções sensíveis (`usuarios`, `agendamentos`, `estoque`, `configuracoes`, `logs`, etc).
 - **Auditoria e Exportação:** Permite exportar a base inteira de uma coleção nos formatos `JSON`, `CSV` e planilhas eletrônicas (`Excel/XLSX`). Integra envios diretamente para APIs web externas via Proxy.
 - **População e Truncate:** Rotinas automatizadas de inserção em massa (Data Seeding) e exclusão irreversível (Truncate) com fins de testes em ambiente não produtivo.
+
+**Figura 2. Tela Dev Acesso Banco Dados Senha Admin**
+<br>
+![Tela Dev Acesso Banco Dados Senha Admin](complementares/Tela_Dev_Acesso_Banco_Dados_Senha_Admin.png)
+<br>
+**Fonte: Autores (2026).**
+<br>
+A presente figura registra a etapa de proteção do acesso ao banco de dados em ambiente DEV, exigindo a senha administrativa configurada conforme o padrão definido em [.env.example](../.env.example) para habilitar as rotinas de diagnóstico.
 
 ### 1.2 Device Preview e Console Logs
 - **Logs em Tempo Real:** Captura de fluxo e exceções diretamente na tela do dispositivo, classificados por filtro (`erro`, `aviso`, `info`, `cancelamento`).
@@ -51,6 +67,22 @@ flowchart LR
 - **Security Rules (Regras de Segurança):** Avaliação de comportamento defensivo para proteção a ataques. Testes comprovam que apenas o usuário da sessão pode ler sua própria Ficha de Anamnese, e que usuários normais sofrem bloqueio ao tentar realizar um *bypass* nos atributos de status de pagamento de pacote.
 - **Auth & Logs:** Criação, simulação de exclusão de usuários e ativação de rotinas em Background, tudo capturado na interface nativa do *Firebase Emulator UI* em tempo real.
 
+**Figura 3. Tela Firebase Emulator Firestore Perfil Cliente Dados**
+<br>
+![Tela Firebase Emulator Firestore Perfil Cliente Dados](complementares/Tela_Firebase_Emulator_Firestore_Perfil_Cliente_Dados.png)
+<br>
+**Fonte: Autores (2026).**
+<br>
+A presente figura ilustra a coleção de perfil do cliente no emulador, destacando a persistência local dos dados utilizados nos testes.
+
+**Figura 4. Diagrama Arquitetura Geral SAGMA**
+<br>
+![Diagrama Arquitetura Geral SAGMA](complementares/Diagrama_Arquitetura_Geral_SAGMA.png)
+<br>
+**Fonte: Autores (2026).**
+<br>
+A presente figura resume a arquitetura geral do SAGMA, conectando cliente, administradora, banco de dados e integrações externas.
+
 ### Ativação do Ambiente Isolado:
 ```bash
 # Inicia o Emulator Suite com Auth e Firestore local na porta 4000
@@ -59,3 +91,11 @@ firebase emulators:start --only auth,firestore --config firebase.json
 # Executa a aplicação Flutter instruída a apontar para o emulador
 flutter run -d chrome --dart-define=ENV=dev --dart-define=USE_FIREBASE_EMULATORS=true
 ```
+
+---
+
+## Links Relacionados
+
+- Manual Administrativo: [MANUAL_ADMINISTRATIVO.md](MANUAL_ADMINISTRATIVO.md) (veja também)
+- Manual do Cliente: [MANUAL_CLIENTE.md](MANUAL_CLIENTE.md) (veja também)
+- DevOps e Emuladores: [DEVOPS_AND_EMULATORS.md](DEVOPS_AND_EMULATORS.md) (você está aqui!)

@@ -358,6 +358,11 @@ grep -c "en" lib/app_localizations.dart
 
 ### Pré-implementação
 - [ ] Fazer backup de AppStrings.dart
+
+## Links Relacionados
+
+- Apêndice de imagens complementares: [docs/complementares/APÊNDICE_imagens_complementares_SAGMA.md](docs/complementares/APÊNDICE_imagens_complementares_SAGMA.md)
+- Melhorias de interface Admin/Dev: [MELHORIAS_INTERFACE_ADMIN_DEV.md](MELHORIAS_INTERFACE_ADMIN_DEV.md)
 - [ ] Fazer backup de arquivo a ser modificado
 - [ ] Git commit "wip: i18n audit"
 

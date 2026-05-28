@@ -235,3 +235,8 @@ Para mais informacoes sobre o desenvolvimento, veja:
 - `IMPLEMENTATION_GUIDE.md` - Guia de implementacao geral
 - `dicionario_dados_variaveis.md` - Dicionário de campos
 - `lib/core/models/cliente_model.dart` - Modelo de Cliente
+
+## Links Relacionados
+
+- Apêndice de imagens complementares: [docs/complementares/APÊNDICE_imagens_complementares_SAGMA.md](docs/complementares/APÊNDICE_imagens_complementares_SAGMA.md)
+- Resumo final da importação: [IMPORT_FINAL_SUMMARY.md](IMPORT_FINAL_SUMMARY.md)

@@ -107,7 +107,6 @@ if (collection == 'clientes')
 
 ---
 
-**Data**: 18/03/2026
 **Status**: ✅ CONCLUÍDO
 
 ## Links Relacionados

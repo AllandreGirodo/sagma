@@ -8,21 +8,21 @@ As imagens abaixo permanecem como registros visuais do apêndice; o diagrama a s
 
 ```mermaid
 flowchart TD
-	A[APÊNDICE A] --> B1[A.1 Fluxo Inicial e Autenticação\nFiguras 1 a 10]
-	A --> B2[A.2 Infraestrutura, Diagnóstico e Governança\nFiguras 11 a 30]
-	A --> B3[A.3 Experiência do Cliente e Histórico de Atendimentos\nFiguras 31 a 38]
-	A --> B4[A.4 Agendamentos e Operação Administrativa\nFiguras 39 e 40]
-	A --> B5[A.5 Personalização Visual e Governança de Interface\nFiguras 41 a 57]
-	A --> B6[A.6 Esboço APP Caderno\nFiguras 58 a 60]
+    A[APÊNDICE A] --> B1[A.1 Fluxo Inicial e Autenticação\nFiguras 1 a 10]
+    A --> B2[A.2 Infraestrutura, Diagnóstico e Governança\nFiguras 11 a 30]
+    A --> B3[A.3 Experiência do Cliente e Histórico de Atendimentos\nFiguras 31 a 38]
+    A --> B4[A.4 Agendamentos e Operação Administrativa\nFiguras 39 e 40]
+    A --> B5[A.5 Personalização Visual e Governança de Interface\nFiguras 41 a 57]
+    A --> B6[A.6 Esboço APP Caderno\nFiguras 58 a 60]
 
-	B1 --> C1[Boas-vindas, login, cadastro e LGPD]
-	B1 --> C2[Consolidação inicial e arquitetura]
-	B2 --> C3[Emulador, dashboard e agenda]
-	B2 --> C4[Temas, ajustes e configurações]
-	B3 --> C5[Perfil, histórico e pacotes]
-	B4 --> C6[Operação administrativa inicial]
-	B5 --> C7[Seleção, confirmação e métricas]
-	B6 --> C8[Esboço visual do aplicativo]
+    B1 --> C1[Boas-vindas, login, cadastro e LGPD]
+    B1 --> C2[Consolidação inicial e arquitetura]
+    B2 --> C3[Emulador, dashboard e agenda]
+    B2 --> C4[Temas, ajustes e configurações]
+    B3 --> C5[Perfil, histórico e pacotes]
+    B4 --> C6[Operação administrativa inicial]
+    B5 --> C7[Seleção, confirmação e métricas]
+    B6 --> C8[Esboço visual do aplicativo]
 ```
 
 ## Diagramas do Sistema
@@ -33,221 +33,156 @@ Os diagramas a seguir complementam as imagens do apêndice e resumem, em linguag
 
 ```mermaid
 flowchart TD
-	A[Início] --> B[Autenticar no sistema]
-	B --> C{Senha master ou biometria valida?}
-	C -- Sim --> D[Painel administrativo]
-	C -- Nao --> E[Exibir erro de autenticacao]
-	D --> F[Aprovar agenda]
-	D --> G[Registrar atendimento realizado]
-	D --> H[Debitar sessao]
-	D --> I[Gerenciar estoque]
-	D --> J[Ajustar configuracoes gerais]
-	D --> K[Importar planilha CSV]
-	D --> L[Auditar solicitacoes LGPD]
-	F --> M[Fim]
-	G --> M
-	H --> M
-	I --> M
-	J --> M
-	K --> M
-	L --> M
-	E --> M
+    A[Início] --> B[Autenticar no sistema]
+    B --> C{Senha master ou biometria valida?}
+    C -- Sim --> D[Painel administrativo]
+    C -- Nao --> E[Exibir erro de autenticacao]
+    D --> F[Aprovar agenda]
+    D --> G[Registrar atendimento realizado]
+    D --> H[Debitar sessao]
+    D --> I[Gerenciar estoque]
+    D --> J[Ajustar configuracoes gerais]
+    D --> K[Importar planilha CSV]
+    D --> L[Auditar solicitacoes LGPD]
+    F --> M[Fim]
+    G --> M
+    H --> M
+    I --> M
+    J --> M
+    K --> M
+    L --> M
+    E --> M
 ```
 
 ### Diagrama de Atividades do Cliente
 
 ```mermaid
 flowchart TD
-	A[Início] --> B[Abrir aplicativo e onboarding]
-	B --> C[Login/Cadastro]
-	C --> D{Novo usuario?}
-	D -- Sim --> E[Cadastro novo]
-	D -- Nao --> F[Login existente]
-	E --> G[Area logada]
-	F --> G
-	G --> H[Agendar]
-	G --> I[Historico]
-	G --> J[WhatsApp]
-	H --> K[Fim]
-	I --> K
-	J --> K
+    A[Início] --> B[Abrir aplicativo e onboarding]
+    B --> C[Login/Cadastro]
+    C --> D{Novo usuario?}
+    D -- Sim --> E[Cadastro novo]
+    D -- Nao --> F[Login existente]
+    E --> G[Area logada]
+    F --> G
+    G --> H[Agendar]
+    G --> I[Historico]
+    G --> J[WhatsApp]
+    H --> K[Fim]
+    I --> K
+    J --> K
 ```
 
 ### Diagrama de Casos de Uso da Administradora
 
 ```mermaid
 flowchart LR
-	A[Administradora] --> U1[Aprovar / recusar agendamento]
-	A --> U2[Registrar atendimento realizado]
-	A --> U3[Debitar sessao do saldo]
-	A --> U4[Gerenciar estoque]
-	A --> U5[Ajustar configuracoes gerais]
-	A --> U6[Importar planilha CSV]
-	A --> U7[Auditar solicitacoes LGPD]
+    A[Administradora] --> U1[Aprovar / recusar agendamento]
+    A --> U2[Registrar atendimento realizado]
+    A --> U3[Debitar sessao do saldo]
+    A --> U4[Gerenciar estoque]
+    A --> U5[Ajustar configuracoes gerais]
+    A --> U6[Importar planilha CSV]
+    A --> U7[Auditar solicitacoes LGPD]
 ```
 
 ### Diagrama de Casos de Uso do Cliente
 
 ```mermaid
 flowchart LR
-	A[Cliente] --> U1[Cadastrar / autenticar]
-	A --> U2[Solicitar agendamento]
-	A --> U3[Consultar horarios disponiveis]
-	A --> U4[Consultar historico]
-	A --> U5[Ver saldo de sessoes]
-	A --> U6[Solicitar alteracao de horario]
+    A[Cliente] --> U1[Cadastrar / autenticar]
+    A --> U2[Solicitar agendamento]
+    A --> U3[Consultar horarios disponiveis]
+    A --> U4[Consultar historico]
+    A --> U5[Ver saldo de sessoes]
+    A --> U6[Solicitar alteracao de horario]
 ```
 
 ### Diagrama de Classes
 
 ```mermaid
 classDiagram
-	class UsuarioModel {
-		+id
-		+nome
-		+email
-		+tipo
-		+aprovado
-		+reprovado
-		+dataCadastro
-		+lgpdConsentido
-	}
+    class UsuarioModel {
+        +id
+        +nome
+        +email
+        +tipo
+        +aprovado
+        +reprovado
+        +dataCadastro
+        +lgpdConsentido
+    }
 
-	class Cliente {
-		+idCliente
-		+nomeCliente
-		+nomePreferidoCliente
-		+telefonePrincipalCliente
-		+cpfCliente
-		+enderecoCliente
-		+saldoSessoesCliente
-		+anamneseOkCliente
-		+agendaFixaSemanalCliente
-	}
+    class Cliente {
+        +idCliente
+        +nomeCliente
+        +nomePreferidoCliente
+        +telefonePrincipalCliente
+        +cpfCliente
+        +enderecoCliente
+        +saldoSessoesCliente
+        +anamneseOkCliente
+        +agendaFixaSemanalCliente
+    }
 
-	class Agendamento {
-		+id
-		+clienteId
-		+dataHora
-		+tipo
-		+status
-		+motivoCancelamento
-		+dataCriacao
-		+clienteNomeSnapshot
-		+clienteTelefoneSnapshot
-		+valorOriginal
-		+valorFinal
-		+administradoraAtrelada
-	}
+    class Agendamento {
+        +id
+        +clienteId
+        +dataHora
+        +tipo
+        +status
+        +motivoCancelamento
+        +dataCriacao
+        +clienteNomeSnapshot
+        +clienteTelefoneSnapshot
+        +valorOriginal
+        +valorFinal
+        +administradoraAtrelada
+    }
 
-	class TransacaoFinanceira {
-		+id
-		+agendamentoId
-		+clienteId
-		+valorBruto
-		+valorDesconto
-		+valorLiquido
-		+metodoPagamento
-		+statusPagamento
-		+createdAt
-		+createdBy
-	}
+    class TransacaoFinanceira {
+        +id
+        +agendamentoId
+        +clienteId
+        +valorBruto
+        +valorDesconto
+        +valorLiquido
+        +metodoPagamento
+        +statusPagamento
+        +createdAt
+        +createdBy
+    }
 
-	class LogModel {
-		+tipo
-		+mensagem
-		+dataHora
-		+usuarioId
-	}
+    class LogModel {
+        +tipo
+        +mensagem
+        +dataHora
+        +usuarioId
+    }
 
-	class ConfiguracaoGeral {
-		+currentVersion
-		+minRequiredVersion
-	}
+    class ConfiguracaoGeral {
+        +currentVersion
+        +minRequiredVersion
+    }
 
-	UsuarioModel <|-- Cliente
-	Cliente "1" --> "0..*" Agendamento
-	Cliente "1" --> "0..*" TransacaoFinanceira
-	Agendamento "1" --> "0..*" TransacaoFinanceira
-	UsuarioModel "1" --> "0..*" LogModel
-	ConfiguracaoGeral --> LogModel
+    UsuarioModel <|-- Cliente
+    Cliente "1" --> "0..*" Agendamento
+    Cliente "1" --> "0..*" TransacaoFinanceira
+    Agendamento "1" --> "0..*" TransacaoFinanceira
+    UsuarioModel "1" --> "0..*" LogModel
+    ConfiguracaoGeral --> LogModel
 ```
-
 ## A.1 Fluxo Inicial e Autenticação
+
+Fluxograma do fluxo do cliente: [Fluxo do Cliente (SVG)](Tela_Fluxo_Cliente.svg)
+
+
 
 As figuras desta seção reúnem a sequência inicial de interação com o sistema, abrangendo elementos de apresentação, autenticação, cadastro e consentimento.
 
-**Figura 1. Tela Firestore Perfil Cliente Dados**
-<br>
-![Tela Firestore Perfil Cliente Dados](Tela_Firestore_Perfil_Cliente_Dados.png)
-<br>
-**Fonte: Autores (2026).**
-<br>
-A presente figura Evidencia a estrutura de dados vinculada ao perfil do cliente, na qual se observa a organização dos campos destinados ao cadastro, ao acompanhamento e ao histórico das informações registradas.
 
 
-
-**Figura 2. Tela Onboarding Bem Vindo Principal**
-<br>
-![Tela Onboarding Bem Vindo Principal](Tela_Onboarding_Bem_Vindo_Principal.png)
-<br>
-**Fonte: Autores (2026).**
-<br>
-A presente figura A presente captura ilustra a primeira interação do usuário com o aplicativo, destacando a mensagem inicial de acolhimento e orientação ao acesso ao sistema.
-
-
-
-**Figura 3. Tela Onboarding Notificacoes Automaticas**
-<br>
-![Tela Onboarding Notificacoes Automaticas](Tela_Onboarding_Notificacoes_Automaticas.png)
-<br>
-**Fonte: Autores (2026).**
-<br>
-A presente figura Evidencia a apresentação de recursos de notificações automáticas ao usuário, evidenciando a preocupação do sistema com a comunicação proativa já na etapa inicial de navegação.
-
-
-
-**Figura 4. Tela Onboarding Historico Completo**
-<br>
-![Tela Onboarding Historico Completo](Tela_Onboarding_Historico_Completo.png)
-<br>
-**Fonte: Autores (2026).**
-<br>
-A presente figura A referida etapa de onboarding demonstra a contextualização do histórico de uso e da continuidade da interação do usuário com a plataforma.
-
-
-
-**Figura 5. Tela Login Cliente Completo Principal**
-<br>
-![Tela Login Cliente Completo Principal](Tela_Login_Cliente_Completo_Principal.png)
-<br>
-**Fonte: Autores (2026).**
-<br>
-A presente figura A presente captura apresenta a interface de autenticação do cliente, configurada como porta de entrada para o acesso ao sistema e às funcionalidades disponibilizadas.
-
-
-
-**Figura 6. Tela Cadastro Cliente Novo Completo**
-<br>
-![Tela Cadastro Cliente Novo Completo](Tela_Cadastro_Cliente_Novo_Completo.png)
-<br>
-**Fonte: Autores (2026).**
-<br>
-A presente figura Ilustra o formulário destinado ao cadastro de um novo cliente, contemplando os campos essenciais para sua identificação e posterior vinculação ao ambiente da aplicação.
-
-
-
-**Figura 7. Tela Termos Uso Privacidade Cliente**
-<br>
-![Tela Termos Uso Privacidade Cliente](Tela_Termos_Uso_Privacidade_Cliente.png)
-<br>
-**Fonte: Autores (2026).**
-<br>
-A presente figura Apresenta a etapa de aceite dos termos de uso e privacidade, requisito indispensável para o atendimento às exigências de conformidade e tratamento adequado dos dados.
-
-
-
-**Figura 8. Tela Cadastro Aguardando Aprovacao Admin**
+**Figura 1. Tela Cadastro Aguardando Aprovacao Admin**
 <br>
 ![Tela Cadastro Aguardando Aprovacao Admin](Tela_Cadastro_Aguardando_Aprovacao_Admin.png)
 <br>
@@ -257,7 +192,17 @@ A presente figura A captura evidencia o estado intermediário do cadastro, o qua
 
 
 
-**Figura 9. Diagrama Arquitetura Total SAGMA Completo**
+**Figura 2. Tela Cadastro Cliente Novo Completo**
+<br>
+![Tela Cadastro Cliente Novo Completo](Tela_Cadastro_Cliente_Novo_Completo.png)
+<br>
+**Fonte: Autores (2026).**
+<br>
+A presente figura Ilustra o formulário destinado ao cadastro de um novo cliente, contemplando os campos essenciais para sua identificação e posterior vinculação ao ambiente da aplicação.
+
+
+
+**Figura 3. Diagrama Arquitetura Total SAGMA Completo**
 <br>
 ![Diagrama Arquitetura Total SAGMA Completo](Tela_Cadastro_Em_Analise.png)
 <br>
@@ -267,7 +212,7 @@ A presente figura O diagrama sintetiza a arquitetura do sistema, articulando a i
 
 
 
-**Figura 10. Tela Compartilhar WhatsApp Aprovacao**
+**Figura 4. Tela Compartilhar WhatsApp Aprovacao**
 <br>
 ![Tela Compartilhar WhatsApp Aprovacao](Tela_Compartilhar_WhatsApp_Aprovacao.png)
 <br>
@@ -277,7 +222,71 @@ A presente figura Demonstra a integração com o WhatsApp, utilizada como mecani
 
 
 
+**Figura 5. Tela Firestore Perfil Cliente Dados**
+<br>
+![Tela Firestore Perfil Cliente Dados](Tela_Firestore_Perfil_Cliente_Dados.png)
+<br>
+**Fonte: Autores (2026).**
+<br>
+A presente figura Evidencia a estrutura de dados vinculada ao perfil do cliente, na qual se observa a organização dos campos destinados ao cadastro, ao acompanhamento e ao histórico das informações registradas.
+
+
+
+**Figura 6. Tela Login Cliente Completo Principal**
+<br>
+![Tela Login Cliente Completo Principal](Tela_Login_Cliente_Completo_Principal.png)
+<br>
+**Fonte: Autores (2026).**
+<br>
+A presente figura A presente captura apresenta a interface de autenticação do cliente, configurada como porta de entrada para o acesso ao sistema e às funcionalidades disponibilizadas.
+
+
+
+**Figura 7. Tela Onboarding Bem Vindo Principal**
+<br>
+![Tela Onboarding Bem Vindo Principal](Tela_Onboarding_Bem_Vindo_Principal.png)
+<br>
+**Fonte: Autores (2026).**
+<br>
+A presente figura A presente captura ilustra a primeira interação do usuário com o aplicativo, destacando a mensagem inicial de acolhimento e orientação ao acesso ao sistema.
+
+
+
+**Figura 8. Tela Onboarding Historico Completo**
+<br>
+![Tela Onboarding Historico Completo](Tela_Onboarding_Historico_Completo.png)
+<br>
+**Fonte: Autores (2026).**
+<br>
+A presente figura A referida etapa de onboarding demonstra a contextualização do histórico de uso e da continuidade da interação do usuário com a plataforma.
+
+
+
+**Figura 9. Tela Onboarding Notificacoes Automaticas**
+<br>
+![Tela Onboarding Notificacoes Automaticas](Tela_Onboarding_Notificacoes_Automaticas.png)
+<br>
+**Fonte: Autores (2026).**
+<br>
+A presente figura Evidencia a apresentação de recursos de notificações automáticas ao usuário, evidenciando a preocupação do sistema com a comunicação proativa já na etapa inicial de navegação.
+
+
+
+**Figura 10. Tela Termos Uso Privacidade Cliente**
+<br>
+![Tela Termos Uso Privacidade Cliente](Tela_Termos_Uso_Privacidade_Cliente.png)
+<br>
+**Fonte: Autores (2026).**
+<br>
+A presente figura Apresenta a etapa de aceite dos termos de uso e privacidade, requisito indispensável para o atendimento às exigências de conformidade e tratamento adequado dos dados.
+
+Consulte também: - [LGPD — Privacidade e Tratamento de Dados](../../lib/documents/LGPD_PRIVACIDADE.md)
+
+
+
 ## A.2 Infraestrutura, Diagnóstico e Governança
+
+
 
 As figuras a seguir documentam o ambiente técnico de apoio, contemplando emulação, governança de versão e recursos de diagnóstico utilizados durante o desenvolvimento.
 
@@ -289,27 +298,9 @@ Documentos relacionados:
 - [IMPLEMENTATION_GUIDE.md](../../IMPLEMENTATION_GUIDE.md)
 - [Relatório de Correções e Melhorias - Projeto Agenda.md](../../lib/documents/Relatório%20de%20Correções%20e%20Melhorias%20-%20Projeto%20Agenda.md)
 
-**Figura 11. Tela Firebase Emulator Firestore Data**
-<br>
-![Tela Firebase Emulator Firestore Data](Tela_Firebase_Fluxo_Total_Infra_Nuvem.png)
-<br>
-**Fonte: Autores (2026).**
-<br>
-A presente figura Apresenta uma evidência do ambiente de emulação do Firebase, utilizado na fase de testes e validação.
 
 
-
-**Figura 12. Tela Admin Dashboard Resumo Geral**
-<br>
-![Tela Admin Dashboard Resumo Geral](Tela_Admin_Dashboard_Resumo_Geral.png)
-<br>
-**Fonte: Autores (2026).**
-<br>
-A presente figura Evidencia o painel administrativo com indicadores resumidos de acompanhamento do sistema.
-
-
-
-**Figura 13. Tela Admin Agendamentos Vazios Lista**
+**Figura 11. Tela Admin Agendamentos Vazios Lista**
 <br>
 ![Tela Admin Agendamentos Vazios Lista](Tela_Admin_Agendamentos_Vazios_Lista.png)
 <br>
@@ -319,7 +310,7 @@ A presente figura Exibe a visão administrativa quando ainda não há agendament
 
 
 
-**Figura 14. Tela Admin Clientes Detalhes Completos**
+**Figura 12. Tela Admin Clientes Detalhes Completos**
 <br>
 ![Tela Admin Clientes Detalhes Completos](Tela_Admin_Clientes_Detalhes_Completos.png)
 <br>
@@ -329,7 +320,17 @@ A presente figura Apresenta a área administrativa com informações detalhadas 
 
 
 
-**Figura 15. Tela Admin Pendentes Aprovacao Cadastro**
+**Figura 13. Tela Admin Dashboard Resumo Geral**
+<br>
+![Tela Admin Dashboard Resumo Geral](Tela_Admin_Dashboard_Resumo_Geral.png)
+<br>
+**Fonte: Autores (2026).**
+<br>
+A presente figura Evidencia o painel administrativo com indicadores resumidos de acompanhamento do sistema.
+
+
+
+**Figura 14. Tela Admin Pendentes Aprovacao Cadastro**
 <br>
 ![Tela Admin Pendentes Aprovacao Cadastro](Tela_Admin_Pendentes_Aprovacao_Cadastro.png)
 <br>
@@ -339,107 +340,7 @@ A presente figura Indica a fila de cadastros pendentes aguardando aprovação da
 
 
 
-**Figura 16. Tela Google Agenda Semana Horarios**
-<br>
-![Tela Google Agenda Semana Horarios](Tela_Google_Agenda_Semana_Horarios.png)
-<br>
-**Fonte: Autores (2026).**
-<br>
-A presente figura Registra a integração visual com a agenda externa, exibindo a organização semanal dos horários.
-
-
-
-**Figura 17. Tela Agendamentos Visao Cliente Vazia**
-<br>
-![Tela Agendamentos Visao Cliente Vazia](Tela_Agendamentos_Visao_Cliente_Vazia.png)
-<br>
-**Fonte: Autores (2026).**
-<br>
-A presente figura Evidencia a visão do cliente quando não há agendamentos cadastrados ou ativos.
-
-
-
-**Figura 18. Tela Agendamento Novo Tipo Horario**
-<br>
-![Tela Agendamento Novo Tipo Horario](Tela_Agendamento_Novo_Tipo_Horario.png)
-<br>
-**Fonte: Autores (2026).**
-<br>
-A presente figura Apresenta a seleção inicial do tipo de atendimento e do horário desejado pelo cliente.
-
-
-
-**Figura 19. Tela Agendamento Data Selecao Calendario**
-<br>
-![Tela Agendamento Data Selecao Calendario](Tela_Agendamento_Data_Selecao_Calendario.png)
-<br>
-**Fonte: Autores (2026).**
-<br>
-A presente figura Exibe o calendário de seleção de data, etapa essencial para definir o agendamento.
-
-
-
-**Figura 20. Tela Agendamento Favoritos Tipo Servico**
-<br>
-![Tela Agendamento Favoritos Tipo Servico](Tela_Agendamento_Favoritos_Tipo_Servico.png)
-<br>
-**Fonte: Autores (2026).**
-<br>
-A presente figura Evidencia a seleção de tipos de serviço favoritados para agilizar o fluxo de agendamento.
-
-
-
-**Figura 21. Tela Agendamento Horarios Disponiveis Lista**
-<br>
-![Tela Agendamento Horarios Disponiveis Lista](Tela_Agendamento_Horarios_Disponiveis_Lista.png)
-<br>
-**Fonte: Autores (2026).**
-<br>
-A presente figura Apresenta a relação de horários disponíveis após a verificação de conflito na agenda.
-
-
-
-**Figura 22. Tela Agendamento Confirmacao Final Completa**
-<br>
-![Tela Agendamento Confirmacao Final Completa](Tela_Agendamento_Confirmacao_Final_Completa.png)
-<br>
-**Fonte: Autores (2026).**
-<br>
-A presente figura Registra a etapa final de confirmação do agendamento antes do envio ou persistência da solicitação.
-
-
-
-**Figura 23. Tela Agendamento Novo Formulario**
-<br>
-![Tela Agendamento Novo Formulario](Tela_Agendamento_Novo_Formulario.png)
-<br>
-**Fonte: Autores (2026).**
-<br>
-A presente figura Evidencia o formulário modal de novo agendamento, com seleção de data, horário, tipo de serviço, cupom e confirmação final.
-
-
-
-**Figura 24. Tela Administracao Escolher Tema Dialogo Preview**
-<br>
-![Tela Administracao Escolher Tema Dialogo Preview](Tela_Administracao_Escolher_Tema_Dialogo_Preview.png)
-<br>
-**Fonte: Autores (2026).**
-<br>
-A presente figura Apresenta a pré-visualização do tema selecionado antes da aplicação definitiva na interface administrativa.
-
-
-
-**Figura 25. Tela Instagram Popup Cadastro Entrar**
-<br>
-![Tela Instagram Popup Cadastro Entrar](Tela_Instagram_Popup_Cadastro_Entrar.png)
-<br>
-**Fonte: Autores (2026).**
-<br>
-A presente figura Ilustra o pop-up de cadastro e entrada exibido sobre a tela inicial do Instagram.
-
-
-
-**Figura 26. Tela Administracao Clientes Tema Escuro**
+**Figura 15. Tela Administracao Clientes Tema Escuro**
 <br>
 ![Tela Administracao Clientes Tema Escuro](Tela_Administracao_Clientes_Tema_Escuro.png)
 <br>
@@ -449,27 +350,7 @@ A presente figura Evidencia a listagem de clientes em tema escuro, útil para va
 
 
 
-**Figura 27. Tela Administracao Agendamentos Detalhe Cliente**
-<br>
-![Tela Administracao Agendamentos Detalhe Cliente](Tela_Administracao_Selecao_Idioma.png)
-<br>
-**Fonte: Autores (2026).**
-<br>
-A presente figura Apresenta os detalhes do cliente associados a um agendamento específico.
-
-
-
-**Figura 28. Tela Administracao Agendamentos Detalhe Status**
-<br>
-![Tela Administracao Agendamentos Detalhe Status](Tela_Administracao_Metricas_Diarias.png)
-<br>
-**Fonte: Autores (2026).**
-<br>
-A presente figura Evidencia o painel administrativo com foco na atualização e acompanhamento do status do agendamento.
-
-
-
-**Figura 29. Tela Administracao Config Sistema Padrao**
+**Figura 16. Tela Administracao Config Sistema Padrao**
 <br>
 ![Tela Administracao Config Sistema Padrao](Tela_Administracao_Config_Sistema_Padrao.png)
 <br>
@@ -479,7 +360,37 @@ A presente figura Exibe a configuração geral padrão utilizada pelo sistema.
 
 
 
-**Figura 30. Tela Administracao WhatsApp Aprovacao Template**
+**Figura 17. Tela Administracao Escolher Tema Dialogo Preview**
+<br>
+![Tela Administracao Escolher Tema Dialogo Preview](Tela_Administracao_Escolher_Tema_Dialogo_Preview.png)
+<br>
+**Fonte: Autores (2026).**
+<br>
+A presente figura Apresenta a pré-visualização do tema selecionado antes da aplicação definitiva na interface administrativa.
+
+
+
+**Figura 18. Tela Administracao Agendamentos Detalhe Status**
+<br>
+![Tela Administracao Agendamentos Detalhe Status](Tela_Administracao_Metricas_Diarias.png)
+<br>
+**Fonte: Autores (2026).**
+<br>
+A presente figura Evidencia o painel administrativo com foco na atualização e acompanhamento do status do agendamento.
+
+
+
+**Figura 19. Tela Administracao Agendamentos Detalhe Cliente**
+<br>
+![Tela Administracao Agendamentos Detalhe Cliente](Tela_Administracao_Selecao_Idioma.png)
+<br>
+**Fonte: Autores (2026).**
+<br>
+A presente figura Apresenta os detalhes do cliente associados a um agendamento específico.
+
+
+
+**Figura 20. Tela Administracao WhatsApp Aprovacao Template**
 <br>
 ![Tela Administracao WhatsApp Aprovacao Template](Tela_Administracao_WhatsApp_Aprovacao_Template.png)
 <br>
@@ -489,12 +400,116 @@ A presente figura Evidencia o modelo de mensagem usado para aprovação por meio
 
 
 
+**Figura 21. Tela Agendamento Confirmacao Final Completa**
+<br>
+![Tela Agendamento Confirmacao Final Completa](Tela_Agendamento_Confirmacao_Final_Completa.png)
+<br>
+**Fonte: Autores (2026).**
+<br>
+A presente figura Registra a etapa final de confirmação do agendamento antes do envio ou persistência da solicitação.
+
+
+
+**Figura 22. Tela Agendamento Data Selecao Calendario**
+<br>
+![Tela Agendamento Data Selecao Calendario](Tela_Agendamento_Data_Selecao_Calendario.png)
+<br>
+**Fonte: Autores (2026).**
+<br>
+A presente figura Exibe o calendário de seleção de data, etapa essencial para definir o agendamento.
+
+
+
+**Figura 23. Tela Agendamento Favoritos Tipo Servico**
+<br>
+![Tela Agendamento Favoritos Tipo Servico](Tela_Agendamento_Favoritos_Tipo_Servico.png)
+<br>
+**Fonte: Autores (2026).**
+<br>
+A presente figura Evidencia a seleção de tipos de serviço favoritados para agilizar o fluxo de agendamento.
+
+
+
+**Figura 24. Tela Agendamento Horarios Disponiveis Lista**
+<br>
+![Tela Agendamento Horarios Disponiveis Lista](Tela_Agendamento_Horarios_Disponiveis_Lista.png)
+<br>
+**Fonte: Autores (2026).**
+<br>
+A presente figura Apresenta a relação de horários disponíveis após a verificação de conflito na agenda.
+
+
+
+**Figura 25. Tela Agendamento Novo Formulario**
+<br>
+![Tela Agendamento Novo Formulario](Tela_Agendamento_Novo_Formulario.png)
+<br>
+**Fonte: Autores (2026).**
+<br>
+A presente figura Evidencia o formulário modal de novo agendamento, com seleção de data, horário, tipo de serviço, cupom e confirmação final.
+
+
+
+**Figura 26. Tela Agendamento Novo Tipo Horario**
+<br>
+![Tela Agendamento Novo Tipo Horario](Tela_Agendamento_Novo_Tipo_Horario.png)
+<br>
+**Fonte: Autores (2026).**
+<br>
+A presente figura Apresenta a seleção inicial do tipo de atendimento e do horário desejado pelo cliente.
+
+
+
+**Figura 27. Tela Agendamentos Visao Cliente Vazia**
+<br>
+![Tela Agendamentos Visao Cliente Vazia](Tela_Agendamentos_Visao_Cliente_Vazia.png)
+<br>
+**Fonte: Autores (2026).**
+<br>
+A presente figura Evidencia a visão do cliente quando não há agendamentos cadastrados ou ativos.
+
+
+
+**Figura 28. Tela Firebase Emulator Firestore Data**
+<br>
+![Tela Firebase Emulator Firestore Data](Tela_Firebase_Fluxo_Total_Infra_Nuvem.png)
+<br>
+**Fonte: Autores (2026).**
+<br>
+A presente figura Apresenta uma evidência do ambiente de emulação do Firebase, utilizado na fase de testes e validação.
+
+
+
+**Figura 29. Tela Google Agenda Semana Horarios**
+<br>
+![Tela Google Agenda Semana Horarios](Tela_Google_Agenda_Semana_Horarios.png)
+<br>
+**Fonte: Autores (2026).**
+<br>
+A presente figura Registra a integração visual com a agenda externa, exibindo a organização semanal dos horários.
+
+
+
+**Figura 30. Tela Instagram Popup Cadastro Entrar**
+<br>
+![Tela Instagram Popup Cadastro Entrar](Tela_Instagram_Popup_Cadastro_Entrar.png)
+<br>
+**Fonte: Autores (2026).**
+<br>
+A presente figura Ilustra o pop-up de cadastro e entrada exibido sobre a tela inicial do Instagram.
+
+
+
 ## A.3 Experiência do Cliente e Histórico de Atendimentos
+
+
 
 As imagens reunidas a seguir documentam o percurso visual do cliente, abrangendo cadastro, consentimento, perfil, histórico e informações financeiras associadas ao acompanhamento dos atendimentos.
 
 Documento relacionado:
 - [LGPD_PRIVACIDADE.md](../../lib/documents/LGPD_PRIVACIDADE.md)
+
+
 
 **Figura 31. Tela Perfil Cliente Dados Pessoais Formulario**
 <br>
@@ -536,27 +551,7 @@ A presente figura apresenta o DevTools DB Manager com Device Preview ativado e a
 
 
 
-**Figura 35. Tela Perfil Cliente Consentimento LGPD Visual**
-<br>
-![Tela Perfil Cliente Consentimento LGPD Visual](Tela_DevTools_DB_Manager_Menu_Exportacao_Preview_Dispositivo.png)
-<br>
-**Fonte: Autores (2026).**
-<br>
-A presente figura Exibe a etapa de consentimento LGPD com foco na conformidade e transparência dos dados.
-
-
-
-**Figura 36. Tela Perfil Cliente Atividades Historico Completo**
-<br>
-![Tela Perfil Cliente Atividades Historico Completo](Tela_Swagger_OpenAPI_API_Agendamento_Clientes.png)
-<br>
-**Fonte: Autores (2026).**
-<br>
-A presente figura Evidencia o histórico completo de atividades executadas no perfil do cliente.
-
-
-
-**Figura 37. Tela Dashboard Cliente Meu Perfil Visao**
+**Figura 35. Tela Dashboard Cliente Meu Perfil Visao**
 <br>
 ![Tela Dashboard Cliente Meu Perfil Visao](Tela_DevTools_DB_Manager_Listagem_Colecoes.png)
 <br>
@@ -566,7 +561,7 @@ A presente figura Apresenta a visão geral do perfil do cliente dentro do dashbo
 
 
 
-**Figura 38. Tela Dashboard Cliente Resumo Sessoes Pacotes**
+**Figura 36. Tela Dashboard Cliente Resumo Sessoes Pacotes**
 <br>
 ![Tela Dashboard Cliente Resumo Sessoes Pacotes](Tela_DevTools_DB_Manager_Logs_Sistema_Tempo_Real.png)
 <br>
@@ -576,24 +571,42 @@ A presente figura Exibe o resumo de sessões e pacotes disponíveis para o clien
 
 
 
+**Figura 37. Tela Perfil Cliente Consentimento LGPD Visual**
+<br>
+![Tela Perfil Cliente Consentimento LGPD Visual](Tela_DevTools_DB_Manager_Menu_Exportacao_Preview_Dispositivo.png)
+<br>
+**Fonte: Autores (2026).**
+<br>
+A presente figura Exibe a etapa de consentimento LGPD com foco na conformidade e transparência dos dados.
+
+Ver documentação de privacidade e consentimento: - [LGPD — Privacidade e Tratamento de Dados](../../lib/documents/LGPD_PRIVACIDADE.md)
+
+
+
+**Figura 38. Tela Perfil Cliente Atividades Historico Completo**
+<br>
+![Tela Perfil Cliente Atividades Historico Completo](Tela_Swagger_OpenAPI_API_Agendamento_Clientes.png)
+<br>
+**Fonte: Autores (2026).**
+<br>
+A presente figura Evidencia o histórico completo de atividades executadas no perfil do cliente.
+
+Documentos relacionados: - [Especificação OpenAPI (swagger.yaml)](../../lib/documents/swagger.yaml)  - [Comandos de API (api_commands.md)](../../lib/documents/api_commands.md)
+
+
+
 ## A.4 Agendamentos e Operação Administrativa
+
+
 
 Esta seção concentra as evidências visuais da operação administrativa, incluindo panorama geral, gestão de clientes, pendências, calendário e parametrizações internas.
 
 Documento relacionado:
 - [MELHORIAS_INTERFACE_ADMIN_DEV.md](../../MELHORIAS_INTERFACE_ADMIN_DEV.md)
 
-**Figura 39. Tela Dashboard Cliente Agendamentos Ativos Detalhes**
-<br>
-![Tela Dashboard Cliente Agendamentos Ativos Detalhes](Tela_Firebase_Emulator_Suite_Firestore_Requests.png)
-<br>
-**Fonte: Autores (2026).**
-<br>
-A presente figura Detalha os agendamentos ativos disponíveis no painel do cliente.
 
 
-
-**Figura 40. Tela Firebase Emulator Firestore Perfil Cliente Dados**
+**Figura 39. Tela Firebase Emulator Firestore Perfil Cliente Dados**
 <br>
 ![Tela Firebase Emulator Firestore Perfil Cliente Dados](Tela_Firebase_Emulator_Firestore_Perfil_Cliente_Dados.png)
 <br>
@@ -603,164 +616,28 @@ A presente figura Apresenta a coleção de perfil do cliente no Firebase Emulato
 
 
 
+**Figura 40. Tela Dashboard Cliente Agendamentos Ativos Detalhes**
+<br>
+![Tela Dashboard Cliente Agendamentos Ativos Detalhes](Tela_Firebase_Emulator_Suite_Firestore_Requests.png)
+<br>
+**Fonte: Autores (2026).**
+<br>
+A presente figura Detalha os agendamentos ativos disponíveis no painel do cliente.
+
+
+
 ## A.5 Personalização Visual e Governança de Interface
+
+
 
 As últimas figuras concentram a camada de personalização estética do sistema, incluindo temas, pré-visualização e aplicação final das configurações visuais.
 
 Documento relacionado:
 - [IMPLEMENTATION_GUIDE.md](../../IMPLEMENTATION_GUIDE.md)
 
-**Figura 41. Tela Agendamentos Administracao Pendente Listagem**
-<br>
-![Tela Agendamentos Administracao Pendente Listagem](Tela_Versao_App_Pendente_Listagem.png)
-<br>
-**Fonte: Autores (2026).**
-<br>
-A presente figura Apresenta a listagem de agendamentos pendentes aguardando análise.
 
 
-
-**Figura 42. Tela Agendamentos Administracao Selecionar Tipo**
-<br>
-![Tela Agendamentos Administracao Selecionar Tipo](Tela_Agendamentos_Administracao_Selecionar_Tipo.png)
-<br>
-**Fonte: Autores (2026).**
-<br>
-A presente figura Evidencia a etapa administrativa de seleção do tipo de atendimento.
-
-
-
-**Figura 43. Tela Agendamentos Administracao Selecionar Data**
-<br>
-![Tela Agendamentos Administracao Selecionar Data](Tela_Agendamentos_Administracao_Selecionar_Data.png)
-<br>
-**Fonte: Autores (2026).**
-<br>
-A presente figura Exibe a seleção de data para criação ou ajuste do agendamento.
-
-
-
-**Figura 44. Tela Agendamentos Administracao Selecionar Horario**
-<br>
-![Tela Agendamentos Administracao Selecionar Horario](Tela_Agendamentos_Administracao_Selecionar_Horario.png)
-<br>
-**Fonte: Autores (2026).**
-<br>
-A presente figura Apresenta a seleção de horário dentro do fluxo administrativo de agendamentos.
-
-
-
-**Figura 45. Tela Agendamentos Administracao Cupom Desconto**
-<br>
-![Tela Agendamentos Administracao Cupom Desconto](Tela_Login_Cliente.png)
-<br>
-**Fonte: Autores (2026).**
-<br>
-A presente figura Registra a aplicação de cupom de desconto no agendamento administrativo.
-
-
-
-**Figura 46. Tela Agendamentos Administracao Favoritos Tipo**
-<br>
-![Tela Agendamentos Administracao Favoritos Tipo](Tela_Esqueci_Senha_Cliente.png)
-<br>
-**Fonte: Autores (2026).**
-<br>
-A presente figura Evidencia os tipos de atendimento salvos como favoritos para agilizar a operação.
-
-
-
-**Figura 47. Tela Agendamentos Administracao Remover Favorito**
-<br>
-![Tela Agendamentos Administracao Remover Favorito](Tela_Health_Check_Servicos_Nuvem_App.png)
-<br>
-**Fonte: Autores (2026).**
-<br>
-A presente figura Apresenta a ação administrativa para remover um item da lista de favoritos.
-
-
-
-**Figura 48. Tela Agendamentos Administracao Total Previsto**
-<br>
-![Tela Agendamentos Administracao Total Previsto](Tela_Agendamentos_Administracao_Total_Previsto.png)
-<br>
-**Fonte: Autores (2026).**
-<br>
-A presente figura Exibe o total previsto para o atendimento ou conjunto de agendamentos analisados.
-
-
-
-**Figura 49. Tela Agendamentos Administracao Confirmar Reserva**
-<br>
-![Tela Agendamentos Administracao Confirmar Reserva](Tela_Perfil_Cliente_Dados_Pessoais_Formulario_2.png)
-<br>
-**Fonte: Autores (2026).**
-<br>
-A presente figura Evidencia a confirmação final da reserva dentro do fluxo administrativo.
-
-
-
-**Figura 50. Tela Agendamentos Administracao Aviso Dica**
-<br>
-![Tela Agendamentos Administracao Aviso Dica](Tela_Cliente_Alteracao_Cadastral_Ficha.png)
-<br>
-**Fonte: Autores (2026).**
-<br>
-A presente figura Registra um aviso ou dica operacional exibido na interface administrativa.
-
-
-
-**Figura 51. Tela Perfil Cliente Salvar Perfil Disparo WhatsApp Admin**
-<br>
-![Tela Perfil Cliente Salvar Perfil Disparo WhatsApp Admin](Tela_Perfil_Cliente_Salvar_Perfil_Disparo_WhatsApp_Admin.png)
-<br>
-**Fonte: Autores (2026).**
-<br>
-A presente figura apresenta o botão de salvar perfil que dispara comunicação ao WhatsApp do administrador para acompanhamento do atendimento.
-
-
-
-**Figura 52. Tela Dev Acesso Banco Dados Senha Admin**
-<br>
-![Tela Dev Acesso Banco Dados Senha Admin](Tela_Dev_Acesso_Banco_Dados_Senha_Admin.png)
-<br>
-**Fonte: Autores (2026).**
-<br>
-A presente figura evidencia a proteção do acesso ao banco de dados em ambiente DEV, com senha administrativa definida conforme o padrão descrito em [.env.example](../../.env.example), habilitando as rotinas de diagnóstico.
-
-
-
-**Figura 53. Tela Perfil Cliente Excluir Conta Confirmacao**
-<br>
-![Tela Perfil Cliente Excluir Conta Confirmacao](Tela_Perfil_Cliente_Excluir_Conta_Confirmacao.png)
-<br>
-**Fonte: Autores (2026).**
-<br>
-A presente figura registra o modal de confirmação para exclusão da conta do cliente, em conformidade com a [Lei nº 13.709, de 14 de agosto de 2018](https://www.planalto.gov.br/ccivil_03/_ato2015-2018/2018/lei/l13709.htm) (LGPD). Os dados que precisarem permanecer na base por prazo legal são anonimizados; o restante é excluído.
-
-
-
-**Figura 54. Tela Administracao Clientes Detalhes Resumo**
-<br>
-![Tela Administracao Clientes Detalhes Resumo](Tela_Administracao_Clientes_Detalhes_Resumo.png)
-<br>
-**Fonte: Autores (2026).**
-<br>
-A presente figura Evidencia o resumo administrativo de um cliente com seus principais indicadores e ações rápidas.
-
-
-
-**Figura 55. Tela Administracao Escolher Tema Lista Opcoes**
-<br>
-![Tela Administracao Escolher Tema Lista Opcoes](Tela_Administracao_Escolher_Tema_Lista_Opcoes.png)
-<br>
-**Fonte: Autores (2026).**
-<br>
-A presente figura Evidencia a lista de opções disponíveis para personalização do tema, organizada em um seletor suspenso.
-
-
-
-**Figura 56. Diagrama Arquitetura Geral SAGMA**
+**Figura 41. Diagrama Arquitetura Geral SAGMA**
 <br>
 ![Diagrama Arquitetura Geral SAGMA](Diagrama_Arquitetura_Geral_SAGMA.png)
 <br>
@@ -770,7 +647,87 @@ A presente figura Apresenta a arquitetura geral do sistema SAGMA, com a relaçã
 
 
 
-**Figura 57. Tela Diagrama Fluxo Total Sistema**
+**Figura 42. Tela Administracao Clientes Detalhes Resumo**
+<br>
+![Tela Administracao Clientes Detalhes Resumo](Tela_Administracao_Clientes_Detalhes_Resumo.png)
+<br>
+**Fonte: Autores (2026).**
+<br>
+A presente figura Evidencia o resumo administrativo de um cliente com seus principais indicadores e ações rápidas.
+
+
+
+**Figura 43. Tela Administracao Escolher Tema Lista Opcoes**
+<br>
+![Tela Administracao Escolher Tema Lista Opcoes](Tela_Administracao_Escolher_Tema_Lista_Opcoes.png)
+<br>
+**Fonte: Autores (2026).**
+<br>
+A presente figura Evidencia a lista de opções disponíveis para personalização do tema, organizada em um seletor suspenso.
+
+
+
+**Figura 44. Tela Agendamentos Administracao Selecionar Data**
+<br>
+![Tela Agendamentos Administracao Selecionar Data](Tela_Agendamentos_Administracao_Selecionar_Data.png)
+<br>
+**Fonte: Autores (2026).**
+<br>
+A presente figura Exibe a seleção de data para criação ou ajuste do agendamento.
+
+
+
+**Figura 45. Tela Agendamentos Administracao Selecionar Horario**
+<br>
+![Tela Agendamentos Administracao Selecionar Horario](Tela_Agendamentos_Administracao_Selecionar_Horario.png)
+<br>
+**Fonte: Autores (2026).**
+<br>
+A presente figura Apresenta a seleção de horário dentro do fluxo administrativo de agendamentos.
+
+
+
+**Figura 46. Tela Agendamentos Administracao Selecionar Tipo**
+<br>
+![Tela Agendamentos Administracao Selecionar Tipo](Tela_Agendamentos_Administracao_Selecionar_Tipo.png)
+<br>
+**Fonte: Autores (2026).**
+<br>
+A presente figura Evidencia a etapa administrativa de seleção do tipo de atendimento.
+
+
+
+**Figura 47. Tela Agendamentos Administracao Total Previsto**
+<br>
+![Tela Agendamentos Administracao Total Previsto](Tela_Agendamentos_Administracao_Total_Previsto.png)
+<br>
+**Fonte: Autores (2026).**
+<br>
+A presente figura Exibe o total previsto para o atendimento ou conjunto de agendamentos analisados.
+
+
+
+**Figura 48. Tela Agendamentos Administracao Aviso Dica**
+<br>
+![Tela Agendamentos Administracao Aviso Dica](Tela_Cliente_Alteracao_Cadastral_Ficha.png)
+<br>
+**Fonte: Autores (2026).**
+<br>
+A presente figura Registra um aviso ou dica operacional exibido na interface administrativa.
+
+
+
+**Figura 49. Tela Dev Acesso Banco Dados Senha Admin**
+<br>
+![Tela Dev Acesso Banco Dados Senha Admin](Tela_Dev_Acesso_Banco_Dados_Senha_Admin.png)
+<br>
+**Fonte: Autores (2026).**
+<br>
+A presente figura evidencia a proteção do acesso ao banco de dados em ambiente DEV, com senha administrativa definida conforme o padrão descrito em [.env.example](../../.env.example), habilitando as rotinas de diagnóstico.
+
+
+
+**Figura 50. Tela Diagrama Fluxo Total Sistema**
 <br>
 ![Tela Diagrama Fluxo Total Sistema](Tela_Diagrama_Fluxo_Total_Sistema.png)
 <br>
@@ -780,11 +737,97 @@ A presente figura Apresenta o diagrama consolidado do fluxo total do sistema, re
 
 
 
+**Figura 51. Tela Agendamentos Administracao Favoritos Tipo**
+<br>
+![Tela Agendamentos Administracao Favoritos Tipo](Tela_Esqueci_Senha_Cliente.png)
+<br>
+**Fonte: Autores (2026).**
+<br>
+A presente figura Evidencia os tipos de atendimento salvos como favoritos para agilizar a operação.
+
+
+
+**Figura 52. Tela Agendamentos Administracao Remover Favorito**
+<br>
+![Tela Agendamentos Administracao Remover Favorito](Tela_Health_Check_Servicos_Nuvem_App.png)
+<br>
+**Fonte: Autores (2026).**
+<br>
+A presente figura Apresenta a ação administrativa para remover um item da lista de favoritos.
+
+
+
+**Figura 53. Tela Agendamentos Administracao Cupom Desconto**
+<br>
+![Tela Agendamentos Administracao Cupom Desconto](Tela_Login_Cliente.png)
+<br>
+**Fonte: Autores (2026).**
+<br>
+A presente figura Registra a aplicação de cupom de desconto no agendamento administrativo.
+
+
+
+**Figura 54. Tela Agendamentos Administracao Confirmar Reserva**
+<br>
+![Tela Agendamentos Administracao Confirmar Reserva](Tela_Perfil_Cliente_Dados_Pessoais_Formulario_2.png)
+<br>
+**Fonte: Autores (2026).**
+<br>
+A presente figura Evidencia a confirmação final da reserva dentro do fluxo administrativo.
+
+
+
+**Figura 55. Tela Perfil Cliente Excluir Conta Confirmacao**
+<br>
+![Tela Perfil Cliente Excluir Conta Confirmacao](Tela_Perfil_Cliente_Excluir_Conta_Confirmacao.png)
+<br>
+**Fonte: Autores (2026).**
+<br>
+A presente figura registra o modal de confirmação para exclusão da conta do cliente, em conformidade com a [Lei nº 13.709, de 14 de agosto de 2018](https://www.planalto.gov.br/ccivil_03/_ato2015-2018/2018/lei/l13709.htm) (LGPD). Os dados que precisarem permanecer na base por prazo legal são anonimizados; o restante é excluído.
+
+
+
+**Figura 56. Tela Perfil Cliente Salvar Perfil Disparo WhatsApp Admin**
+<br>
+![Tela Perfil Cliente Salvar Perfil Disparo WhatsApp Admin](Tela_Perfil_Cliente_Salvar_Perfil_Disparo_WhatsApp_Admin.png)
+<br>
+**Fonte: Autores (2026).**
+<br>
+A presente figura apresenta o botão de salvar perfil que dispara comunicação ao WhatsApp do administrador para acompanhamento do atendimento.
+
+
+
+**Figura 57. Tela Agendamentos Administracao Pendente Listagem**
+<br>
+![Tela Agendamentos Administracao Pendente Listagem](Tela_Versao_App_Pendente_Listagem.png)
+<br>
+**Fonte: Autores (2026).**
+<br>
+A presente figura Apresenta a listagem de agendamentos pendentes aguardando análise.
+
+
+
 ## A.6 Esboço APP Caderno
+
+
 
 O material de esboço do aplicativo encontra-se disponível no arquivo [Esboço APP caderno.pdf](Esboço%20APP%20caderno.pdf). As páginas seguintes reproduzem visualmente esse conteúdo para registro no apêndice.
 
-**Figura 58. Esboço APP Caderno Pagina 1**
+
+
+
+
+**Figura 58. Esboço APP Caderno Pagina 3**
+<br>
+![Esboço APP Caderno Pagina 3](Esboco_APP_caderno_pagina_3.png)
+<br>
+**Fonte: Autores (2026).**
+<br>
+A presente figura Registra a terceira página do esboço, consolidando as referências visuais preparatórias do aplicativo.
+
+
+
+**Figura 59. Esboço APP Caderno Pagina 1**
 <br>
 ![Esboço APP Caderno Pagina 1](Esboco_APP_caderno_pagina_1.png)
 <br>
@@ -794,7 +837,7 @@ A presente figura Registra a primeira página do esboço do aplicativo, preserva
 
 
 
-**Figura 59. Esboço APP Caderno Pagina 2**
+**Figura 60. Esboço APP Caderno Pagina 2**
 <br>
 ![Esboço APP Caderno Pagina 2](Esboco_APP_caderno_pagina_2.png)
 <br>
@@ -804,10 +847,11 @@ A presente figura Apresenta a segunda página do esboço, com a continuidade das
 
 
 
-**Figura 60. Esboço APP Caderno Pagina 3**
-<br>
-![Esboço APP Caderno Pagina 3](Esboco_APP_caderno_pagina_3.png)
-<br>
-**Fonte: Autores (2026).**
-<br>
-A presente figura Registra a terceira página do esboço, consolidando as referências visuais preparatórias do aplicativo.
+## Direcionamento ao Dossiê
+
+
+Para continuidade e consulta das evidências qualitativas, consulte o dossiê: - [Dossiê de entrevistas e elicitação de requisitos](../dossie_entrevistas_elicitacao_requisitos.md)
+
+## Direcionamento ao Fluxograma
+
+Para visualizar o fluxograma principal do sistema e outros diagramas de fluxo, consulte: - [Fluxogramas do Sistema](../diagramas/fluxograma.md)

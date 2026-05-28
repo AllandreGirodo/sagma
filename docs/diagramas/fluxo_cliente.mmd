@@ -1,0 +1,54 @@
+flowchart TD
+    A[Cliente acessa a tela de agendamento] --> B[Seleciona data, horário e tipo de massagem]
+    B --> C{Campos obrigatórios preenchidos?}
+
+    C -->|Não| C1[Exibir feedback de validação\nSolicitar preenchimento dos campos]
+    C -->|Sim| D{Usuário autenticado?}
+
+    D -->|Não| D1[Bloquear a operação\nRedirecionar para autenticação]
+    D -->|Sim| E{Perfil com permissão para criar solicitação?}
+
+    E -->|Cliente| F[Montar solicitação de agendamento]
+    E -->|Sem permissão| E1[Negar ação\nExibir mensagem de acesso restrito]
+
+    F --> G[Normalizar data e hora\nGerar status inicial: pendente/solicitado]
+    G --> H[Buscar agendamento ativo no mesmo horário]
+    H --> I{Existe agendamento no horário?}
+
+    I -->|Não| J[Montar objeto Agendamento\ncliente_uid, data_hora, tipo, status, snapshots]
+    I -->|Sim| K{O agendamento ocupado pertence ao mesmo cliente?}
+
+    K -->|Sim| K1[Bloquear duplicidade\nInformar que já existe agendamento no horário]
+    K -->|Não| L[Oferecer lista de espera\nou nova tentativa em horário livre]
+
+    L --> L1{Cliente aceita entrar na lista de espera?}
+    L1 -->|Não| L2[Cancelar a tentativa\nRetornar à escolha de horários]
+    L1 -->|Sim| L3{Cliente já atingiu limite de solicitações ativas?}
+    L3 -->|Sim| L4[Recusar entrada na lista de espera\nExibir limite máximo permitido]
+    L3 -->|Não| L5[Registrar nome do cliente na fila\nAtualizar lista_espera e lista_espera_detalhes]
+    L5 --> M[Salvar solicitação vinculada ao horário ocupado]
+
+    J --> N[Chamar método salvarAgendamento]
+    M --> N
+
+    N --> O[Buscar perfil do cliente\nCriar snapshots históricos de nome e telefone]
+    O --> P[Preencher administradora_atrelada\ne demais campos derivados]
+    P --> Q[Garantir compatibilidade\nGravar cliente_uid no documento]
+    Q --> R[Executar add na coleção agendamentos]
+
+    R --> S{Firestore Security Rules aprovam a gravação?}
+    S -->|Não| S1[Erro permission-denied\nExibir SnackBar de falha para o usuário]
+    S -->|Sim| T[Documento criado com sucesso]
+
+    T --> U[Exibir confirmação visual\nAgendamento realizado com sucesso]
+    T --> V[Disponibilizar o agendamento para a área administrativa]
+
+    style A fill:#e3f2fd,stroke:#1976d2
+    style C1 fill:#fff3e0,stroke:#f57c00
+    style E1 fill:#ffebee,stroke:#c62828
+    style K1 fill:#ffebee,stroke:#c62828
+    style L2 fill:#fff3e0,stroke:#ef6c00
+    style L4 fill:#ffebee,stroke:#c62828
+    style S1 fill:#ffebee,stroke:#c62828
+    style T fill:#e8f5e9,stroke:#2e7d32
+    style U fill:#e8f5e9,stroke:#2e7d32

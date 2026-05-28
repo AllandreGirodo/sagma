@@ -183,6 +183,5 @@ Para melhorias futuras:
 
 ---
 
-**Data**: 18/03/2026
 **Versao**: 1.0
 **Status**: Pronto para uso

@@ -41,7 +41,7 @@ flowchart TD
     N --> O[Buscar perfil do cliente\nCriar snapshots históricos de nome e telefone]
     O --> P[Preencher administradora_atrelada\ne demais campos derivados]
     P --> Q[Garantir compatibilidade\nGravar cliente_uid no documento]
-    Q --> R[Executar add() na coleção agendamentos]
+    Q --> R[Executar add na coleção agendamentos]
 
     R --> S{Firestore Security Rules aprovam a gravação?}
     S -->|Não| S1[Erro permission-denied\nExibir SnackBar de falha para o usuário]
@@ -110,6 +110,8 @@ flowchart TD
     style V fill:#ede7f6,stroke:#5e35b1
     style W fill:#e8f5e9,stroke:#2e7d32
 ```
+
+**Observação:** a baixa de pacote (débito de 1 sessão do saldo) ocorre quando a sessão é registrada como realizada pela profissional — veja **Seção 2. Fluxo da profissional** (nós `U -> V`).
 
 ## 3. Pontos críticos do fluxo
 

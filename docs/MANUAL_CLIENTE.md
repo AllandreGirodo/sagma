@@ -12,7 +12,7 @@ O diagrama sintetiza as principais interações do cliente com o sistema, inclui
 
 **Figura 1. Tela Onboarding Bem Vindo Principal**
 <br>
-![Tela Onboarding Bem Vindo Principal](complementares/Tela_Onboarding_Bem_Vindo_Principal.png)
+![Tela Onboarding Bem Vindo Principal](complementares/client_ui/Tela_Onboarding_Bem_Vindo_Principal.png)
 <br>
 **Fonte: Autores (2026).**
 <br>
@@ -28,7 +28,7 @@ Ao autenticar-se, o cliente é direcionado ao seu **Dashboard Pessoal**.
 
 **Figura 2. Tela Login Cliente Completo Principal**
 <br>
-![Tela Login Cliente Completo Principal](complementares/Tela_Login_Cliente_Completo_Principal.png)
+![Tela Login Cliente Completo Principal](complementares/client_ui/Tela_Login_Cliente_Completo_Principal.png)
 <br>
 **Fonte: Autores (2026).**
 <br>
@@ -36,7 +36,7 @@ A presente figura apresenta a interface de autenticação do cliente, utilizada 
 
 **Figura 3. Tela Dashboard Cliente Resumo Sessoes Pacotes**
 <br>
-![Tela Dashboard Cliente Resumo Sessoes Pacotes](complementares/Tela_DevTools_DB_Manager_Logs_Sistema_Tempo_Real.png)
+![Tela Dashboard Cliente Resumo Sessoes Pacotes](complementares/infra/Tela_DevTools_DB_Manager_Logs_Sistema_Tempo_Real.png)
 <br>
 **Fonte: Autores (2026).**
 <br>
@@ -91,7 +91,7 @@ A presente figura evidencia a etapa final de conferência dos dados antes da con
 
 **Figura 6. Tela Dashboard Cliente Agendamentos Ativos Detalhes**
 <br>
-![Tela Dashboard Cliente Agendamentos Ativos Detalhes](complementares/Tela_Firebase_Emulator_Suite_Firestore_Requests.png)
+![Tela Dashboard Cliente Agendamentos Ativos Detalhes](complementares/infra/Tela_Firebase_Emulator_Suite_Firestore_Requests.png)
 <br>
 **Fonte: Autores (2026).**
 <br>
@@ -105,7 +105,7 @@ Caso deseje, o cliente tem acesso ao fluxo de **Direito ao Esquecimento**, que a
 
 **Figura 7. Tela Perfil Cliente Consentimento LGPD Visual**
 <br>
-![Tela Perfil Cliente Consentimento LGPD Visual](complementares/Tela_DevTools_DB_Manager_Menu_Exportacao_Preview_Dispositivo.png)
+![Tela Perfil Cliente Consentimento LGPD Visual](complementares/infra/Tela_DevTools_DB_Manager_Menu_Exportacao_Preview_Dispositivo.png)
 <br>
 **Fonte: Autores (2026).**
 <br>
@@ -121,7 +121,7 @@ A presente figura mostra o formulário de dados pessoais utilizado para atualiza
 
 **Figura 9. Tela Perfil Cliente Excluir Conta Confirmacao**
 <br>
-![Tela Perfil Cliente Excluir Conta Confirmacao](complementares/Tela_Perfil_Cliente_Excluir_Conta_Confirmacao.png)
+![Tela Perfil Cliente Excluir Conta Confirmacao](complementares/client_ui/Tela_Perfil_Cliente_Excluir_Conta_Confirmacao.png)
 <br>
 **Fonte: Autores (2026).**
 <br>

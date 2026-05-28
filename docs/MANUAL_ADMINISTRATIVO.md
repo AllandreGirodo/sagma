@@ -90,7 +90,7 @@ A presente figura apresenta a ficha detalhada de um cliente, reunindo informa√ß√
 
 **Figura 7. Tela Administracao Clientes Tema Escuro**
 <br>
-![Tela Administracao Clientes Tema Escuro](complementares/Tela_Administracao_Clientes_Tema_Escuro.png)
+![Tela Administracao Clientes Tema Escuro](complementares/admin_ui/Tela_Administracao_Clientes_Tema_Escuro.png)
 <br>
 **Fonte: Autores (2026).**
 <br>

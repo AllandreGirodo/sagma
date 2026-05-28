@@ -27,8 +27,6 @@ flowchart TD
 
 ## Diagramas do Sistema
 
-Os diagramas a seguir complementam as imagens do apêndice e resumem, em linguagem de modelagem, o comportamento principal do sistema.
-
 ### Diagrama de Atividades do Admin
 
 ```mermaid
@@ -174,7 +172,7 @@ classDiagram
 ```
 ## A.1 Fluxo Inicial e Autenticação
 
-Fluxograma do fluxo do cliente: [Fluxo do Cliente (SVG)](Tela_Fluxo_Cliente.svg)
+Fluxograma do fluxo do cliente: [Fluxo do Cliente (SVG)](../diagramas/generated_svgs/Tela_Fluxo_Cliente.svg)
 
 
 
@@ -224,7 +222,7 @@ A presente figura Demonstra a integração com o WhatsApp, utilizada como mecani
 
 **Figura 5. Tela Firestore Perfil Cliente Dados**
 <br>
-![Tela Firestore Perfil Cliente Dados](Tela_Firestore_Perfil_Cliente_Dados.png)
+![Tela Firestore Perfil Cliente Dados](infra/Tela_Firestore_Perfil_Cliente_Dados.png)
 <br>
 **Fonte: Autores (2026).**
 <br>
@@ -234,7 +232,7 @@ A presente figura Evidencia a estrutura de dados vinculada ao perfil do cliente,
 
 **Figura 6. Tela Login Cliente Completo Principal**
 <br>
-![Tela Login Cliente Completo Principal](Tela_Login_Cliente_Completo_Principal.png)
+![Tela Login Cliente Completo Principal](client_ui/Tela_Login_Cliente_Completo_Principal.png)
 <br>
 **Fonte: Autores (2026).**
 <br>
@@ -244,7 +242,7 @@ A presente figura A presente captura apresenta a interface de autenticação do 
 
 **Figura 7. Tela Onboarding Bem Vindo Principal**
 <br>
-![Tela Onboarding Bem Vindo Principal](Tela_Onboarding_Bem_Vindo_Principal.png)
+![Tela Onboarding Bem Vindo Principal](client_ui/Tela_Onboarding_Bem_Vindo_Principal.png)
 <br>
 **Fonte: Autores (2026).**
 <br>
@@ -254,7 +252,7 @@ A presente figura A presente captura ilustra a primeira interação do usuário 
 
 **Figura 8. Tela Onboarding Historico Completo**
 <br>
-![Tela Onboarding Historico Completo](Tela_Onboarding_Historico_Completo.png)
+![Tela Onboarding Historico Completo](client_ui/Tela_Onboarding_Historico_Completo.png)
 <br>
 **Fonte: Autores (2026).**
 <br>
@@ -264,17 +262,26 @@ A presente figura A referida etapa de onboarding demonstra a contextualização 
 
 **Figura 9. Tela Onboarding Notificacoes Automaticas**
 <br>
-![Tela Onboarding Notificacoes Automaticas](Tela_Onboarding_Notificacoes_Automaticas.png)
+![Tela Onboarding Notificacoes Automaticas](client_ui/Tela_Onboarding_Notificacoes_Automaticas.png)
 <br>
 **Fonte: Autores (2026).**
 <br>
 A presente figura Evidencia a apresentação de recursos de notificações automáticas ao usuário, evidenciando a preocupação do sistema com a comunicação proativa já na etapa inicial de navegação.
 
 
+**Imagem adicional. Tela Device Preview**
+<br>
+![Tela Device Preview](Tela_DevicePreview.jpeg)
+<br>
+**Fonte: Autores (2026).**
+<br>
+Imagem capturada do Device Preview exibindo a pré-visualização responsiva (tablet) da etapa de notificações do onboarding.
+
+
 
 **Figura 10. Tela Termos Uso Privacidade Cliente**
 <br>
-![Tela Termos Uso Privacidade Cliente](Tela_Termos_Uso_Privacidade_Cliente.png)
+![Tela Termos Uso Privacidade Cliente](client_ui/Tela_Termos_Uso_Privacidade_Cliente.png)
 <br>
 **Fonte: Autores (2026).**
 <br>
@@ -342,7 +349,7 @@ A presente figura Indica a fila de cadastros pendentes aguardando aprovação da
 
 **Figura 15. Tela Administracao Clientes Tema Escuro**
 <br>
-![Tela Administracao Clientes Tema Escuro](Tela_Administracao_Clientes_Tema_Escuro.png)
+![Tela Administracao Clientes Tema Escuro](admin_ui/Tela_Administracao_Clientes_Tema_Escuro.png)
 <br>
 **Fonte: Autores (2026).**
 <br>
@@ -472,7 +479,7 @@ A presente figura Evidencia a visão do cliente quando não há agendamentos cad
 
 **Figura 28. Tela Firebase Emulator Firestore Data**
 <br>
-![Tela Firebase Emulator Firestore Data](Tela_Firebase_Fluxo_Total_Infra_Nuvem.png)
+![Tela Firebase Emulator Firestore Data](infra/Tela_Firebase_Fluxo_Total_Infra_Nuvem.png)
 <br>
 **Fonte: Autores (2026).**
 <br>
@@ -492,7 +499,7 @@ A presente figura Registra a integração visual com a agenda externa, exibindo 
 
 **Figura 30. Tela Instagram Popup Cadastro Entrar**
 <br>
-![Tela Instagram Popup Cadastro Entrar](Tela_Instagram_Popup_Cadastro_Entrar.png)
+![Tela Instagram Popup Cadastro Entrar](client_ui/Tela_Instagram_Popup_Cadastro_Entrar.png)
 <br>
 **Fonte: Autores (2026).**
 <br>
@@ -543,7 +550,7 @@ A presente figura registra a etapa 2 de confirmação da senha administrativa em
 
 **Figura 34. Tela DevTools DB Manager Device Preview Csv Configuracao**
 <br>
-![Tela DevTools DB Manager Device Preview Csv Configuracao](Tela_DevTools_DB_Manager_Device_Preview_CSV_Configuracao.png)
+![Tela DevTools DB Manager Device Preview Csv Configuracao](infra/Tela_DevTools_DB_Manager_Device_Preview_CSV_Configuracao.png)
 <br>
 **Fonte: Autores (2026).**
 <br>
@@ -553,7 +560,7 @@ A presente figura apresenta o DevTools DB Manager com Device Preview ativado e a
 
 **Figura 35. Tela Dashboard Cliente Meu Perfil Visao**
 <br>
-![Tela Dashboard Cliente Meu Perfil Visao](Tela_DevTools_DB_Manager_Listagem_Colecoes.png)
+![Tela Dashboard Cliente Meu Perfil Visao](infra/Tela_DevTools_DB_Manager_Listagem_Colecoes.png)
 <br>
 **Fonte: Autores (2026).**
 <br>
@@ -563,7 +570,7 @@ A presente figura Apresenta a visão geral do perfil do cliente dentro do dashbo
 
 **Figura 36. Tela Dashboard Cliente Resumo Sessoes Pacotes**
 <br>
-![Tela Dashboard Cliente Resumo Sessoes Pacotes](Tela_DevTools_DB_Manager_Logs_Sistema_Tempo_Real.png)
+![Tela Dashboard Cliente Resumo Sessoes Pacotes](infra/Tela_DevTools_DB_Manager_Logs_Sistema_Tempo_Real.png)
 <br>
 **Fonte: Autores (2026).**
 <br>
@@ -573,7 +580,7 @@ A presente figura Exibe o resumo de sessões e pacotes disponíveis para o clien
 
 **Figura 37. Tela Perfil Cliente Consentimento LGPD Visual**
 <br>
-![Tela Perfil Cliente Consentimento LGPD Visual](Tela_DevTools_DB_Manager_Menu_Exportacao_Preview_Dispositivo.png)
+![Tela Perfil Cliente Consentimento LGPD Visual](infra/Tela_DevTools_DB_Manager_Menu_Exportacao_Preview_Dispositivo.png)
 <br>
 **Fonte: Autores (2026).**
 <br>
@@ -608,7 +615,7 @@ Documento relacionado:
 
 **Figura 39. Tela Firebase Emulator Firestore Perfil Cliente Dados**
 <br>
-![Tela Firebase Emulator Firestore Perfil Cliente Dados](Tela_Firebase_Emulator_Firestore_Perfil_Cliente_Dados.png)
+![Tela Firebase Emulator Firestore Perfil Cliente Dados](infra/Tela_Firebase_Emulator_Firestore_Perfil_Cliente_Dados.png)
 <br>
 **Fonte: Autores (2026).**
 <br>
@@ -618,7 +625,7 @@ A presente figura Apresenta a coleção de perfil do cliente no Firebase Emulato
 
 **Figura 40. Tela Dashboard Cliente Agendamentos Ativos Detalhes**
 <br>
-![Tela Dashboard Cliente Agendamentos Ativos Detalhes](Tela_Firebase_Emulator_Suite_Firestore_Requests.png)
+![Tela Dashboard Cliente Agendamentos Ativos Detalhes](infra/Tela_Firebase_Emulator_Suite_Firestore_Requests.png)
 <br>
 **Fonte: Autores (2026).**
 <br>
@@ -639,7 +646,7 @@ Documento relacionado:
 
 **Figura 41. Diagrama Arquitetura Geral SAGMA**
 <br>
-![Diagrama Arquitetura Geral SAGMA](Diagrama_Arquitetura_Geral_SAGMA.png)
+![Diagrama Arquitetura Geral SAGMA](../diagramas/generated_svgs/Diagrama_Arquitetura_Geral_SAGMA.png)
 <br>
 **Fonte: Autores (2026).**
 <br>
@@ -649,7 +656,7 @@ A presente figura Apresenta a arquitetura geral do sistema SAGMA, com a relaçã
 
 **Figura 42. Tela Administracao Clientes Detalhes Resumo**
 <br>
-![Tela Administracao Clientes Detalhes Resumo](Tela_Administracao_Clientes_Detalhes_Resumo.png)
+![Tela Administracao Clientes Detalhes Resumo](admin_ui/Tela_Administracao_Clientes_Detalhes_Resumo.png)
 <br>
 **Fonte: Autores (2026).**
 <br>
@@ -729,7 +736,7 @@ A presente figura evidencia a proteção do acesso ao banco de dados em ambiente
 
 **Figura 50. Tela Diagrama Fluxo Total Sistema**
 <br>
-![Tela Diagrama Fluxo Total Sistema](Tela_Diagrama_Fluxo_Total_Sistema.png)
+![Tela Diagrama Fluxo Total Sistema](../diagramas/generated_svgs/Tela_Diagrama_Fluxo_Total_Sistema.png)
 <br>
 **Fonte: Autores (2026).**
 <br>
@@ -749,7 +756,7 @@ A presente figura Evidencia os tipos de atendimento salvos como favoritos para a
 
 **Figura 52. Tela Agendamentos Administracao Remover Favorito**
 <br>
-![Tela Agendamentos Administracao Remover Favorito](Tela_Health_Check_Servicos_Nuvem_App.png)
+![Tela Agendamentos Administracao Remover Favorito](infra/Tela_Health_Check_Servicos_Nuvem_App.png)
 <br>
 **Fonte: Autores (2026).**
 <br>
@@ -759,7 +766,7 @@ A presente figura Apresenta a ação administrativa para remover um item da list
 
 **Figura 53. Tela Agendamentos Administracao Cupom Desconto**
 <br>
-![Tela Agendamentos Administracao Cupom Desconto](Tela_Login_Cliente.png)
+![Tela Agendamentos Administracao Cupom Desconto](client_ui/Tela_Login_Cliente.png)
 <br>
 **Fonte: Autores (2026).**
 <br>
@@ -846,6 +853,92 @@ A presente figura Registra a primeira página do esboço do aplicativo, preserva
 A presente figura Apresenta a segunda página do esboço, com a continuidade das anotações e estudos de interface.
 
 
+## A.7 Telas Administrativas — Complementares
+
+As imagens a seguir complementam a seção administrativa com telas de auditoria, controle de estoque e configuração do sistema.
+
+
+**Figura 61. Tela Administração — Cadastro de Estoque**
+<br>
+![Tela Administração Cadastro Estoque](admin_ui/Tela_Administracao_Cadastro_Estoque.png)
+<br>
+**Fonte: Autores (2026).**
+<br>
+A presente figura Mostra o formulário e validações relacionadas ao cadastro e atualização de itens de estoque no sistema administrativo.
+
+
+**Figura 62. Tela Administração — Auditoria LGPD (Anonimização de Conta)**
+<br>
+![Tela Administração Auditoria LGPD](admin_ui/Tela_Administracao_Auditoria_LGPD_Anonimização_de_Conta_Usuário_Excluído.png)
+<br>
+**Fonte: Autores (2026).**
+<br>
+A presente figura Documenta o processo de auditoria e opções de anonimização de dados pessoais após exclusão de conta, conforme requisitos de privacidade.
+
+
+**Figura 63. Tela Administração — Configurações (1)**
+<br>
+![Tela Administração Configurações 1](admin_ui/Tela_Administracao_Configurações1.png)
+<br>
+**Fonte: Autores (2026).**
+<br>
+A presente figura Exibe opções de configuração do sistema na primeira aba de parametrização.
+
+
+**Figura 64. Tela Administração — Configurações (2)**
+<br>
+![Tela Administração Configurações 2](admin_ui/Tela_Administracao_Configurações2.png)
+<br>
+**Fonte: Autores (2026).**
+<br>
+A presente figura Complementa a visão de parametrização com ajustes avançados de integração e políticas.
+
+
+**Figura 65. Tela Administração — Configurações (3)**
+<br>
+![Tela Administração Configurações 3](admin_ui/Tela_Administracao_Configurações3.png)
+<br>
+**Fonte: Autores (2026).**
+<br>
+A presente figura Mostra controles adicionais de personalização e segurança aplicáveis à administradora.
+
+
+**Figura 66. Tela Administração — Configurações (4)**
+<br>
+![Tela Administração Configurações 4](admin_ui/Tela_Administracao_Configurações4.png)
+<br>
+**Fonte: Autores (2026).**
+<br>
+A presente figura Apresenta a aba final de configurações com opções de versão e manutenção do sistema.
+
+
+**Figura 67. Tela Administração — Controle de Estoque**
+<br>
+![Tela Administração Controle Estoque](admin_ui/Tela_Administracao_Controle_Estoque.png)
+<br>
+**Fonte: Autores (2026).**
+<br>
+A presente figura Evidencia a lista de itens em estoque, com filtros, ajustes de quantidade e exportação.
+
+
+**Figura 68. Tela Administração — Relatório / Dash Resumo**
+<br>
+![Tela Administração Dash Resumo](admin_ui/Tela_Administracao_Dash_Resumo.png)
+<br>
+**Fonte: Autores (2026).**
+<br>
+A presente figura Exibe um resumo gerencial com indicadores financeiros e operacionais relevantes para a administradora.
+
+
+**Figura 69. Vídeo: Visão Cliente / Administradora (demonstração)**
+<br>
+[VisãoCliente — Administradora (vídeo demonstrativo)](media/VisaoCliente_Administradora_Video_1.mp4)
+<br>
+**Fonte: Autores (2026).**
+<br>
+Vídeo demonstrativo que apresenta a interação entre a visão do cliente e a visão administrativa durante um fluxo de aprovação e confirmação de agendamento.
+
+
 
 ## Direcionamento ao Dossiê
 
@@ -855,3 +948,9 @@ Para continuidade e consulta das evidências qualitativas, consulte o dossiê: -
 ## Direcionamento ao Fluxograma
 
 Para visualizar o fluxograma principal do sistema e outros diagramas de fluxo, consulte: - [Fluxogramas do Sistema](../diagramas/fluxograma.md)
+
+## REFERÊNCIAS
+
+Para a lista completa de referências utilizadas neste apêndice, consulte: [REFERÊNCIAS](REFERENCIAS.md)
+
+

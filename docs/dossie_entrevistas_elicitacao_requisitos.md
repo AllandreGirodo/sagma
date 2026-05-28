@@ -123,7 +123,7 @@ Para facilitar a correlação entre requisitos, interfaces e material de comunic
 <br>
 **Tela de Onboarding (apresentação)**
 <br>
-![Tela Onboarding - Apresentação](complementares/Tela_Onboarding_Bem_Vindo_Principal.png)
+![Tela Onboarding - Apresentação](complementares/client_ui/Tela_Onboarding_Bem_Vindo_Principal.png)
 <br>
 **Favicon / Ícone da aplicação**
 <br>
@@ -135,9 +135,9 @@ Fonte: Autores (2026). A entrevistada autorizou expressamente o uso dos logos e 
 <br>
 As três primeiras telas usadas para validar fluxos com a profissional foram incluídas como evidência visual:
 
-- Tela de Onboarding (Boas-vindas): `docs/complementares/Tela_Onboarding_Bem_Vindo_Principal.png`
-- Tela de Login do Cliente: `docs/complementares/Tela_Login_Cliente_Completo_Principal.png`
-- Tela de Resumo / Dashboard: `docs/complementares/Tela_DevTools_DB_Manager_Logs_Sistema_Tempo_Real.png`
+- Tela de Onboarding (Boas-vindas): `docs/complementares/client_ui/Tela_Onboarding_Bem_Vindo_Principal.png`
+- Tela de Login do Cliente: `docs/complementares/client_ui/Tela_Login_Cliente_Completo_Principal.png`
+- Tela de Resumo / Dashboard: `docs/complementares/infra/Tela_DevTools_DB_Manager_Logs_Sistema_Tempo_Real.png`
 <br>
 Estas telas foram fornecidas e aprovadas pela profissional e documentam a orientação visual inicial do cliente ao utilizar o aplicativo.
 

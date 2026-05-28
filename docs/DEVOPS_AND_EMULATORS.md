@@ -11,7 +11,7 @@ As funcionalidades de diagnóstico foram totalmente isoladas das áreas de negó
 
 **Figura 1. Tela Firebase Emulator Firestore Data**
 <br>
-![Tela Firebase Emulator Firestore Data](complementares/Tela_Firebase_Fluxo_Total_Infra_Nuvem.png)
+![Tela Firebase Emulator Firestore Data](complementares/infra/Tela_Firebase_Fluxo_Total_Infra_Nuvem.png)
 <br>
 **Fonte: Autores (2026).**
 <br>
@@ -69,7 +69,7 @@ flowchart LR
 
 **Figura 3. Tela Firebase Emulator Firestore Perfil Cliente Dados**
 <br>
-![Tela Firebase Emulator Firestore Perfil Cliente Dados](complementares/Tela_Firebase_Emulator_Firestore_Perfil_Cliente_Dados.png)
+![Tela Firebase Emulator Firestore Perfil Cliente Dados](complementares/infra/Tela_Firebase_Emulator_Firestore_Perfil_Cliente_Dados.png)
 <br>
 **Fonte: Autores (2026).**
 <br>
@@ -77,7 +77,7 @@ A presente figura ilustra a coleção de perfil do cliente no emulador, destacan
 
 **Figura 4. Diagrama Arquitetura Geral SAGMA**
 <br>
-![Diagrama Arquitetura Geral SAGMA](complementares/Diagrama_Arquitetura_Geral_SAGMA.png)
+![Diagrama Arquitetura Geral SAGMA](diagramas/generated_svgs/Diagrama_Arquitetura_Geral_SAGMA.png)
 <br>
 **Fonte: Autores (2026).**
 <br>

@@ -86,6 +86,8 @@ O sistema deve dar baixa automática de estoque ao encerrar uma sessão e vincul
 - O fluxo de aprovação de agendamento precisa ser manual para evitar conflitos de horário e permitir validação operacional da profissional.
 - O controle de pacotes deve ser integrado ao fechamento do atendimento, evitando divergência entre saldo exibido e saldo real.
 - O módulo de estoque deve preservar rastreabilidade por lote, sem reaproveitamento de insumos entre clientes.
+ - Observação sobre plataforma: a entrevistada informou utilizar dispositivos Android e tem familiaridade como usuária, mas não é desenvolvedora mobile; recomenda-se interfaces simples e consistentes para Android.
+ Detalkhes técnicos dev Citado android mas mobile engloba também iOS, e o sistema deve ser multiplataforma (Flutter) para atender a ambos os públicos.
 
 ---
 
@@ -119,11 +121,50 @@ Para facilitar a correlação entre requisitos, interfaces e material de comunic
 
 **Logos e ícones**
 <br>
-![Logo do projeto](../assets/Logo.jpg)
+<img src="../assets/Logo.jpg" alt="Logo do projeto" width="200" height="200" />
 <br>
 **Tela de Onboarding (apresentação)**
 <br>
-![Tela Onboarding - Apresentação](complementares/client_ui/Tela_Onboarding_Bem_Vindo_Principal.png)
+As três primeiras telas usadas para validar fluxos com a profissional foram incluídas como evidência visual:
+<br>
+<table>
+	<tr>
+		<td align="center">
+			<img src="complementares/client_ui/Tela_Onboarding_Bem_Vindo_Principal.png" alt="Onboarding - Bem Vindo" width="280" />
+			<br>
+			<strong>Onboarding — Bem-vindo</strong>
+		</td>
+		<td align="center">
+			<img src="complementares/client_ui/Tela_Onboarding_Historico_Completo.png" alt="Onboarding - Histórico" width="280" />
+			<br>
+			<strong>Onboarding — Histórico</strong>
+		</td>
+		<td align="center">
+			<img src="complementares/client_ui/Tela_Onboarding_Notificacoes_Automaticas.png" alt="Onboarding - Notificações" width="280" />
+			<br>
+			<strong>Onboarding — Notificações</strong>
+		</td>
+	</tr>
+</table>
+<br>
+**Login**
+<br>
+As telas de login utilizadas como referência (exibidas lado a lado):
+<br>
+<table>
+	<tr>
+		<td align="center">
+			<img src="complementares/client_ui/Tela_Login_Cliente_Completo_Principal.png" alt="Login Completo" width="320" />
+			<br>
+			<strong>Login — Completo</strong>
+		</td>
+		<td align="center">
+			<img src="complementares/client_ui/Tela_Login_Cliente.png" alt="Login Simples" width="320" />
+			<br>
+			<strong>Login — Simples</strong>
+		</td>
+	</tr>
+</table>
 <br>
 **Favicon / Ícone da aplicação Flutter e Web da Cliente**
 <br>
@@ -139,16 +180,43 @@ As duas versões do ícone são apresentadas abaixo: à esquerda a pré-visualiz
 			<code>windows/runner/resources/app_icon.ico</code>
 		</td>
 		<td align="center">
-			<img src="../lib/assets/Logo_favIcon.png" alt="Web/Android favicon" width="96" />
+			<img src="complementares/system/Logo_favIcon.png" alt="Web/Android favicon" width="96" />
 			<br>
 			<strong>Web / Android (favicon)</strong>
 			<br>
-			<code>lib/assets/Logo_favIcon.png</code>
+			<code>docs/complementares/system/Logo_favIcon.png</code>
 		</td>
 	</tr>
 </table>
 <br>
 **Fonte:** Autores. A entrevistada autorizou expressamente o uso dos logos e do ícone como material ilustrativo na documentação e como ícone/favico do sistema, mediante consentimento explícito e registrado.
+<br>
+---
+
+**Consentimento**
+<br>A entrevistada autorizou expressamente o uso dos dados coletados, dos requisitos extraídos e dos recursos visuais (logos, ícones, telas) como material ilustrativo na documentação do projeto e como base para a implementação do sistema, mediante consentimento explícito e registrado. O uso desses materiais deve respeitar a privacidade e os direitos de imagem da profissional, garantindo que qualquer menção ou representação seja feita de forma ética e alinhada com as expectativas acordadas durante as entrevistas. O consentimento inclui a utilização dos templates de mensagens automáticas para comunicação com clientes, desde que seja mantida a conformidade com as normas de proteção de dados e comunicação consentida.
+<br>
+<br>
+**Mensagens-padrão (templates)**
+<br>O sistema suporta envio de mensagens automáticas e templates via integração com WhatsApp (gatilhos: reserva solicitada, confirmação, lembrete, cancelamento). A seguir, exemplos de templates padronizados sugeridos e aprovados pela profissional:
+- Mensagem recebida do cliente (entrada no histórico, não enviada pelo sistema):
+> "Olá, gostaria de agendar uma sessão de massagem relaxante — qual melhor horário para esta semana?"
+- Mensagem automática enviada pelo sistema para confirmação (cliente ← sistema → WhatsApp):
+> "Olá {primeiro_nome}, sua solicitação de agendamento para {data} às {hora} foi registrada como *PENDENTE*. Você será notificada quando for aprovada. Obrigada! — {nome_clinica}"
+- Mensagem automática enviada pelo sistema como lembrete (24h antes):
+> "Lembrete: sua sessão de {procedimento} está agendada para {data} às {hora}. Caso precise reagendar, responda a esta mensagem ou acesse o app."
+- Mensagem enviada pela profissional via sistema (quando a profissional precisa comunicar algo pelo WhatsApp): 
+> "Olá {primeiro_nome}, aqui é a {nome_profissional}. Confirmei seu horário para {data} às {hora}. Trazer documento e chegar 10 minutos antes. Obrigada."
+<br>
+Os templates acima são exemplos recomendados. Todos os envios via WhatsApp devem respeitar o consentimento de comunicação do cliente e as regras da LGPD, mantendo opt-in explícito para mensagens promocionais.
+<br>
+Quando o sistema enviar mensagens automáticas, ele deve substituir as chaves `{primeiro_nome}`, `{data}`, `{hora}`, `{procedimento}` e `{nome_clinica}` pelos valores correspondentes do cliente e do agendamento. As mensagens devem ser claras, profissionais e alinhadas com a identidade visual da clínica, reforçando a marca e a confiança do cliente.
+<br>
+**Fonte:** Autores. A entrevistada autorizou expressamente o uso dos templates de mensagens como material ilustrativo na documentação e como base para os envios automáticos do sistema, mediante consentimento explícito e registrado.
+<br>
+---
+
+## 6. Referências e exemplos
 
 **Telas iniciais utilizadas como referência**
 <br>

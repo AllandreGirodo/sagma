@@ -520,7 +520,7 @@ class _LoginViewState extends State<LoginView> {
         // Como estamos usando Firebase Auth que persiste a sessão, se o currentUser não for nulo,
         // podemos pular o login. Se for nulo, a biometria serve apenas como "atalho" visual,
         // mas ainda precisaria de credenciais.
-        // Para o TCC, simularemos que a biometria valida o usuário atual se ele já estiver logado no cache.
+        // Para o projeto, simularemos que a biometria valida o usuário atual se ele já estiver logado no cache.
         final user = FirebaseAuth.instance.currentUser;
         if (user != null && mounted) {
           navigator.pushReplacement(

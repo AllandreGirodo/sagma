@@ -69,7 +69,7 @@ Desenvolver e validar um **MVP funcional** de um sistema de agendamento e gestã
 - **Pacotes:** controle de saldo de sessões por cliente; consumo por sessão.
 - **Relatórios simples:** listagem e filtros por data.
 
-### 5.2 Fora do escopo (neste TCC)
+### 5.2 Fora do escopo (neste MVP, mas possível extensão ou trabalho futuro)
 
 - Integração com meios de pagamento (PIX/cartão).
 - Emissão fiscal/nota.

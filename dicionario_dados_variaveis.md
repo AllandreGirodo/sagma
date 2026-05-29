@@ -135,4 +135,3 @@ No documento da transação, não salvamos apenas `cliente_uid: "123"`. Salvamos
 Dessa forma, mesmo que o perfil em `usuarios/{email}/perfil/cliente` seja anonimizado, o relatório financeiro continuará mostrando que "Maria Joaquina da Silva" pagou R$ 100,00 naquela data.
 
 ---
-*Documento para padronização do TCC - Agenda Massoterapia.*

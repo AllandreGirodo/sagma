@@ -3238,7 +3238,7 @@ class FirestoreService {
     var snapshot = await _db.collection(collectionPath).limit(500).get();
 
     // Firestore limita batches a 500 operações. Em produção, precisaria de um loop while.
-    // Para o TCC, assumimos que limpar 500 por vez é suficiente ou clicamos várias vezes.
+    // Para o projeto, assumimos que limpar 500 por vez é suficiente ou clicamos várias vezes.
     for (var doc in snapshot.docs) {
       batch.delete(doc.reference);
     }
@@ -3559,7 +3559,7 @@ class FirestoreService {
             ChangeLogModel(
               versao: '1.3.0',
               data: DateTime.now(),
-              autor: 'Dev TCC',
+              autor: 'Dev',
               mudancas: [
                 'Interatividade: Toque na tela para explodir fogos de artifício (Tema Aniversário).',
                 'Física Avançada: Simulação de gravidade para confetes e neve.',
@@ -3581,7 +3581,7 @@ class FirestoreService {
             ChangeLogModel(
               versao: '1.2.0',
               data: DateTime.now(),
-              autor: 'Dev TCC',
+              autor: 'Dev',
               mudancas: [
                 'Novos Temas Visuais: Cyberpunk, Tempestade, Carnaval, Aniversário e Espaço.',
                 'Efeitos de Fundo Animados: Neve, Chuva, Glitch, Confetes e Fogos de Artifício.',
@@ -3603,7 +3603,7 @@ class FirestoreService {
             ChangeLogModel(
               versao: '1.1.0',
               data: DateTime.now(),
-              autor: 'Dev TCC',
+              autor: 'Dev',
               mudancas: [
                 'Implementação de Anonimização de Conta (LGPD Art. 16).',
                 'Criação de Logs de Auditoria para dados sensíveis.',

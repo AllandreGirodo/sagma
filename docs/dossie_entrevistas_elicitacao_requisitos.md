@@ -1,17 +1,48 @@
 # Dossiê Técnico de Entrevistas e Elicitação de Requisitos
 
-**Projeto:** Sistema Multiplataforma de Agendamento e Gestão para Massoterapia
-**Instituição:** FATEC Ribeirão Preto - Curso de Análise e Desenvolvimento de Sistemas (ADS)
-**Data de consolidação:** maio de 2026
-**Desenvolvedor:** Autor do projeto
-**Entrevistada:** Andréia Araújo Campos Girodo
+<table style="width:100%; border-collapse:collapse;">
+	<colgroup>
+		<col style="width:24%;" />
+		<col style="width:76%;" />
+	</colgroup>
+	<tr>
+		<td><strong>Projeto</strong></td>
+		<td>Sistema Multiplataforma de Agendamento e Gestão para Massoterapia</td>
+	</tr>
+	<tr>
+		<td><strong>Instituição</strong></td>
+		<td>FATEC Ribeirão Preto - Curso de Análise e Desenvolvimento de Sistemas (ADS)</td>
+	</tr>
+	<tr>
+		<td><strong>Data de consolidação</strong></td>
+		<td>maio de 2026</td>
+	</tr>
+	<tr>
+		<td><strong>Desenvolvedor</strong></td>
+		<td>Autor do projeto</td>
+	</tr>
+	<tr>
+		<td><strong>Entrevistada</strong></td>
+		<td>Andréia Araújo Campos Girodo</td>
+	</tr>
+</table>
 
 ---
 
 <div align="center">
-	<img src="Massoterapeuta_Estética_Costmética.jpeg" alt="Massoterapeuta / Esteticista" width="220" />
-	<br>
-	<strong>Figura: Massoterapeuta / Esteticista</strong>
+	<table style="width:auto; border-collapse:collapse;">
+		<tr>
+			<td align="center">
+				<a href="Massoterapeuta_Estética_Costmética.jpeg">
+					<img src="Massoterapeuta_Estética_Costmética.jpeg" alt="Massoterapeuta / Esteticista" width="220" />
+				</a>
+				<br>
+				<strong>Figura: Diploma da Massoterapeuta / Esteticista</strong>
+				<br>
+				<small><a href="Massoterapeuta_Estética_Costmética.jpeg">🔍+</a> Visualização ampliada</small>
+			</td>
+		</tr>
+	</table>
 </div>
 
 **Formação:** Andréia Araújo Campos Girodo — graduada em Estética e Cosmética pela Universidade de Franca (UNIFRAN), turma 2019–2021.
@@ -105,11 +136,11 @@ Consulte o detalhamento completo em [Requisitos Funcionais e Não Funcionais](re
 
 Para facilitar a correlação entre requisitos, interfaces e material de comunicação, registramos abaixo os recursos visuais utilizados no projeto, o consentimento da profissional para seu uso e as mensagens-padrão geradas pelo sistema que interagem com o WhatsApp.
 
-**Logos e ícones**
+<strong>Logos e ícones</strong>
 <br>
 <img src="../assets/Logo.jpg" alt="Logo do projeto" width="200" height="200" />
 <br>
-**Tela de Onboarding (apresentação)**
+<strong>Tela de Onboarding (apresentação)</strong>
 <br>
 As três primeiras telas usadas para validar fluxos com a profissional foram incluídas como evidência visual:
 <br>
@@ -133,26 +164,21 @@ As três primeiras telas usadas para validar fluxos com a profissional foram inc
 	</tr>
 </table>
 <br>
-**Login**
+<strong>Login</strong>
 <br>
 As telas de login utilizadas como referência (exibidas lado a lado):
 <br>
 <table>
 	<tr>
 		<td align="center">
-			<img src="complementares/client_ui/Tela_Login_Cliente_Completo_Principal.png" alt="Login Completo" width="320" />
+			<img src="complementares/client_ui/Tela_Login_Cliente_Completo.png" alt="Login Completo" width="320" />
 			<br>
 			<strong>Login — Completo</strong>
-		</td>
-		<td align="center">
-			<img src="complementares/client_ui/Tela_Login_Cliente.png" alt="Login Simples" width="320" />
-			<br>
-			<strong>Login — Simples</strong>
 		</td>
 	</tr>
 </table>
 <br>
-**Favicon / Ícone da aplicação Flutter e Web da Cliente**
+<strong>Favicon / Ícone da aplicação Flutter e Web da Cliente</strong>
 <br>
 As duas versões do ícone são apresentadas abaixo: à esquerda a pré-visualização derivada do `app_icon.ico` (Windows / Flutter), à direita o favicon usado pela build Web/Android.
 <br>
@@ -175,15 +201,15 @@ As duas versões do ícone são apresentadas abaixo: à esquerda a pré-visualiz
 	</tr>
 </table>
 <br>
-**Fonte:** Autores. A entrevistada autorizou expressamente o uso dos logos e do ícone como material ilustrativo na documentação e como ícone/favico do sistema, mediante consentimento explícito e registrado.
+<strong>Fonte:</strong> Autores. A entrevistada autorizou expressamente o uso dos logos e do ícone como material ilustrativo na documentação e como ícone/favico do sistema, mediante consentimento explícito e registrado.
 <br>
 ---
 
-**Consentimento**
+<strong>Consentimento</strong>
 <br>A entrevistada autorizou expressamente o uso dos dados coletados, dos requisitos extraídos e dos recursos visuais (logos, ícones, telas) como material ilustrativo na documentação do projeto e como base para a implementação do sistema, mediante consentimento explícito e registrado. O uso desses materiais deve respeitar a privacidade e os direitos de imagem da profissional, garantindo que qualquer menção ou representação seja feita de forma ética e alinhada com as expectativas acordadas durante as entrevistas. O consentimento inclui a utilização dos templates de mensagens automáticas para comunicação com clientes, desde que seja mantida a conformidade com as normas de proteção de dados e comunicação consentida.
 <br>
 <br>
-**Mensagens-padrão (templates)**
+<strong>Mensagens-padrão (templates)</strong>
 <br>O sistema suporta envio de mensagens automáticas e templates via integração com WhatsApp (gatilhos: reserva solicitada, confirmação, lembrete, cancelamento). A seguir, exemplos de templates padronizados sugeridos e aprovados pela profissional:
 - Mensagem recebida do cliente (entrada no histórico, não enviada pelo sistema):
 > "Olá, gostaria de agendar uma sessão de massagem relaxante — qual melhor horário para esta semana?"
@@ -198,7 +224,7 @@ Os templates acima são exemplos recomendados. Todos os envios via WhatsApp deve
 <br>
 Quando o sistema enviar mensagens automáticas, ele deve substituir as chaves `{primeiro_nome}`, `{data}`, `{hora}`, `{procedimento}` e `{nome_clinica}` pelos valores correspondentes do cliente e do agendamento. As mensagens devem ser claras, profissionais e alinhadas com a identidade visual da clínica, reforçando a marca e a confiança do cliente.
 <br>
-**Fonte:** Autores. A entrevistada autorizou expressamente o uso dos templates de mensagens como material ilustrativo na documentação e como base para os envios automáticos do sistema, mediante consentimento explícito e registrado.
+<strong>Fonte:</strong> Autores. A entrevistada autorizou expressamente o uso dos templates de mensagens como material ilustrativo na documentação e como base para os envios automáticos do sistema, mediante consentimento explícito e registrado.
 <br>
 ---
 
@@ -206,19 +232,19 @@ Quando o sistema enviar mensagens automáticas, ele deve substituir as chaves `{
 
 Os dois últimos diagramas consolidados também foram registrados neste dossiê para correlacionar os requisitos com os fluxos de uso do sistema.
 
-**Diagrama 1. Casos de uso do cliente**
+<strong>Diagrama 1. Casos de uso do cliente</strong>
 <br>
 ![Casos de uso do cliente](diagramas/diagrama_casos_uso_cliente_agenda_massoterapia.png)
 <br>
-**Fonte: Autores.**
+<strong>Fonte: Autores.</strong>
 <br>
 Cumprido: o diagrama cobre autenticação, agendamento, acompanhamento de status e gestão de perfil do cliente.
 
-**Diagrama 2. Casos de uso da administradora**
+<strong>Diagrama 2. Casos de uso da administradora</strong>
 <br>
 ![Diagrama de Casos de Uso da Administradora](diagramas/diagrama_casos_uso_admin_agenda_massoterapia.png)
 <br>
-**Fonte: Autores.**
+<strong>Fonte: Autores.</strong>
 <br>
 Cumprido: o diagrama cobre aprovação de agendamentos, gestão operacional e apoio à administração da agenda.
 

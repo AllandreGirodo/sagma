@@ -1,4 +1,4 @@
-# Estrutura do Relatório Final de TCC (Baseada no Modelo Aprovado)
+# Estrutura do Relatório Final de Projeto (Baseada no Modelo Aprovado)
 
 ## 1. Elementos Pré-Textuais
 

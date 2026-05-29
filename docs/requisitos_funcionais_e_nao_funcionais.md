@@ -6,23 +6,47 @@ Este documento consolida os requisitos derivados do dossiê de entrevistas e da 
 
 ```mermaid
 flowchart TD
-    A[Requisitos do Sistema] --> B[Funcionais]
-    A --> C[Nao funcionais]
+    %% Definições de estilo
+    classDef func fill:#e6f7ff,stroke:#0b7285,color:#000;
+    classDef nonfunc fill:#fff4e6,stroke:#d97706,color:#000;
+    classDef neutral fill:#f3f4f6,stroke:#6b7280,color:#111;
 
-    B --> B1[Agenda e aprovacao]
-    B --> B2[Pacotes e pagamentos]
-    B --> B3[Clientes e importacao]
-    B --> B4[Estoque e lotes]
-    B --> B5[WhatsApp e notificacoes]
-    B --> B6[Relatorios e dashboards]
-    B --> B7[Multiagendas, perfis e idiomas]
+    subgraph REQ[Requisitos do Sistema]
+        direction LR
+        subgraph FUNC[Funcionais]
+            direction TB
+            F1[Agenda e aprovação]
+            F2[Pacotes e pagamentos]
+            F3[Clientes e importação]
+            F4[Estoque e lotes]
+            F5[WhatsApp e notificações]
+            F6[Relatórios e dashboards]
+            F7[Multiagendas, perfis e idiomas]
+        end
 
-    C --> C1[Seguranca e LGPD]
-    C --> C2[Performance e offline]
-    C --> C3[Usabilidade]
-    C --> C4[Escalabilidade]
-    C --> C5[Confiabilidade e auditoria]
-    C --> C6[Compatibilidade multiplataforma]
+        subgraph NFUNC[Não Funcionais]
+            direction TB
+            N1[Segurança e LGPD]
+            N2[Performance e offline]
+            N3[Usabilidade]
+            N4[Escalabilidade]
+            N5[Confiabilidade e auditoria]
+            N6[Compatibilidade multiplataforma]
+        end
+    end
+
+    %% Relações ilustrativas
+    F1 --> F2
+    F1 --> F3
+    F4 --> F5
+    F6 --> F7
+
+    %% Aplicar classes de cor
+    class F1,F2,F3,F4,F5,F6,F7 func
+    class N1,N2,N3,N4,N5,N6 nonfunc
+
+    %% Legenda/agrupamento neutro
+    class REQ neutral
 ```
 
 ## Requisitos Funcionais

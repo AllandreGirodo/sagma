@@ -1,4 +1,4 @@
-# Documentação do Projeto de TCC - Agenda Massoterapia
+# Documentação do Projeto - Agenda Massoterapia
 
 **Aluno:** [Removido para avaliação cega]
 **Orientador:** [Removido para avaliação cega]
@@ -74,7 +74,7 @@ As configurações globais são lidas em `configuracoes/geral`, enquanto a persi
 
 ## 2. Histórico de Desenvolvimento e Decisões Técnicas
 
-Esta seção registra os desafios encontrados durante a codificação e as soluções aplicadas, servindo de base para a defesa técnica do TCC.
+Esta seção registra os desafios encontrados durante a codificação e as soluções aplicadas, servindo de base para a defesa técnica do projeto.
 
 ### 2.1. Configuração de Dependências e Erros de Compilação
 *   **Problema:** Erro `Target of URI doesn't exist: 'package:url_launcher/url_launcher.dart'`.
@@ -172,7 +172,7 @@ O desenvolvimento deste projeto demonstrou a aplicação prática de diversos co
 
 ---
 
-## 5. Perguntas Frequentes durante o Desenvolvimento (FAQ TCC)
+## 5. Perguntas Frequentes durante o Desenvolvimento (FAQ Projeto)
 
 **P: Por que usar Flutter e não nativo (Kotlin/Swift)?**
 *R: Para permitir o desenvolvimento de uma única base de código que atenda tanto Android quanto iOS, reduzindo tempo de desenvolvimento e manutenção, ideal para um projeto de TCC individual.*
@@ -191,6 +191,14 @@ O desenvolvimento deste projeto demonstrou a aplicação prática de diversos co
 
 **P: Como o sistema lida com a falta de conexão à internet?**
 *R: O Firestore possui suporte offline. As operações de leitura e escrita são enfileiradas e sincronizadas automaticamente quando a conexão é restabelecida. O usuário recebe feedback visual (ex: "Salvando...") durante esse processo.*
+
+**   **P: O que acontece se o número de telefone da administradora mudar?**
+*R: O número é armazenado na coleção `configuracoes/geral`. A administradora pode atualizar esse valor diretamente no Firestore (via console ou interface de administração futura), e o app irá refletir a mudança sem necessidade de atualização nas lojas.*
+
+**P: O que acontece se o cliente tentar agendar um horário já ocupado?**
+*R: O sistema verifica conflitos de agenda no momento da solicitação. Se o horário já estiver ocupado para o mesmo profissional, o cliente recebe uma mensagem de erro solicitando que escolha outro horário.* 
+
+
 
 
 ---

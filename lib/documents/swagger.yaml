@@ -8,7 +8,7 @@ servers:
     description: Firebase Firestore REST API
     variables:
       projectId:
-        default: agenda-massoterapia-tcc
+        default: agenda-massoterapia
 
 paths:
   /usuarios:

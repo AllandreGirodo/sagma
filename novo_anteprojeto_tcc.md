@@ -1,8 +1,8 @@
 # Anteprojeto de Trabalho de Conclusão de Curso (TCC)
 
 **Título provisório:** Sistema de Agendamento e Gestão para Profissionais de Massoterapia utilizando Flutter e Dart  
-**Discente:** Allandre Ramos Girodo  
-**Orientador:** Prof. Júnior César Bonafim  
+**Discente:** [Removido para avaliação cega]  
+**Orientador:** [Removido para avaliação cega]  
 **Instituição:** Faculdade de Tecnologia de Ribeirão Preto (FATEC)  
 **Data:** Março de 2026  
 

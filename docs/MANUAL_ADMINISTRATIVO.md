@@ -7,7 +7,7 @@ O painel operativo do **SAGMA (Sistema de Agendamento e Gestão para Massoterapi
 <br>
 ![Tela Administração Dash Resumo](complementares/admin_ui/Tela_Administracao_Dash_Resumo.png)
 <br>
-**Fonte: Autores (2026).**
+**Fonte: Autores.**
 <br>
 A presente figura apresenta a visão consolidada dos indicadores analíticos da administradora, com métricas de acompanhamento diário, mensal e operacional.
 
@@ -24,7 +24,7 @@ A aba **Dash** atua como o centro de inteligência do negócio. Os dados nela ap
 <br>
 ![Tela Administração Clientes Detalhes Resumo](complementares/admin_ui/Tela_Administracao_Clientes_Detalhes_Resumo.png)
 <br>
-**Fonte: Autores (2026).**
+**Fonte: Autores.**
 <br>
 A presente figura evidencia a visão resumida de um cliente, concentrando dados cadastrais, ações de apoio e uma leitura rápida do contexto operacional.
 
@@ -37,7 +37,7 @@ A aba **Agenda** exibe a grade cronológica da profissional. A aba **Pendentes**
 <br>
 ![Diagrama Casos Uso Admin Agenda Massoterapia](diagramas/diagrama_casos_uso_admin_agenda_massoterapia.png)
 <br>
-**Fonte: Autores (2026).**
+**Fonte: Autores.**
 <br>
 A presente figura apresenta o diagrama de casos de uso da administradora, destacando as interações centrais entre triagem, aprovação, recusa e sincronização de agenda.
 
@@ -59,7 +59,7 @@ flowchart LR
 <br>
 ![Tela Google Agenda Semana Horarios](complementares/Tela_Google_Agenda_Semana_Horarios.png)
 <br>
-**Fonte: Autores (2026).**
+**Fonte: Autores.**
 <br>
 A presente figura ilustra a integração visual com a agenda externa, exibindo a organização semanal dos horários da profissional.
 
@@ -67,7 +67,7 @@ A presente figura ilustra a integração visual com a agenda externa, exibindo a
 <br>
 ![Tela Admin Pendentes Aprovacao Cadastro](complementares/Tela_Admin_Pendentes_Aprovacao_Cadastro.png)
 <br>
-**Fonte: Autores (2026).**
+**Fonte: Autores.**
 <br>
 A presente figura evidencia a fila de cadastros aguardando aprovação, etapa importante para a validação de novos clientes.
 
@@ -75,7 +75,7 @@ A presente figura evidencia a fila de cadastros aguardando aprovação, etapa im
 <br>
 ![Tela Admin Agendamentos Vazios Lista](complementares/Tela_Admin_Agendamentos_Vazios_Lista.png)
 <br>
-**Fonte: Autores (2026).**
+**Fonte: Autores.**
 <br>
 A presente figura mostra a tela de agendamentos quando a lista está vazia, evidenciando o estado inicial da gestão da agenda.
 
@@ -92,7 +92,7 @@ O módulo **Clientes** apresenta a base de usuários registrados (coleção `usu
 <br>
 ![Tela Admin Clientes Detalhes Completos](complementares/Tela_Admin_Clientes_Detalhes_Completos.png)
 <br>
-**Fonte: Autores (2026).**
+**Fonte: Autores.**
 <br>
 A presente figura apresenta a ficha detalhada de um cliente, reunindo informações cadastrais, histórico e controles administrativos.
 
@@ -100,7 +100,7 @@ A presente figura apresenta a ficha detalhada de um cliente, reunindo informaç�
 <br>
 ![Tela Administracao Clientes Tema Escuro](complementares/admin_ui/Tela_Administracao_Clientes_Tema_Escuro.png)
 <br>
-**Fonte: Autores (2026).**
+**Fonte: Autores.**
 <br>
 A presente figura ilustra a listagem de clientes no tema escuro, usada para validar contraste e conforto visual na administração.
 
@@ -108,7 +108,7 @@ A presente figura ilustra a listagem de clientes no tema escuro, usada para vali
 <br>
 ![Tela Administração Cadastro Estoque](complementares/admin_ui/Tela_Administracao_Cadastro_Estoque.png)
 <br>
-**Fonte: Autores (2026).**
+**Fonte: Autores.**
 <br>
 A presente figura mostra o formulário de cadastro de itens de estoque, utilizado para registrar e manter os insumos da clínica.
 
@@ -116,7 +116,7 @@ A presente figura mostra o formulário de cadastro de itens de estoque, utilizad
 <br>
 ![Tela Administração Controle Estoque](complementares/admin_ui/Tela_Administracao_Controle_Estoque.png)
 <br>
-**Fonte: Autores (2026).**
+**Fonte: Autores.**
 <br>
 A presente figura evidencia a lista de itens em estoque, com filtros, ajustes de quantidade e ações de gerenciamento.
 
@@ -141,7 +141,7 @@ O sistema permite que o administrador ajuste a interface para seu conforto ergon
 <br>
 ![Tela Administracao Escolher Tema Dialogo Preview](complementares/Tela_Administracao_Escolher_Tema_Dialogo_Preview.png)
 <br>
-**Fonte: Autores (2026).**
+**Fonte: Autores.**
 <br>
 A presente figura mostra a pré-visualização do tema antes da aplicação definitiva na interface administrativa.
 
@@ -149,7 +149,7 @@ A presente figura mostra a pré-visualização do tema antes da aplicação defi
 <br>
 ![Tela Administracao Escolher Tema Lista Opcoes](complementares/Tela_Administracao_Escolher_Tema_Lista_Opcoes.png)
 <br>
-**Fonte: Autores (2026).**
+**Fonte: Autores.**
 <br>
 A presente figura evidencia a lista de opções disponíveis para personalização do tema da interface.
 
@@ -157,7 +157,7 @@ A presente figura evidencia a lista de opções disponíveis para personalizaç�
 <br>
 ![Tela Administração Configurações 1](complementares/admin_ui/Tela_Administracao_Configurações1.png)
 <br>
-**Fonte: Autores (2026).**
+**Fonte: Autores.**
 <br>
 A presente figura exibe a primeira camada de parametrização administrativa, com ajustes gerais do sistema.
 
@@ -165,7 +165,7 @@ A presente figura exibe a primeira camada de parametrização administrativa, co
 <br>
 ![Tela Administração Configurações 2](complementares/admin_ui/Tela_Administracao_Configurações2.png)
 <br>
-**Fonte: Autores (2026).**
+**Fonte: Autores.**
 <br>
 A presente figura complementa a parametrização com opções de integração, políticas e comportamento operacional.
 
@@ -173,7 +173,7 @@ A presente figura complementa a parametrização com opções de integração, p
 <br>
 ![Tela Administração Configurações 3](complementares/admin_ui/Tela_Administracao_Configurações3.png)
 <br>
-**Fonte: Autores (2026).**
+**Fonte: Autores.**
 <br>
 A presente figura reúne controles adicionais de personalização e segurança sob responsabilidade da administração.
 
@@ -181,7 +181,7 @@ A presente figura reúne controles adicionais de personalização e segurança s
 <br>
 ![Tela Administração Configurações 4](complementares/admin_ui/Tela_Administracao_Configurações4.png)
 <br>
-**Fonte: Autores (2026).**
+**Fonte: Autores.**
 <br>
 A presente figura apresenta a aba final de configurações, com opções de manutenção e versionamento do sistema.
 
@@ -189,7 +189,7 @@ A presente figura apresenta a aba final de configurações, com opções de manu
 <br>
 ![Tela Administração Auditoria LGPD](complementares/admin_ui/Tela_Administracao_Auditoria_LGPD_Anonimização_de_Conta_Usuário_Excluído.png)
 <br>
-**Fonte: Autores (2026).**
+**Fonte: Autores.**
 <br>
 A presente figura documenta a auditoria de LGPD e o fluxo de anonimização de dados após a exclusão de uma conta, reforçando os critérios de privacidade e conformidade legal.
 
@@ -202,7 +202,7 @@ Além das telas principais, o repositório contém imagens suplementares na past
 <br>
 ![Tela Admin Dashboard Resumo Geral](complementares/Tela_Admin_Dashboard_Resumo_Geral.png)
 <br>
-**Fonte: Autores (2026).**
+**Fonte: Autores.**
 <br>
 Visão alternativa do painel executivo com foco em métricas consolidadas.
 
@@ -210,7 +210,7 @@ Visão alternativa do painel executivo com foco em métricas consolidadas.
 <br>
 ![Tela Admin Pendentes Aprovacao Cadastro](complementares/Tela_Admin_Pendentes_Aprovacao_Cadastro.png)
 <br>
-**Fonte: Autores (2026).**
+**Fonte: Autores.**
 <br>
 Fila de cadastros aguardando revisão administrativa.
 
@@ -218,7 +218,7 @@ Fila de cadastros aguardando revisão administrativa.
 <br>
 ![Tela Admin Clientes Detalhes Completos](complementares/Tela_Admin_Clientes_Detalhes_Completos.png)
 <br>
-**Fonte: Autores (2026).**
+**Fonte: Autores.**
 <br>
 Ficha detalhada do cliente com histórico e controles administrativos.
 
@@ -226,7 +226,7 @@ Ficha detalhada do cliente com histórico e controles administrativos.
 <br>
 ![Tela Admin Agendamentos Vazios Lista](complementares/Tela_Admin_Agendamentos_Vazios_Lista.png)
 <br>
-**Fonte: Autores (2026).**
+**Fonte: Autores.**
 <br>
 Estado da lista de agendamentos quando não há itens a exibir.
 
@@ -234,7 +234,7 @@ Estado da lista de agendamentos quando não há itens a exibir.
 <br>
 ![Tela Administração Config Sistema Padrao](complementares/Tela_Administracao_Config_Sistema_Padrao.png)
 <br>
-**Fonte: Autores (2026).**
+**Fonte: Autores.**
 <br>
 Configurações básicas do sistema acessíveis à administradora.
 
@@ -242,7 +242,7 @@ Configurações básicas do sistema acessíveis à administradora.
 <br>
 ![Tela Administração Métricas Diárias](complementares/Tela_Administracao_Metricas_Diarias.png)
 <br>
-**Fonte: Autores (2026).**
+**Fonte: Autores.**
 <br>
 Visão detalhada de métricas e séries temporais para acompanhamento operacional.
 
@@ -250,7 +250,7 @@ Visão detalhada de métricas e séries temporais para acompanhamento operaciona
 <br>
 ![Tela Administração Selecao Idioma](complementares/Tela_Administracao_Selecao_Idioma.png)
 <br>
-**Fonte: Autores (2026).**
+**Fonte: Autores.**
 <br>
 Opção administrativa para seleção de idioma e filtros de exibição.
 
@@ -258,7 +258,7 @@ Opção administrativa para seleção de idioma e filtros de exibição.
 <br>
 ![Tela Administração WhatsApp Aprovacao Template](complementares/Tela_Administracao_WhatsApp_Aprovacao_Template.png)
 <br>
-**Fonte: Autores (2026).**
+**Fonte: Autores.**
 <br>
 Modelo de mensagem usado para comunicação com clientes durante aprovações.
 
@@ -266,7 +266,7 @@ Modelo de mensagem usado para comunicação com clientes durante aprovações.
 <br>
 ![Tela Administração Nova Senha Admin](complementares/Tela_Administracao_Nova_Senha_Admin.png)
 <br>
-**Fonte: Autores (2026).**
+**Fonte: Autores.**
 <br>
 Interface de recuperação/definição de senha para usuários administrativos.
 
@@ -274,7 +274,7 @@ Interface de recuperação/definição de senha para usuários administrativos.
 <br>
 ![Tela Versão App Pendente Listagem](complementares/Tela_Versao_App_Pendente_Listagem.png)
 <br>
-**Fonte: Autores (2026).**
+**Fonte: Autores.**
 <br>
 Exemplo de listagem de versões e itens pendentes relacionados ao aplicativo.
 

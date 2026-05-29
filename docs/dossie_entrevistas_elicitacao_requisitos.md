@@ -3,7 +3,7 @@
 **Projeto:** Sistema Multiplataforma de Agendamento e Gestão para Massoterapia
 **Instituição:** FATEC Ribeirão Preto - Curso de Análise e Desenvolvimento de Sistemas (ADS)
 **Data de consolidação:** maio de 2026
-**Desenvolvedor:** Allandre Ramos Girodo
+**Desenvolvedor:** Autor do projeto
 **Entrevistada:** Andreia Araújo Campos Girodo
 
 ---
@@ -97,15 +97,15 @@ Os dois últimos diagramas consolidados também foram registrados neste dossiê 
 <br>
 ![Casos de uso do cliente](diagramas/diagrama_casos_uso_cliente_agenda_massoterapia.png)
 <br>
-**Fonte: Autores (2026).**
+**Fonte: Autores.**
 <br>
 Cumprido: o diagrama cobre autenticação, agendamento, acompanhamento de status e gestão de perfil do cliente.
 
 **Diagrama 2. Casos de uso da administradora**
 <br>
-![Casos de uso da administradora](diagramas/diagrama_casos_uso_admin_agenda_massoterapia.png)
+![Diagrama de Casos de Uso da Administradora](diagramas/diagrama_casos_uso_admin_agenda_massoterapia.png)
 <br>
-**Fonte: Autores (2026).**
+**Fonte: Autores.**
 <br>
 Cumprido: o diagrama cobre aprovação de agendamentos, gestão operacional e apoio à administração da agenda.
 
@@ -125,11 +125,30 @@ Para facilitar a correlação entre requisitos, interfaces e material de comunic
 <br>
 ![Tela Onboarding - Apresentação](complementares/client_ui/Tela_Onboarding_Bem_Vindo_Principal.png)
 <br>
-**Favicon / Ícone da aplicação**
+**Favicon / Ícone da aplicação Flutter e Web da Cliente**
 <br>
-- `windows/runner/resources/app_icon.ico` (ícone usado no pacote Windows / instalador)
+As duas versões do ícone são apresentadas abaixo: à esquerda a pré-visualização derivada do `app_icon.ico` (Windows / Flutter), à direita o favicon usado pela build Web/Android.
 <br>
-Fonte: Autores (2026). A entrevistada autorizou expressamente o uso dos logos e do ícone como material ilustrativo na documentação e como ícone/favico do sistema, mediante consentimento explícito e registrado.
+<table>
+	<tr>
+		<td align="center">
+			<img src="complementares/system/app_icon_preview.png" alt="Original (app_icon.ico)" width="96" />
+			<br>
+			<strong>Original (Flutter / Windows .ico preview)</strong>
+			<br>
+			<code>windows/runner/resources/app_icon.ico</code>
+		</td>
+		<td align="center">
+			<img src="../lib/assets/Logo_favIcon.png" alt="Web/Android favicon" width="96" />
+			<br>
+			<strong>Web / Android (favicon)</strong>
+			<br>
+			<code>lib/assets/Logo_favIcon.png</code>
+		</td>
+	</tr>
+</table>
+<br>
+**Fonte:** Autores. A entrevistada autorizou expressamente o uso dos logos e do ícone como material ilustrativo na documentação e como ícone/favico do sistema, mediante consentimento explícito e registrado.
 
 **Telas iniciais utilizadas como referência**
 <br>

@@ -41,5 +41,12 @@ Todas as solicitações de exclusão e alterações sensíveis são registradas 
 
 - Apêndice de imagens complementares: [docs/complementares/APÊNDICE_imagens_complementares_SAGMA.md](../../docs/complementares/APÊNDICE_imagens_complementares_SAGMA.md)
 
+## Referências
+- BRASIL. Lei nº 13.709, de 14 de agosto de 2018. Dispõe sobre a Proteção de Dados Pessoais (LGPD). Brasília, DF: Presidência da República, [2018]. Disponível em: https://www.planalto.gov.br/ccivil_03/_ato2015-2018/2018/lei/l13709.htm. Acesso em: 28 maio 2026.
+- ISO/IEC. ISO/IEC 27001:2022: Information security, cybersecurity and privacy protection - Information security management systems - Requirements. Genebra: ISO, 2022.
+- CANNIATTI, A. C. B. Auditoria de sistemas de informação. São Paulo: Editora Sol, 2012.
+- FIREBASE. Firebase Documentation. Disponível em: https://firebase.google.com/docs. Acesso em: 28 maio 2026.
+- FLUTTER. Flutter Documentation. Disponível em: https://docs.flutter.dev. Acesso em: 30 mar. 2026.
+
 ---
 *Documento técnico para fins de desenvolvimento e auditoria do sistema.*

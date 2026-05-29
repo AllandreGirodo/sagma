@@ -1,7 +1,7 @@
 # Documentação do Projeto de TCC - Agenda Massoterapia
 
-**Aluno:** Allandre Ramos Girodo  
-**Orientador:** Prof. Júnior César Bonafim
+**Aluno:** [Removido para avaliação cega]
+**Orientador:** [Removido para avaliação cega]
 **Tema:** Sistema de Agendamento e Gestão para Clínica de Massoterapia
 **Tecnologias:** Flutter, Firebase (Auth, Firestore, Storage), Dart.
 

@@ -13,7 +13,7 @@ As funcionalidades de diagnóstico foram totalmente isoladas das áreas de negó
 <br>
 ![Tela Firebase Emulator Firestore Data](complementares/infra/Tela_Firebase_Fluxo_Total_Infra_Nuvem.png)
 <br>
-**Fonte: Autores (2026).**
+**Fonte: Autores.**
 <br>
 A presente figura apresenta o painel do Firebase Emulator com a coleção Firestore em modo de diagnóstico, evidenciando a inspeção de dados em ambiente local.
 
@@ -27,7 +27,7 @@ Interface embarcada no app para monitoramento do NoSQL (Firestore):
 <br>
 ![Tela Dev Acesso Banco Dados Senha Admin](complementares/Tela_Dev_Acesso_Banco_Dados_Senha_Admin.png)
 <br>
-**Fonte: Autores (2026).**
+**Fonte: Autores.**
 <br>
 A presente figura registra a etapa de proteção do acesso ao banco de dados em ambiente DEV, exigindo a senha administrativa configurada conforme o padrão definido em [.env.example](../.env.example) para habilitar as rotinas de diagnóstico.
 
@@ -71,7 +71,7 @@ flowchart LR
 <br>
 ![Tela Firebase Emulator Firestore Perfil Cliente Dados](complementares/infra/Tela_Firebase_Emulator_Firestore_Perfil_Cliente_Dados.png)
 <br>
-**Fonte: Autores (2026).**
+**Fonte: Autores.**
 <br>
 A presente figura ilustra a coleção de perfil do cliente no emulador, destacando a persistência local dos dados utilizados nos testes.
 
@@ -79,7 +79,7 @@ A presente figura ilustra a coleção de perfil do cliente no emulador, destacan
 <br>
 ![Diagrama Arquitetura Geral SAGMA](diagramas/generated_svgs/Diagrama_Arquitetura_Geral_SAGMA.png)
 <br>
-**Fonte: Autores (2026).**
+**Fonte: Autores.**
 <br>
 A presente figura resume a arquitetura geral do SAGMA, conectando cliente, administradora, banco de dados e integrações externas.
 

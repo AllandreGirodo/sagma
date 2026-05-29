@@ -4,9 +4,22 @@
 **Instituição:** FATEC Ribeirão Preto - Curso de Análise e Desenvolvimento de Sistemas (ADS)
 **Data de consolidação:** maio de 2026
 **Desenvolvedor:** Autor do projeto
-**Entrevistada:** Andreia Araújo Campos Girodo
+**Entrevistada:** Andréia Araújo Campos Girodo
 
 ---
+
+<div align="center">
+	<img src="Massoterapeuta_Estética_Costmética.jpeg" alt="Massoterapeuta / Esteticista" width="220" />
+	<br>
+	<strong>Figura: Massoterapeuta / Esteticista</strong>
+</div>
+
+**Formação:** Andréia Araújo Campos Girodo — graduada em Estética e Cosmética pela Universidade de Franca (UNIFRAN), turma 2019–2021.
+**Experiência:** 4 anos atuando como massoterapeuta e esteticista, com foco em atendimentos domiciliares e itinerantes na região de Ribeirão Preto (DDD 16). Atualmente, atende uma base de clientes regulares em histórico de atendimento, oferecendo serviços de massagem relaxante, drenagem linfática e cuidados estéticos corporais.
+
+---
+
+
 
 ## 1. Introdução e escopo
 
@@ -19,6 +32,8 @@ Além dos sintomas operacionais, este dossiê explicita causas prováveis observ
 ---
 
 ## 2. Ciclo de entrevistas semiestruturadas
+
+Durante as sessões, foram exploradas questões pré-definidas sobre a rotina de atendimentos, anamnese e fluxos de caixa, permitindo ampla compreensão das necessidades reais do negócio sem desviar do escopo do MVP, onde foram identificados os requisitos funcionais e não funcionais.
 
 ### 2.1 Entrevista 1 - Organização da agenda e concorrência de horários
 
@@ -62,56 +77,27 @@ O sistema deve dar baixa automática de estoque ao encerrar uma sessão e vincul
 
 ---
 
-## 3. Especificação de requisitos derivados
+## 3. Tela de Requisitos
 
-### 3.1 Requisitos funcionais
+Os requisitos funcionais e não funcionais foram detalhados em um documento próprio para manter este dossiê mais objetivo.
 
-- **RF01 - Controle de acesso por perfil:** o sistema deve separar interfaces e permissões entre Profissional e Cliente.
-- **RF02 - Importação e higienização de clientes:** o sistema deve ler listas de clientes, extrair apenas o primeiro nome para mensagens e higienizar números de telefone. Caso a string possua 9 dígitos numéricos isolados, o sistema deve inserir o prefixo de DDD 16.
-- **RF03 - Máquina de estados de agendamento:** o campo `status` das consultas deve seguir o fluxo `solicitado` -> `aprovado` -> (`realizado` | `cancelado_com_onus` | `cancelado_sem_onus`).
-- **RF04 - Bloqueio de inadimplência:** o sistema deve impedir solicitações de agendamento se o pacote vinculado estiver com status de pagamento pendente.
-- **RF05 - Controle sanitário de estoque:** o sistema deve exigir a seleção do lote do cosmético utilizado ao encerrar a sessão como realizada, decrementando a quantidade correspondente do estoque.
-
-### 3.2 Requisitos não funcionais
-
-- **RNF01 - Execução segura de saldos:** a baixa de saldo de pacotes e de estoque deve ocorrer de forma atômica, garantindo consistência mesmo em cenários de queda de conexão móvel.
-- **RNF02 - Proteção de concorrência de grade:** o sistema deve bloquear requisições assíncronas simultâneas para o mesmo horário na agenda da profissional.
-- **RNF03 - Anonimização parcial e LGPD:** caso um usuário solicite exclusão de conta, o sistema deve apagar dados pessoais identificáveis, mas manter de forma mascarada os registros de faturamento e os logs de utilização de lotes por motivos de segurança jurídica.
+Consulte o detalhamento completo em [Requisitos Funcionais e Não Funcionais](requisitos_funcionais_e_nao_funcionais.md).
 
 ---
 
-## 4. Observações de modelagem e implementação
+## 4. Diagrama de casos de uso
+
+[Análise de Requisitos e Casos de Uso](analise_requisitos_casos_uso.md)
+
+---
+
+## 5. Observações de modelagem e implementação
 
 - A importação de clientes deve tratar nomes compostos e apelidos informais antes de gerar textos automáticos de confirmação.
 - O fluxo de aprovação de agendamento precisa ser manual para evitar conflitos de horário e permitir validação operacional da profissional.
 - O controle de pacotes deve ser integrado ao fechamento do atendimento, evitando divergência entre saldo exibido e saldo real.
 - O módulo de estoque deve preservar rastreabilidade por lote, sem reaproveitamento de insumos entre clientes.
- - Observação sobre plataforma: a entrevistada informou utilizar dispositivos Android e tem familiaridade como usuária, mas não é desenvolvedora mobile; recomenda-se interfaces simples e consistentes para Android.
- Detalkhes técnicos dev Citado android mas mobile engloba também iOS, e o sistema deve ser multiplataforma (Flutter) para atender a ambos os públicos.
-
----
-
-## 5. Diagramas de apoio aos requisitos
-
-Os dois últimos diagramas consolidados também foram registrados neste dossiê para correlacionar os requisitos com os fluxos de uso do sistema.
-
-**Diagrama 1. Casos de uso do cliente**
-<br>
-![Casos de uso do cliente](diagramas/diagrama_casos_uso_cliente_agenda_massoterapia.png)
-<br>
-**Fonte: Autores.**
-<br>
-Cumprido: o diagrama cobre autenticação, agendamento, acompanhamento de status e gestão de perfil do cliente.
-
-**Diagrama 2. Casos de uso da administradora**
-<br>
-![Diagrama de Casos de Uso da Administradora](diagramas/diagrama_casos_uso_admin_agenda_massoterapia.png)
-<br>
-**Fonte: Autores.**
-<br>
-Cumprido: o diagrama cobre aprovação de agendamentos, gestão operacional e apoio à administração da agenda.
-
-Os diagramas completos também podem ser consultados nos manuais correlatos: [Manual do Cliente](MANUAL_CLIENTE.md) e [Manual Administrativo](MANUAL_ADMINISTRATIVO.md).
+- Observação sobre plataforma: a entrevistada informou utilizar dispositivos Android e tem familiaridade como usuária, mas não é desenvolvedora mobile; recomenda-se interfaces simples e consistentes para Android. O sistema permanece multiplataforma, com Flutter cobrindo também iOS.
 
 ---
 
@@ -216,50 +202,30 @@ Quando o sistema enviar mensagens automáticas, ele deve substituir as chaves `{
 <br>
 ---
 
-## 6. Referências e exemplos
+## 7. Diagramas de apoio aos requisitos
 
-**Telas iniciais utilizadas como referência**
+Os dois últimos diagramas consolidados também foram registrados neste dossiê para correlacionar os requisitos com os fluxos de uso do sistema.
+
+**Diagrama 1. Casos de uso do cliente**
 <br>
-As três primeiras telas usadas para validar fluxos com a profissional foram incluídas como evidência visual:
-
-- Tela de Onboarding (Boas-vindas): `docs/complementares/client_ui/Tela_Onboarding_Bem_Vindo_Principal.png`
-- Tela de Login do Cliente: `docs/complementares/client_ui/Tela_Login_Cliente_Completo_Principal.png`
-- Tela de Resumo / Dashboard: `docs/complementares/infra/Tela_DevTools_DB_Manager_Logs_Sistema_Tempo_Real.png`
+![Casos de uso do cliente](diagramas/diagrama_casos_uso_cliente_agenda_massoterapia.png)
 <br>
-Estas telas foram fornecidas e aprovadas pela profissional e documentam a orientação visual inicial do cliente ao utilizar o aplicativo.
-
-**Privacidade entre clientes**
+**Fonte: Autores.**
 <br>
-A entrevistada confirmou explicitamente durante as entrevistas que "uma cliente não vê a outra" — ou seja, não há visualização de terceiros na interface do cliente. Complementando esse ponto: o sistema deve garantir que cada cliente só tenha acesso aos seus próprios agendamentos, histórico e dados pessoais (visibilidade de agenda restrita por UID). Qualquer listagem ou relatório que possua informações de terceiros deverá ser acessível apenas por perfis administrativos com autenticação reforçada. Essa separação também implica que notificações e mensagens exibidas ao cliente não devem conter nomes, contatos ou detalhes de outras clientes.
+Cumprido: o diagrama cobre autenticação, agendamento, acompanhamento de status e gestão de perfil do cliente.
 
-**Horário de descanso (bloqueio de grade)**
+**Diagrama 2. Casos de uso da administradora**
 <br>
-A profissional relatou possuir um período de descanso diário que deve ser automaticamente bloqueado pela grade da agenda. Exemplo configurável: `12:30–13:30` (valor parametrizável no painel administrativo). O requisito funcional resultante é que o sistema permita definir janelas fixas de indisponibilidade por dia/semana que impeçam a reserva de horários no intervalo configurado.
-
-**Mensagens-padrão (templates) — fluxo WhatsApp**
+![Diagrama de Casos de Uso da Administradora](diagramas/diagrama_casos_uso_admin_agenda_massoterapia.png)
 <br>
-O sistema suporta envio de mensagens automáticas e templates via integração com WhatsApp (gatilhos: reserva solicitada, confirmação, lembrete, cancelamento). Abaixo exemplos de templates padronizados sugeridos e aprovados pela profissional:
+**Fonte: Autores.**
+<br>
+Cumprido: o diagrama cobre aprovação de agendamentos, gestão operacional e apoio à administração da agenda.
 
-- Mensagem recebida do cliente (entrada no histórico, não enviada pelo sistema):
-
-> "Olá, gostaria de agendar uma sessão de massagem relaxante — qual melhor horário para esta semana?"
-
-- Mensagem automática enviada pelo sistema para confirmação (cliente ← sistema → WhatsApp):
-
-> "Olá {primeiro_nome}, sua solicitação de agendamento para {data} às {hora} foi registrada como *PENDENTE*. Você será notificada quando for aprovada. Obrigada! — {nome_clinica}"
-
-- Mensagem automática enviada pelo sistema como lembrete (24h antes):
-
-> "Lembrete: sua sessão de {procedimento} está agendada para {data} às {hora}. Caso precise reagendar, responda a esta mensagem ou acesse o app."
-
-- Mensagem enviada pela profissional via sistema (quando a profissional precisa comunicar algo pelo WhatsApp):
-
-> "Olá {primeiro_nome}, aqui é a {nome_profissional}. Confirmei seu horário para {data} às {hora}. Trazer documento e chegar 10 minutos antes. Obrigada."
-
-Os templates acima são exemplos recomendados. Todos os envios via WhatsApp devem respeitar o consentimento de comunicação do cliente e as regras da LGPD, mantendo opt-in explícito para mensagens promocionais.
+Os diagramas completos também podem ser consultados nos manuais correlatos: [Manual do Cliente](MANUAL_CLIENTE.md) e [Manual Administrativo](MANUAL_ADMINISTRATIVO.md).
 
 ---
 
-## 7. Encaminhamento para documentação do projeto
+## 8. Encaminhamento para documentação do projeto
 
-Este dossiê pode ser usado como base para o capítulo de levantamento de requisitos e para a seção de metodologia no relatório final. Para continuidade da documentação técnica do projeto, ele deve ser associado aos diagramas consolidados em [DIAGRAMAS.md](../DIAGRAMAS.md).
+Este dossiê pode ser usado como base para o capítulo de levantamento de requisitos e para a seção de metodologia no relatório final. Para continuidade da documentação técnica do projeto, ele deve ser associado aos diagramas consolidados em [DIAGRAMAS.md](../DIAGRAMAS.md), aos requisitos detalhados em [Requisitos Funcionais e Não Funcionais](requisitos_funcionais_e_nao_funcionais.md) e ao resumo de [Funcionalidades Sistêmicas e Infraestrutura](funcionalidades_sistemicas_e_infraestrutura.md).

@@ -29,21 +29,6 @@
 
 ---
 
-<div align="center">
-	<table style="width:auto; border-collapse:collapse;">
-		<tr>
-			<td align="center">
-				<a href="Massoterapeuta_Estética_Costmética.jpeg">
-					<img src="Massoterapeuta_Estética_Costmética.jpeg" alt="Massoterapeuta / Esteticista" width="220" />
-				</a>
-				<br>
-				<strong>Figura: Diploma da Massoterapeuta / Esteticista</strong>
-				<br>
-				<small><a href="Massoterapeuta_Estética_Costmética.jpeg">🔍+</a> Visualização ampliada</small>
-			</td>
-		</tr>
-	</table>
-</div>
 
 **Formação:** Andréia Araújo Campos Girodo — graduada em Estética e Cosmética pela Universidade de Franca (UNIFRAN), turma 2019–2021.
 **Experiência:** 4 anos atuando como massoterapeuta e esteticista, com foco em atendimentos domiciliares e itinerantes na região de Ribeirão Preto (DDD 16). Atualmente, atende uma base de clientes regulares em histórico de atendimento, oferecendo serviços de massagem relaxante, drenagem linfática e cuidados estéticos corporais.

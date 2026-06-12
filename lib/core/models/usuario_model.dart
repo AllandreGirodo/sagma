@@ -69,6 +69,11 @@ class UsuarioModel {
 
   // Converter para Map (para salvar no Firestore)
   Map<String, dynamic> toMap() {
+    final tipoUsuarioFirestore = tipo == 'admin' ? 'Administrador' : 'Cliente';
+    final statusAprovacaoFirestore = aprovado
+        ? 'aprovado'
+        : (reprovado ? 'reprovado' : 'pendente');
+
     final map = <String, dynamic>{
       'id': id,
       'nome': nome,
@@ -79,7 +84,9 @@ class UsuarioModel {
       'nome_cliente_normalizado':
           nomeClienteNormalizado ?? (nomeCliente ?? nome).trim().toLowerCase(),
       'tipo': tipo,
+      'tipo_usuario': tipoUsuarioFirestore,
       'aprovado': aprovado,
+      'status_aprovacao': statusAprovacaoFirestore,
       'data_cadastro': dataCadastro != null
           ? Timestamp.fromDate(dataCadastro!)
           : FieldValue.serverTimestamp(),
@@ -98,8 +105,8 @@ class UsuarioModel {
       'locale': locale,
       'admin_atrelada_id': adminAtreladaId,
       'dev_master': devMaster,
-        'reprovado': reprovado,
-        'data_reprovacao': dataReprovacao != null
+      'reprovado': reprovado,
+      'data_reprovacao': dataReprovacao != null
           ? Timestamp.fromDate(dataReprovacao!)
           : null,
       'lgpd_consentido': lgpdConsentido,
@@ -124,8 +131,21 @@ class UsuarioModel {
       email: map['email'] ?? '',
       emailNormalizado: map['email_normalizado'] as String?,
       nomeClienteNormalizado: map['nome_cliente_normalizado'] as String?,
-      tipo: map['tipo'] ?? 'cliente',
-      aprovado: map['aprovado'] ?? false,
+      tipo:
+          (map['tipo'] ??
+                  (() {
+                    final tipoUsuario = (map['tipo_usuario'] as String? ?? '')
+                        .trim()
+                        .toLowerCase();
+                    if (tipoUsuario == 'administrador') return 'admin';
+                    if (tipoUsuario == 'cliente') return 'cliente';
+                    return 'cliente';
+                  })())
+              as String,
+      aprovado:
+          map['aprovado'] as bool? ??
+          ((map['status_aprovacao'] as String? ?? '').trim().toLowerCase() ==
+              'aprovado'),
       dataCadastro: map['data_cadastro'] != null
           ? (map['data_cadastro'] as Timestamp).toDate()
           : null,
@@ -133,20 +153,20 @@ class UsuarioModel {
       visualizaTodos: map['visualiza_todos'] ?? false,
       theme: map['theme'],
       whatsapp: map['whatsapp'] as String?,
-        ddi: map['ddi'] as String?,
-        telefonePrincipal:
+      ddi: map['ddi'] as String?,
+      telefonePrincipal:
           map['telefone_principal'] as String? ?? map['whatsapp'] as String?,
-        nomeContatoSecundario: map['nome_contato_secundario'] as String?,
-        telefoneSecundario: map['telefone_secundario'] as String?,
-        nomeIndicacao: map['nome_indicacao'] as String?,
-        telefoneIndicacao: map['telefone_indicacao'] as String?,
-        categoriaOrigem: map['categoria_origem'] as String?,
+      nomeContatoSecundario: map['nome_contato_secundario'] as String?,
+      telefoneSecundario: map['telefone_secundario'] as String?,
+      nomeIndicacao: map['nome_indicacao'] as String?,
+      telefoneIndicacao: map['telefone_indicacao'] as String?,
+      categoriaOrigem: map['categoria_origem'] as String?,
       numeroEhWhatsapp: map['numero_e_whatsapp'] as bool? ?? true,
       locale: map['locale'] as String?,
       adminAtreladaId: map['admin_atrelada_id'] as String?,
       devMaster: map['dev_master'] as bool? ?? false,
-        reprovado: map['reprovado'] as bool? ?? false,
-        dataReprovacao: map['data_reprovacao'] != null
+      reprovado: map['reprovado'] as bool? ?? false,
+      dataReprovacao: map['data_reprovacao'] != null
           ? (map['data_reprovacao'] as Timestamp).toDate()
           : null,
       lgpdConsentido: map['lgpd_consentido'] as bool? ?? false,

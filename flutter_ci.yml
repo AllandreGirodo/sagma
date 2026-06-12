@@ -53,6 +53,7 @@ jobs:
           FIREBASE_IOS_BUNDLE_ID=${{ secrets.FIREBASE_IOS_BUNDLE_ID }}
           PUSH_NOTIFICATION_FUNCTION_NAME=${{ secrets.PUSH_NOTIFICATION_FUNCTION_NAME }}
           RANDOM_MESSAGES_FUNCTION_NAME=${{ secrets.RANDOM_MESSAGES_FUNCTION_NAME }}
+          FIRESTORE_HEALTHCHECK_URL=${{ secrets.FIRESTORE_HEALTHCHECK_URL }}
           EOF
 
       - name: 🧪 Executar Testes com Verificação de Cobertura
@@ -60,17 +61,18 @@ jobs:
           sudo apt-get update -qq
           sudo apt-get install -y lcov
           flutter test --coverage
-          
+
           # Gera resumo e extrai a porcentagem
           lcov --summary coverage/lcov.info
           COVERAGE=$(lcov --summary coverage/lcov.info | grep "lines......" | cut -d ':' -f 2 | cut -d '%' -f 1 | xargs)
           echo "Cobertura Atual: $COVERAGE%"
-          
+          echo "COVERAGE=$COVERAGE" >> $GITHUB_ENV
+
           # Verifica se é menor que 80%
           if (( $(echo "$COVERAGE < 80" | bc -l) )); then
             echo "❌ Erro: Cobertura de testes abaixo de 80%!"
             exit 1
-          fi 
+          fi
 
       - name: 🏷️ Atualizar Badge no README
         if: github.ref == 'refs/heads/main'
@@ -120,13 +122,20 @@ jobs:
           FIREBASE_IOS_BUNDLE_ID=${{ secrets.FIREBASE_IOS_BUNDLE_ID }}
           PUSH_NOTIFICATION_FUNCTION_NAME=${{ secrets.PUSH_NOTIFICATION_FUNCTION_NAME }}
           RANDOM_MESSAGES_FUNCTION_NAME=${{ secrets.RANDOM_MESSAGES_FUNCTION_NAME }}
+          FIRESTORE_HEALTHCHECK_URL=${{ secrets.FIRESTORE_HEALTHCHECK_URL }}
           EOF
 
       - name: 🚀 Build APK (Produção)
         if: github.ref == 'refs/heads/main'
         run: |
-          chmod +x build_prod.sh
-          ./build_prod.sh
+          flutter build apk --release \
+            --dart-define=ENV=prod \
+            --dart-define=FIREBASE_PROJECT_ID=${{ secrets.FIREBASE_PROJECT_ID }} \
+            --dart-define=FIREBASE_MESSAGING_SENDER_ID=${{ secrets.FIREBASE_MESSAGING_SENDER_ID }} \
+            --dart-define=FIREBASE_STORAGE_BUCKET=${{ secrets.FIREBASE_STORAGE_BUCKET }} \
+            --dart-define=FIREBASE_ANDROID_API_KEY=${{ secrets.FIREBASE_ANDROID_API_KEY }} \
+            --dart-define=FIREBASE_ANDROID_APP_ID=${{ secrets.FIREBASE_ANDROID_APP_ID }} \
+            --dart-define=WHATSAPP_ADMIN=${{ secrets.WHATSAPP_ADMIN }}
 
       - name: 📤 Upload do APK como Artefato
         if: github.ref == 'refs/heads/main'

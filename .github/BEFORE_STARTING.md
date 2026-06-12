@@ -51,7 +51,35 @@ flutter run
 
 ---
 
-### 5️⃣ (Web Debug) Configure App Check Debug Token
+### 5️⃣ Deploy das Cloud Functions (primeiro uso ou após alterações)
+
+As Cloud Functions são necessárias para push notifications e lembretes automáticos.
+
+```bash
+# Instale as dependências das functions
+cd functions
+npm install
+cd ..
+
+# Faça deploy (requer firebase-tools instalado e login ativo)
+firebase deploy --only functions
+```
+
+> Se ainda não tiver o Firebase CLI: `npm install -g firebase-tools && firebase login`
+
+Após o deploy, verifique no [Firebase Console](https://console.firebase.google.com) → **Functions** se todas as 6 funções aparecem como ativas:
+- `limparLogsLgpdAntigos` (agendada)
+- `enviarPushNotificacao` (callable)
+- `notificarNovoAgendamento` (trigger)
+- `enviarLembretesManual` (callable)
+- `enviarLembretesDiarios` (agendada)
+- `dispararMensagensAleatoriasClientesManual` (callable)
+
+Referência completa das funções: [`docs/cloud_functions.md`](../docs/cloud_functions.md)
+
+---
+
+### 6️⃣ (Web Debug) Configure App Check Debug Token
 
 Se você for rodar no Chrome com Firebase online, configure o token de debug do App Check para evitar erro 403.
 

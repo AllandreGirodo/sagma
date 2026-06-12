@@ -7,6 +7,7 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:agenda/app_localizations.dart';
+import 'package:agenda/core/models/firestore_structure_helper.dart';
 import 'package:agenda/core/utils/app_strings.dart';
 import 'package:agenda/view/onboarding_view.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -30,15 +31,28 @@ class ServicesView extends StatefulWidget {
 class _ServicesViewState extends State<ServicesView> {
   static const String _idWhatsapp = 'whatsapp';
   static const String _idFirestore = 'firestore';
+  static const String _idFirestoreStructure = 'firestore_structure';
   static const String _idAuth = 'auth';
   static const String _idAppCheck = 'appcheck';
   static const String _idStorage = 'storage';
   static const String _idSql = 'sql';
   static const String _idFunctions = 'functions';
 
+  static const List<String> _structureDocs = [
+    'configuracoes/geral',
+    'configuracoes/seguranca',
+    'configuracoes/servicos',
+    'configuracoes/notificacoes',
+    'configuracoes/pagamento',
+    'configuracoes_gerais/administrador_padrao_atrelado',
+    'app_software/config',
+    'app_changelog/1.0.0.0',
+  ];
+
   final List<String> _order = const [
     _idWhatsapp,
     _idFirestore,
+    _idFirestoreStructure,
     _idAuth,
     _idAppCheck,
     _idStorage,
@@ -47,6 +61,7 @@ class _ServicesViewState extends State<ServicesView> {
   ];
 
   final Map<String, _ServiceStatus> _results = {};
+  List<String> _missingDocs = [];
   bool _running = false;
   int _completed = 0;
 
@@ -84,6 +99,8 @@ class _ServicesViewState extends State<ServicesView> {
         return loc.serviceSql;
       case _idFunctions:
         return loc.serviceFunctions;
+      case _idFirestoreStructure:
+        return loc.serviceFirestoreStructure;
       default:
         return id;
     }
@@ -108,6 +125,9 @@ class _ServicesViewState extends State<ServicesView> {
             break;
           case _idFirestore:
             result = await _checkFirestore();
+            break;
+          case _idFirestoreStructure:
+            result = await _checkFirestoreStructure();
             break;
           case _idAuth:
             result = await _checkAuth();
@@ -166,6 +186,120 @@ class _ServicesViewState extends State<ServicesView> {
     }
   }
 
+  Future<_ServiceStatus> _checkFirestoreStructure() async {
+    final loc = AppLocalizations.of(context) ?? AppLocalizations(const Locale('pt', 'BR'));
+    final missing = <String>[];
+    for (final path in _structureDocs) {
+      try {
+        final snap = await FirebaseFirestore.instance
+            .doc(path)
+            .get()
+            .timeout(const Duration(seconds: 6));
+        if (!snap.exists) missing.add(path);
+      } on FirebaseException catch (e) {
+        if (e.code == 'unavailable' || e.code == 'not-found') {
+          return _ServiceStatus(_ServiceState.fail, 'db-missing');
+        }
+        missing.add(path);
+      } catch (_) {
+        missing.add(path);
+      }
+    }
+    _missingDocs = missing;
+    if (missing.isEmpty) {
+      return _ServiceStatus(
+        _ServiceState.ok,
+        loc.serviceStructureDocsCount(_structureDocs.length, _structureDocs.length),
+      );
+    }
+    final labels = missing.map((p) => p.split('/').last).join(', ');
+    return _ServiceStatus(
+      _ServiceState.fail,
+      loc.serviceStructureMissing(missing.length, labels),
+    );
+  }
+
+  Future<void> _mostrarDialogoCriarEstrutura() async {
+    final loc = AppLocalizations.of(context) ?? AppLocalizations(const Locale('pt', 'BR'));
+    final senhaCtrl = TextEditingController();
+    final confirmed = await showDialog<bool>(
+      context: context,
+      builder: (ctx) => AlertDialog(
+        title: Text(loc.serviceStructureDialogTitle),
+        content: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              loc.serviceStructureDialogContent(_missingDocs.length),
+              style: const TextStyle(fontSize: 13),
+            ),
+            const SizedBox(height: 12),
+            TextField(
+              controller: senhaCtrl,
+              obscureText: true,
+              autofocus: true,
+              decoration: InputDecoration(
+                labelText: loc.serviceStructurePasswordLabel,
+                border: const OutlineInputBorder(),
+              ),
+              onSubmitted: (_) => Navigator.pop(ctx, true),
+            ),
+          ],
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(ctx, false),
+            child: Text(AppStrings.cancelarButton),
+          ),
+          ElevatedButton(
+            onPressed: () => Navigator.pop(ctx, true),
+            child: Text(loc.serviceStructureCreateBtn),
+          ),
+        ],
+      ),
+    );
+
+    if (confirmed != true || !mounted) return;
+
+    final senhaEsperada = dotenv.env['DB_ADMIN_PASSWORD'] ?? '';
+    if (senhaCtrl.text != senhaEsperada) {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text(loc.serviceStructureWrongPassword)),
+        );
+      }
+      return;
+    }
+
+    setState(() {
+      _results[_idFirestoreStructure] =
+          _ServiceStatus(_ServiceState.checking, loc.serviceStructureCreating);
+    });
+
+    try {
+      await FirestoreStructureHelper().inicializarSistemaCompleto();
+      if (!mounted) return;
+      final locAfter = AppLocalizations.of(context) ?? AppLocalizations(const Locale('pt', 'BR'));
+      setState(() {
+        _missingDocs = [];
+        _results[_idFirestoreStructure] = _ServiceStatus(
+          _ServiceState.ok,
+          locAfter.serviceStructureDocsCreated(_structureDocs.length, _structureDocs.length),
+        );
+      });
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text(locAfter.serviceStructureSuccess)),
+      );
+    } catch (e) {
+      if (!mounted) return;
+      setState(() {
+        _results[_idFirestoreStructure] =
+            _ServiceStatus(_ServiceState.fail, 'Erro: $e');
+      });
+    }
+  }
+
   Future<_ServiceStatus> _checkAuth() async {
     try {
       await FirebaseAuth.instance.authStateChanges().first.timeout(
@@ -186,6 +320,24 @@ class _ServicesViewState extends State<ServicesView> {
       if (token != null && token.isNotEmpty) {
         return const _ServiceStatus(_ServiceState.ok);
       }
+      // Se não houver token AppCheck, permitir fallback para uma verificação HTTP
+      // configurável apontando para a API do Firestore (útil para checar se o
+      // cliente consegue alcançar firestore.googleapis.com). Configure via
+      // `FIRESTORE_HEALTHCHECK_URL` no .env (por ex. a URL usada pelo curl).
+      final fsHealth = dotenv.env['FIRESTORE_HEALTHCHECK_URL'];
+      if (fsHealth != null && fsHealth.isNotEmpty) {
+        try {
+          final uri = Uri.parse(fsHealth);
+          final response = await http.head(uri).timeout(const Duration(seconds: 6));
+          if (response.statusCode >= 200 && response.statusCode < 400) {
+            return const _ServiceStatus(_ServiceState.ok);
+          }
+          return _ServiceStatus(_ServiceState.fail, 'HTTP ${response.statusCode}');
+        } catch (e) {
+          return _ServiceStatus(_ServiceState.fail, e.toString());
+        }
+      }
+
       return const _ServiceStatus(_ServiceState.fail, 'token-empty');
     } catch (e) {
       return _ServiceStatus(_ServiceState.fail, e.toString());
@@ -245,6 +397,7 @@ class _ServicesViewState extends State<ServicesView> {
     if (detail == null || detail.isEmpty) return '';
     if (detail == 'token-empty') return loc.serviceStatusTokenEmpty;
     if (detail == 'document-not-found') return loc.serviceStatusDocumentNotFound;
+    if (detail == 'db-missing') return loc.serviceStructureDbMissing;
     if (detail.startsWith('HTTP ')) {
       final code = int.tryParse(detail.replaceFirst('HTTP ', '').trim());
       if (code != null) return loc.serviceStatusHttp(code);
@@ -341,11 +494,22 @@ class _ServicesViewState extends State<ServicesView> {
 
   Widget _row(String id, AppLocalizations loc) {
     final status = _results[id] ?? const _ServiceStatus(_ServiceState.pending);
+    Widget? trailing;
+    if (id == _idFirestoreStructure &&
+        status.state == _ServiceState.fail &&
+        status.detail != 'db-missing' &&
+        !_running) {
+      trailing = TextButton.icon(
+        icon: const Icon(Icons.build_outlined, size: 16),
+        label: Text(loc.serviceStructureCreateBtn),
+        onPressed: _mostrarDialogoCriarEstrutura,
+      );
+    }
     return ListTile(
       leading: _statusIcon(status),
       title: Text(_serviceName(id, loc)),
       subtitle: Text(_statusText(status, loc)),
-      trailing: null,
+      trailing: trailing,
     );
   }
 
@@ -435,16 +599,16 @@ class _ServicesViewState extends State<ServicesView> {
                 ),
               ),
               ElevatedButton(
-              onPressed: () {
-                Navigator.of(context).pushAndRemoveUntil(
-                  MaterialPageRoute(
-                    builder: (_) => const OnboardingView(),
-                  ),
-                  (route) => false,
-                );
-              },
-              child: Text(AppStrings.onboardingBtn),
-            ),
+                onPressed: () {
+                  Navigator.of(context).pushAndRemoveUntil(
+                    MaterialPageRoute(
+                      builder: (_) => const OnboardingView(),
+                    ),
+                    (route) => false,
+                  );
+                },
+                child: Text(AppStrings.onboardingBtn),
+              ),
               Padding(
                 padding: const EdgeInsets.all(12.0),
                 child: Row(

@@ -111,6 +111,7 @@ $FIREBASE_ANDROID_APP_ID = Read-EnvValue -Key "FIREBASE_ANDROID_APP_ID"
 
 $INSTAGRAM_ADMIN = Read-EnvValue -Key "INSTAGRAM_ADMIN"
 $WHATSAPP_ADMIN = Read-EnvValue -Key "WHATSAPP_ADMIN"
+$FIRESTORE_HEALTHCHECK_URL = Read-EnvValue -Key "FIRESTORE_HEALTHCHECK_URL"
 
 $commonDefines = @(
     "--dart-define=ENV=prod"
@@ -125,6 +126,10 @@ if (-not [string]::IsNullOrWhiteSpace($INSTAGRAM_ADMIN)) {
 
 if (-not [string]::IsNullOrWhiteSpace($WHATSAPP_ADMIN)) {
     $commonDefines += "--dart-define=WHATSAPP_ADMIN=$WHATSAPP_ADMIN"
+}
+
+if (-not [string]::IsNullOrWhiteSpace($FIRESTORE_HEALTHCHECK_URL)) {
+    $commonDefines += "--dart-define=FIRESTORE_HEALTHCHECK_URL=$FIRESTORE_HEALTHCHECK_URL"
 }
 
 if ($Clean) {

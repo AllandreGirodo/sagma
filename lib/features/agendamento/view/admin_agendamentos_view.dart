@@ -25,6 +25,7 @@ import 'package:agenda/core/utils/app_strings.dart';
 import 'package:agenda/core/widgets/app_governance_dialogs.dart';
 import 'package:agenda/app_localizations.dart';
 import 'package:agenda/core/utils/massage_type_catalog.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class AdminAgendamentosView extends StatefulWidget {
   const AdminAgendamentosView({super.key});
@@ -1666,36 +1667,78 @@ class _AdminAgendamentosViewState extends State<AdminAgendamentosView> {
           itemCount: usuarios.length,
           itemBuilder: (context, index) {
             final usuario = usuarios[index];
+            final telefone =
+                (usuario.telefonePrincipal ?? usuario.whatsapp ?? '').trim();
             return Card(
               margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-              child: ListTile(
-                leading: const Icon(Icons.person, color: Colors.orange),
-                title: Text(
-                  usuario.nome,
-                  style: const TextStyle(fontWeight: FontWeight.bold),
+              child: Padding(
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 12,
+                  vertical: 8,
                 ),
-                subtitle: Text(
-                  AppStrings.emailCadastroLabel(
-                    usuario.email,
-                    usuario.dataCadastro != null
-                        ? DateFormat(
-                            'dd/MM/yyyy HH:mm',
-                          ).format(usuario.dataCadastro!)
-                        : AppStrings.naoDisponivelCurto,
-                  ),
-                ),
-                trailing: IconButton(
-                  icon: _usuarioAprovandoId == usuario.id
-                      ? const SizedBox(
-                          width: 20,
-                          height: 20,
-                          child: CircularProgressIndicator(strokeWidth: 2),
-                        )
-                      : const Icon(Icons.check_circle, color: Colors.green),
-                  onPressed: _usuarioAprovandoId == usuario.id
-                      ? null
-                      : () => _aprovarUsuario(usuario),
-                  tooltip: AppStrings.aprovarCadastro,
+                child: Row(
+                  children: [
+                    const Icon(Icons.person, color: Colors.orange),
+                    const SizedBox(width: 12),
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            usuario.nome,
+                            style: const TextStyle(
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                          const SizedBox(height: 2),
+                          Text(
+                            AppStrings.emailCadastroLabel(
+                              usuario.email,
+                              usuario.dataCadastro != null
+                                  ? DateFormat(
+                                      'dd/MM/yyyy HH:mm',
+                                    ).format(usuario.dataCadastro!)
+                                  : AppStrings.naoDisponivelCurto,
+                            ),
+                            style: const TextStyle(fontSize: 12),
+                          ),
+                          if (telefone.isNotEmpty)
+                            Text(
+                              telefone,
+                              style: TextStyle(
+                                fontSize: 12,
+                                color: Colors.grey[600],
+                              ),
+                            ),
+                        ],
+                      ),
+                    ),
+                    // Botão WhatsApp (só aparece quando há telefone)
+                    if (telefone.isNotEmpty)
+                      IconButton(
+                        icon: const Icon(Icons.message, color: Colors.teal),
+                        tooltip: 'Contato no WhatsApp',
+                        onPressed: () =>
+                            _abrirWhatsAppContato(telefone, usuario.nome),
+                      ),
+                    // Botão Aprovar
+                    IconButton(
+                      icon: _usuarioAprovandoId == usuario.id
+                          ? const SizedBox(
+                              width: 20,
+                              height: 20,
+                              child: CircularProgressIndicator(strokeWidth: 2),
+                            )
+                          : const Icon(
+                              Icons.check_circle,
+                              color: Colors.green,
+                            ),
+                      onPressed: _usuarioAprovandoId == usuario.id
+                          ? null
+                          : () => _aprovarUsuario(usuario),
+                      tooltip: AppStrings.aprovarCadastro,
+                    ),
+                  ],
                 ),
               ),
             );
@@ -1855,19 +1898,27 @@ class _AdminAgendamentosViewState extends State<AdminAgendamentosView> {
   }
 
   Future<void> _aprovarUsuario(UsuarioModel usuario) async {
-    setState(() {
-      _usuarioAprovandoId = usuario.id;
-    });
+    setState(() => _usuarioAprovandoId = usuario.id);
 
     try {
       await _firestoreService.aprovarUsuario(usuario.id);
-      if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text(AppStrings.usuarioAprovadoSucesso(usuario.nome)),
+      if (!mounted) return;
+
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(AppStrings.usuarioAprovadoSucesso(usuario.nome)),
+          action: SnackBarAction(
+            label: 'WhatsApp',
+            onPressed: () {
+              final telefone =
+                  (usuario.telefonePrincipal ?? usuario.whatsapp ?? '').trim();
+              if (telefone.isNotEmpty) {
+                _abrirWhatsAppAprovacao(telefone, usuario.nome);
+              }
+            },
           ),
-        );
-      }
+        ),
+      );
     } catch (e) {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
@@ -1875,11 +1926,33 @@ class _AdminAgendamentosViewState extends State<AdminAgendamentosView> {
         );
       }
     } finally {
-      if (mounted) {
-        setState(() {
-          _usuarioAprovandoId = null;
-        });
-      }
+      if (mounted) setState(() => _usuarioAprovandoId = null);
+    }
+  }
+
+  /// Abre WhatsApp com mensagem de aprovação pré-preenchida.
+  Future<void> _abrirWhatsAppAprovacao(String telefone, String nome) async {
+    final numero = telefone.replaceAll(RegExp(r'[^0-9]'), '');
+    final ddi = numero.startsWith('55') ? '' : '55';
+    final msg = Uri.encodeComponent(
+      'Olá $nome! 🎉 Seu cadastro no SAGMA foi *aprovado*. '
+      'Você já pode entrar no app e agendar sua sessão de massagem. '
+      'Até logo!',
+    );
+    final uri = Uri.parse('https://wa.me/$ddi$numero?text=$msg');
+    if (await canLaunchUrl(uri)) {
+      await launchUrl(uri, mode: LaunchMode.externalApplication);
+    }
+  }
+
+  /// Abre WhatsApp apenas para contato (sem mensagem de aprovação).
+  Future<void> _abrirWhatsAppContato(String telefone, String nome) async {
+    final numero = telefone.replaceAll(RegExp(r'[^0-9]'), '');
+    final ddi = numero.startsWith('55') ? '' : '55';
+    final msg = Uri.encodeComponent('Olá $nome!');
+    final uri = Uri.parse('https://wa.me/$ddi$numero?text=$msg');
+    if (await canLaunchUrl(uri)) {
+      await launchUrl(uri, mode: LaunchMode.externalApplication);
     }
   }
 }

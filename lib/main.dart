@@ -228,11 +228,12 @@ void main() async {
       );
     }
 
-    final bool isLocalWebHost = kIsWeb &&
-      (Uri.base.host == 'localhost' ||
-        Uri.base.host == '127.0.0.1' ||
-        Uri.base.host == '0.0.0.0' ||
-        Uri.base.host == '::1');
+    final bool isLocalWebHost =
+        kIsWeb &&
+        (Uri.base.host == 'localhost' ||
+            Uri.base.host == '127.0.0.1' ||
+            Uri.base.host == '0.0.0.0' ||
+            Uri.base.host == '::1');
 
     const bool enableAppCheckInDebug = bool.fromEnvironment(
       'ENABLE_APPCHECK_IN_DEBUG',
@@ -250,16 +251,16 @@ void main() async {
     );
 
     final String? debugTokenForWeb =
-      (kIsWeb && (kReleaseMode || enableAppCheckInDebug || isLocalWebHost))
+        (kIsWeb && (kReleaseMode || enableAppCheckInDebug || isLocalWebHost))
         ? appCheckDebugToken
         : null;
 
-      _bootDiag(
-        'host=${Uri.base.host} localWeb=$isLocalWebHost '
-        'enableAppCheckInDebug=$enableAppCheckInDebug '
-        'enableAppCheckInRelease=$enableAppCheckInRelease '
-        'debugTokenProvided=${appCheckDebugToken.isNotEmpty}',
-      );
+    _bootDiag(
+      'host=${Uri.base.host} localWeb=$isLocalWebHost '
+      'enableAppCheckInDebug=$enableAppCheckInDebug '
+      'enableAppCheckInRelease=$enableAppCheckInRelease '
+      'debugTokenProvided=${appCheckDebugToken.isNotEmpty}',
+    );
 
     await configureWebAppCheckDebugToken(
       (debugTokenForWeb == null || debugTokenForWeb.isEmpty)
@@ -287,12 +288,12 @@ void main() async {
         // Para Web, desktop e iOS, usamos 'localhost' para manter o fluxo no mesmo host do app.
         final String host = defaultTargetPlatform == TargetPlatform.android
             ? '10.0.2.2'
-          : 'localhost';
+            : 'localhost';
 
         // Conecta Auth (Porta definida em firebase.json)
         await FirebaseAuth.instance.useAuthEmulator(host, 9199);
         // Conecta Firestore (Porta 8080)
-        FirebaseFirestore.instance.useFirestoreEmulator(host, 8080);
+        FirebaseFirestore.instance.useFirestoreEmulator(host, 8081);
         // Conecta Storage (Porta 9199)
         if (enableStorage) {
           await FirebaseStorage.instance.useStorageEmulator(host, 9199);
@@ -300,12 +301,34 @@ void main() async {
         // Conecta Functions (Porta 5001)
         FirebaseFunctions.instance.useFunctionsEmulator(host, 5001);
 
-          Logger.info(AppStrings.firebaseEmulatorConnected(host));
+        Logger.info(AppStrings.firebaseEmulatorConnected(host));
       } catch (e) {
-          Logger.error(AppStrings.firebaseEmulatorConnectionError(e.toString()));
+        Logger.error(AppStrings.firebaseEmulatorConnectionError(e.toString()));
       }
     } else {
       Logger.info(AppStrings.firebaseUsingOnline);
+    }
+
+    // --- Ajuste de persistência para Web ---
+    // Tentativa de manter persistência (IndexedDB). Se falhar (ex.: modo
+    // privativo do navegador ou bloqueio de IndexedDB) desliga a persistência
+    // para evitar erros 'client is offline' ao tentar ler documentos.
+    if (kIsWeb) {
+      try {
+        FirebaseFirestore.instance.settings = const Settings(
+          persistenceEnabled: true,
+        );
+        _bootDiag('Firestore persistence enabled for Web.');
+      } catch (e) {
+        try {
+          FirebaseFirestore.instance.settings = const Settings(
+            persistenceEnabled: false,
+          );
+          Logger.warn('IndexedDB not available or persistence failed; disabled Firestore persistence for Web.');
+        } catch (_) {
+          // Não é crítico — prosseguir sem persistência configurada explicitamente.
+        }
+      }
     }
 
     // 3. App Check para Web
@@ -314,7 +337,9 @@ void main() async {
     // Ativa App Check apenas quando explicitamente habilitado em flags.
     // Evita ativar automaticamente em builds de release sem configuração adequada.
     final bool shouldEnableWebAppCheck =
-      kIsWeb && (enableAppCheckInRelease || enableAppCheckInDebug) && !isLocalWebHost;
+        kIsWeb &&
+        (enableAppCheckInRelease || enableAppCheckInDebug) &&
+        !isLocalWebHost;
     _bootDiag(
       'webAppCheck shouldEnable=$shouldEnableWebAppCheck '
       'recaptchaConfigured=${recaptchaKey.isNotEmpty}',
@@ -328,7 +353,7 @@ void main() async {
         );
       } on FirebaseException catch (e) {
         if (e.code == 'already-initialized') {
-              Logger.warn(AppStrings.appCheckAlreadyInitialized);
+          Logger.warn(AppStrings.appCheckAlreadyInitialized);
         } else {
           Logger.error(AppStrings.appCheckActivationFailure(e.toString()));
         }
@@ -551,9 +576,14 @@ class _MyAppState extends State<MyApp> {
       String? token;
       if (kIsWeb) {
         // Prioriza VAPID key passada via --dart-define em produção.
-        final vapidKeyFromDefine = const String.fromEnvironment('VAPID_KEY', defaultValue: '');
+        final vapidKeyFromDefine = const String.fromEnvironment(
+          'VAPID_KEY',
+          defaultValue: '',
+        );
         final vapidKeyFromDotenv = dotenv.env['VAPID_KEY'] ?? '';
-        final vapidKey = vapidKeyFromDefine.isNotEmpty ? vapidKeyFromDefine : vapidKeyFromDotenv;
+        final vapidKey = vapidKeyFromDefine.isNotEmpty
+            ? vapidKeyFromDefine
+            : vapidKeyFromDotenv;
 
         if (vapidKey.isEmpty) {
           debugPrint(AppStrings.vapidKeyMissing);
@@ -628,9 +658,7 @@ class _MyAppState extends State<MyApp> {
             Locale('ja', 'JP'),
           ],
           // Rota pública para checagem de serviços (acessível em /services)
-          routes: {
-            '/services': (context) => const ServicesView(),
-          },
+          routes: {'/services': (context) => const ServicesView()},
           home: AppInitializationView(
             onboardingComplete: widget.onboardingComplete,
           ),

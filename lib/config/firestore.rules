@@ -50,12 +50,67 @@ service cloud.firestore {
       allow delete: if isAdmin();
     }
 
+    // Retorna true enquanto o banco ainda não foi inicializado (bootstrap).
+    // Após configuracoes/geral existir, a janela fecha automaticamente.
+    function isBootstrap() {
+      return !exists(/databases/$(database)/documents/configuracoes/geral);
+    }
+
     match /configuracoes/{configId} {
-      allow get: if isSignedIn();
+      // Permite leitura pública do doc 'geral' (status de manutenção) sem login
+      allow get: if configId == 'geral' || isSignedIn();
+      allow list: if isAdmin();
+      // log_clientes: contador de sequência de cadastro — qualquer usuário autenticado pode incrementar
+      allow write: if isAdmin() || isBootstrap()
+        || (configId == 'log_clientes' && isSignedIn());
+    }
+
+    // configuracoes_gerais (tenant padrão) — somente admin ou bootstrap
+    match /configuracoes_gerais/{docId} {
+      allow read: if isSignedIn();
+      allow write: if isAdmin() || isBootstrap();
+    }
+
+    // transacoes — admin gerencia tudo; cliente lê apenas as próprias
+    match /transacoes/{transacaoId} {
+      allow read: if isAdmin()
+        || (isSignedIn() && resource.data.cliente_uid == request.auth.uid);
+      allow create: if isAdmin();
+      allow update, delete: if isAdmin();
+    }
+
+    // estoque — exclusivo do administrador
+    match /estoque/{itemId} {
+      allow read, write: if isAdmin();
+    }
+
+    // cupons — admin gerencia; clientes autenticados podem ler cupons ativos
+    match /cupons/{cupomId} {
+      allow read: if isAdmin()
+        || (isSignedIn() && resource.data.ativo == true);
       allow write: if isAdmin();
     }
 
-    match /{logCollection=**}/logs/{logId} {
+    // app_software e app_changelog — qualquer usuário autenticado lê; admin ou bootstrap escreve
+    match /app_software/{docId} {
+      allow read: if isSignedIn();
+      allow write: if isAdmin() || isBootstrap();
+    }
+
+    match /app_changelog/{docId} {
+      allow read: if isSignedIn();
+      allow write: if isAdmin() || isBootstrap();
+    }
+
+    // lgpd_logs — qualquer usuário autenticado pode registrar; somente admin lê
+    match /lgpd_logs/{logId} {
+      allow create: if isSignedIn();
+      allow read: if isAdmin();
+      allow update, delete: if false;
+    }
+
+    // Nega acesso a qualquer outra coleção não mapeada
+    match /{document=**} {
       allow read, write: if false;
     }
   }

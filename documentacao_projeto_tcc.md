@@ -50,9 +50,9 @@ Observação: o controle de pacotes é implementado como saldo de sessoes no per
     *   Todas as operações de anonimização devem ser registradas em uma coleção segura (`lgpd_logs`) contendo data, ID do usuário e ação realizada.
     *   Apenas o Administrador pode visualizar esses logs.
 
-*   **[RF008] Retenção e Descarte Automático:**
+*   **[RF008] Retenção e Descarte Automático:** ✅ Implementado
     *   Os logs de auditoria LGPD devem ser mantidos por um período legal de 5 anos.
-    *   A automação de descarte definitivo deve ser tratada como trabalho futuro enquanto a Cloud Function correspondente não estiver implementada.
+    *   A Cloud Function `limparLogsLgpdAntigos` executa diariamente às 03:00 e exclui em lote todos os documentos de `lgpd_logs` com campo `data` anterior a 5 anos, garantindo o descarte automático conforme a LGPD.
 
 *   **[RF009] Padronização e Integridade de Dados (Audit Trail):**
     *   Todos os registros críticos (agendamentos, pagamentos) devem conter carimbos de tempo (`data_criacao`, `data_atualizacao`) para auditoria.
@@ -120,8 +120,13 @@ Funcionalidades mapeadas que não entraram no MVP (Mínimo Produto Viável) mas 
 1.  **Pagamento Online:**
     *   Integração com Gateway de Pagamento (Mercado Pago ou Stripe) para exigir pagamento ou sinal no momento do agendamento.
 
-2.  **Notificações Push Reais:**
-    *   Atualmente o sistema prepara o token FCM, mas o envio depende de um Backend (Cloud Functions). Implementar "Triggers" no Firestore para enviar notificação quando o status do agendamento mudar.
+2.  **Notificações Push Reais:** ✅ Implementado (Junho/2026)
+    *   Cloud Functions implantadas em `functions/index.js`:
+        *   `notificarNovoAgendamento` — trigger Firestore: notifica todos os admins ao criar novo agendamento
+        *   `enviarPushNotificacao` — callable: envia push FCM para token específico
+        *   `enviarLembretesDiarios` — agendada 08:00 Brasília: lembretes automáticos 24h antes
+        *   `enviarLembretesManual` — callable: disparo manual de lembretes pelo painel admin
+    *   Referência completa: [`docs/cloud_functions.md`](docs/cloud_functions.md)
 
 3.  **Sincronização com Google Calendar:**
     *   Permitir que a administradora veja os agendamentos do app diretamente na sua agenda pessoal do Google.

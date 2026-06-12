@@ -515,7 +515,63 @@ class LoginController {
       try {
         await FirestoreStructureHelper().inicializarSistemaCompleto();
       } catch (e) {
-        debugPrint('Falha ao inicializar colecoes de entrada: $e');
+        // Se falhar, exibe diálogo com opção de tentar novamente
+        if (!context.mounted) return false;
+
+        await showDialog(
+          context: context,
+          barrierDismissible: false,
+          builder: (ctx) {
+            return StatefulBuilder(builder: (ctx, setState) {
+              bool loading = false;
+              String? errorMsg = e.toString();
+
+              Future<void> tryAgain() async {
+                setState(() => loading = true);
+                try {
+                  await FirestoreStructureHelper().inicializarSistemaCompleto();
+                  if (ctx.mounted) Navigator.of(ctx).pop();
+                } catch (err) {
+                  setState(() {
+                    errorMsg = err.toString();
+                    loading = false;
+                  });
+                }
+              }
+
+              return AlertDialog(
+                title: Row(children: const [
+                  Icon(Icons.error_outline, color: Colors.red),
+                  SizedBox(width: 8),
+                  Text('Erro'),
+                ]),
+                content: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Text('Erro ao inicializar sistema: ${errorMsg ?? ''}'),
+                    const SizedBox(height: 12),
+                    if (loading) const CircularProgressIndicator(),
+                  ],
+                ),
+                actions: [
+                  TextButton(
+                    onPressed: loading
+                        ? null
+                        : () {
+                            Navigator.of(ctx).pop();
+                          },
+                    child: const Text('Cancelar'),
+                  ),
+                  ElevatedButton.icon(
+                    onPressed: loading ? null : tryAgain,
+                    icon: const Icon(Icons.refresh),
+                    label: Text(AppStrings.tentarNovamente),
+                  ),
+                ],
+              );
+            });
+          },
+        );
       }
 
       if (!context.mounted) return false;
@@ -881,7 +937,7 @@ class LoginController {
 
   bool _isAppCheckSignupError(FirebaseAuthException e) {
     // Desabilita detecção de App Check em desenvolvimento local web
-    if (kIsWeb && Uri.base.host == 'localhost' || Uri.base.host == '127.0.0.1') {
+    if (kIsWeb && (Uri.base.host == 'localhost' || Uri.base.host == '127.0.0.1')) {
       return false;
     }
     
@@ -895,20 +951,19 @@ class LoginController {
         message.contains('firebase app check token is invalid');
   }
 
-        bool _isFirestorePermissionLikelyAppCheck(Object e) {
-          if (e is! FirebaseException) return false;
-          
-          // Desabilita detecção de App Check em desenvolvimento local web
-          if (kIsWeb && (Uri.base.host == 'localhost' || Uri.base.host == '127.0.0.1')) {
-            return false;
-          }
+  bool _isFirestorePermissionLikelyAppCheck(Object e) {
+    if (e is! FirebaseException) return false;
 
-          final message = (e.message ?? '').toLowerCase();
-          return message.contains('app check') ||
-          message.contains('app-check') ||
-          message.contains('appcheck') ||
-          message.contains('firebase app check token is invalid');
-        }
+    if (kIsWeb && (Uri.base.host == 'localhost' || Uri.base.host == '127.0.0.1')) {
+      return false;
+    }
+
+    final message = (e.message ?? '').toLowerCase();
+    return message.contains('app check') ||
+        message.contains('app-check') ||
+        message.contains('appcheck') ||
+        message.contains('firebase app check token is invalid');
+  }
 
   Future<void> _atualizarTokenAutenticacao(User user) async {
     try {

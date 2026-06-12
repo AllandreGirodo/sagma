@@ -77,6 +77,18 @@ class AppLocalizations {
             'servicesSectionUnverified': 'Não verificados',
             'servicesNoItems': 'Nenhum item por enquanto',
             'servicesWhatsappLink': 'Link WhatsApp Web',
+            'serviceFirestoreStructure': 'Estrutura do Banco',
+            'serviceStructureDialogTitle': 'Criar Estrutura do Banco',
+            'serviceStructureDialogContent': 'Serão criados {count} documento(s) faltando com valores padrão. Confirme com a senha admin.',
+            'serviceStructurePasswordLabel': 'Senha Admin (DB_ADMIN_PASSWORD)',
+            'serviceStructureCreateBtn': 'Criar',
+            'serviceStructureWrongPassword': 'Senha incorreta.',
+            'serviceStructureCreating': 'Criando documentos...',
+            'serviceStructureDocsCount': '{done}/{total} documentos',
+            'serviceStructureMissing': '{count} faltando: {labels}',
+            'serviceStructureDocsCreated': '{done}/{total} documentos criados',
+            'serviceStructureSuccess': 'Estrutura criada com sucesso!',
+            'serviceStructureDbMissing': 'Banco não criado. Acesse Firebase Console → Firestore → Criar banco (default).',
       // Cadastro
       'signupTitle': 'Criar Conta',
       'fullNameLabel': 'Nome Completo',
@@ -269,6 +281,18 @@ class AppLocalizations {
             'servicesSectionUnverified': 'Unverified',
             'servicesNoItems': 'No items yet',
             'servicesWhatsappLink': 'WhatsApp Web link',
+            'serviceFirestoreStructure': 'Database Structure',
+            'serviceStructureDialogTitle': 'Create Database Structure',
+            'serviceStructureDialogContent': '{count} missing document(s) will be created with default values. Confirm with admin password.',
+            'serviceStructurePasswordLabel': 'Admin Password (DB_ADMIN_PASSWORD)',
+            'serviceStructureCreateBtn': 'Create',
+            'serviceStructureWrongPassword': 'Wrong password.',
+            'serviceStructureCreating': 'Creating documents...',
+            'serviceStructureDocsCount': '{done}/{total} documents',
+            'serviceStructureMissing': '{count} missing: {labels}',
+            'serviceStructureDocsCreated': '{done}/{total} documents created',
+            'serviceStructureSuccess': 'Structure created successfully!',
+            'serviceStructureDbMissing': 'Database not created. Go to Firebase Console → Firestore → Create database (default).',
       // Signup
       'signupTitle': 'Create Account',
       'fullNameLabel': 'Full Name',
@@ -424,6 +448,48 @@ class AppLocalizations {
     'softwareVersion': 'Versión del software: ${AppStrings.appVersion}',
     'lastUpdate': 'Última actualización: ${AppStrings.appLastUpdate}',
       'closeButton': 'Cerrar',
+      // Services Health Check
+      'servicesCheckTitle': 'Verificación de Servicios',
+      'servicesResultsTitle': 'Resultados',
+      'servicesRunning': 'Ejecutando...',
+      'servicesRerun': 'Reejecutar verificaciones',
+      'servicesOpenWhatsApp': 'Abrir WhatsApp',
+      'servicesOpenWhatsAppHint': 'Abrir en nueva pestaña: https://web.whatsapp.com/',
+      'serviceWhatsappWeb': 'WhatsApp Web (sitio)',
+      'serviceFirestore': 'Cloud Firestore',
+      'serviceAuth': 'Authentication',
+      'serviceAppCheck': 'App Check (reCAPTCHA)',
+      'serviceStorage': 'Firebase Storage',
+      'serviceSql': 'SQL Connect',
+      'serviceFunctions': 'Cloud Functions',
+      'serviceStatusPending': 'Pendiente',
+      'serviceStatusChecking': 'Verificando...',
+      'serviceStatusOk': 'OK',
+      'serviceStatusFail': 'Fallo',
+      'serviceStatusUnverified': 'No verificado',
+      'serviceStatusNotApplicable': 'No aplicable',
+      'serviceStatusTokenEmpty': 'token vacío',
+      'serviceStatusDocumentNotFound': 'documento no encontrado',
+      'serviceStatusProgress': '{done} / {total}',
+      'serviceStatusHttp': 'HTTP {code}',
+      'servicesSectionSuccess': 'Servicios OK',
+      'servicesSectionFail': 'Servicios con fallo',
+      'servicesSectionPending': 'Pendientes / en ejecución',
+      'servicesSectionUnverified': 'No verificados',
+      'servicesNoItems': 'Ningún elemento por ahora',
+      'servicesWhatsappLink': 'Enlace WhatsApp Web',
+      'serviceFirestoreStructure': 'Estructura de la Base de Datos',
+      'serviceStructureDialogTitle': 'Crear Estructura de la Base de Datos',
+      'serviceStructureDialogContent': 'Se crearán {count} documento(s) faltante(s) con valores predeterminados. Confirme con la contraseña de administrador.',
+      'serviceStructurePasswordLabel': 'Contraseña Admin (DB_ADMIN_PASSWORD)',
+      'serviceStructureCreateBtn': 'Crear',
+      'serviceStructureWrongPassword': 'Contraseña incorrecta.',
+      'serviceStructureCreating': 'Creando documentos...',
+      'serviceStructureDocsCount': '{done}/{total} documentos',
+      'serviceStructureMissing': '{count} faltante(s): {labels}',
+      'serviceStructureDocsCreated': '{done}/{total} documentos creados',
+      'serviceStructureSuccess': '¡Estructura creada con éxito!',
+      'serviceStructureDbMissing': 'Base de datos no creada. Vaya a Firebase Console → Firestore → Crear base de datos (default).',
       // Signup
       'signupTitle': 'Crear Cuenta',
       'fullNameLabel': 'Nombre Completo',
@@ -579,6 +645,48 @@ class AppLocalizations {
     'softwareVersion': 'ソフトウェアバージョン: ${AppStrings.appVersion}',
     'lastUpdate': '最終更新日: ${AppStrings.appLastUpdate}',
       'closeButton': '閉じる',
+      // Services Health Check
+      'servicesCheckTitle': 'サービス確認',
+      'servicesResultsTitle': '結果',
+      'servicesRunning': '実行中...',
+      'servicesRerun': '再確認',
+      'servicesOpenWhatsApp': 'WhatsAppを開く',
+      'servicesOpenWhatsAppHint': '新しいタブで開く: https://web.whatsapp.com/',
+      'serviceWhatsappWeb': 'WhatsApp Web (サイト)',
+      'serviceFirestore': 'Cloud Firestore',
+      'serviceAuth': 'Authentication',
+      'serviceAppCheck': 'App Check (reCAPTCHA)',
+      'serviceStorage': 'Firebase Storage',
+      'serviceSql': 'SQL Connect',
+      'serviceFunctions': 'Cloud Functions',
+      'serviceStatusPending': '保留中',
+      'serviceStatusChecking': '確認中...',
+      'serviceStatusOk': 'OK',
+      'serviceStatusFail': '失敗',
+      'serviceStatusUnverified': '未確認',
+      'serviceStatusNotApplicable': '対象外',
+      'serviceStatusTokenEmpty': 'トークンが空',
+      'serviceStatusDocumentNotFound': 'ドキュメントが見つかりません',
+      'serviceStatusProgress': '{done} / {total}',
+      'serviceStatusHttp': 'HTTP {code}',
+      'servicesSectionSuccess': '正常なサービス',
+      'servicesSectionFail': '失敗したサービス',
+      'servicesSectionPending': '保留中 / 実行中',
+      'servicesSectionUnverified': '未確認',
+      'servicesNoItems': 'アイテムがありません',
+      'servicesWhatsappLink': 'WhatsApp Webリンク',
+      'serviceFirestoreStructure': 'データベース構造',
+      'serviceStructureDialogTitle': 'データベース構造を作成',
+      'serviceStructureDialogContent': '{count}件の不足ドキュメントをデフォルト値で作成します。管理者パスワードで確認してください。',
+      'serviceStructurePasswordLabel': '管理者パスワード (DB_ADMIN_PASSWORD)',
+      'serviceStructureCreateBtn': '作成',
+      'serviceStructureWrongPassword': 'パスワードが間違っています。',
+      'serviceStructureCreating': 'ドキュメントを作成中...',
+      'serviceStructureDocsCount': '{done}/{total} ドキュメント',
+      'serviceStructureMissing': '{count}件不足: {labels}',
+      'serviceStructureDocsCreated': '{done}/{total} ドキュメント作成済み',
+      'serviceStructureSuccess': '構造が正常に作成されました！',
+      'serviceStructureDbMissing': 'データベースが作成されていません。Firebase Console → Firestore → データベースを作成 (default) へ。',
       // Signup
       'signupTitle': 'アカウント作成',
       'fullNameLabel': '氏名',
@@ -925,6 +1033,28 @@ class AppLocalizations {
   String get servicesSectionUnverified => _t('servicesSectionUnverified');
   String get servicesNoItems => _t('servicesNoItems');
   String get servicesWhatsappLink => _t('servicesWhatsappLink');
+  String get serviceFirestoreStructure => _t('serviceFirestoreStructure');
+  String get serviceStructureDialogTitle => _t('serviceStructureDialogTitle');
+  String serviceStructureDialogContent(int count) =>
+      _t('serviceStructureDialogContent').replaceAll('{count}', '$count');
+  String get serviceStructurePasswordLabel => _t('serviceStructurePasswordLabel');
+  String get serviceStructureCreateBtn => _t('serviceStructureCreateBtn');
+  String get serviceStructureWrongPassword => _t('serviceStructureWrongPassword');
+  String get serviceStructureCreating => _t('serviceStructureCreating');
+  String serviceStructureDocsCount(int done, int total) =>
+      _t('serviceStructureDocsCount')
+          .replaceAll('{done}', '$done')
+          .replaceAll('{total}', '$total');
+  String serviceStructureMissing(int count, String labels) =>
+      _t('serviceStructureMissing')
+          .replaceAll('{count}', '$count')
+          .replaceAll('{labels}', labels);
+  String serviceStructureDocsCreated(int done, int total) =>
+      _t('serviceStructureDocsCreated')
+          .replaceAll('{done}', '$done')
+          .replaceAll('{total}', '$total');
+  String get serviceStructureSuccess => _t('serviceStructureSuccess');
+  String get serviceStructureDbMissing => _t('serviceStructureDbMissing');
 
   // Signup
   String get signupTitle => _t('signupTitle');

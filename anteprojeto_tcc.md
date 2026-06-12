@@ -38,7 +38,32 @@ A digitalização de processos para profissionais autônomos permite maior escal
 | 05-06 | Gestão de Pacotes, Finanças e Controle de Estoque. |
 | 07-08 | Testes com usuário real, Correções e Redação Final do Relatório. |
 
-## 6. Referências Bibliográficas
+## 6. Status de Entrega (Junho/2026)
+
+O MVP foi concluído e superou o escopo original planejado. Resumo do que foi entregue:
+
+| Funcionalidade | Planejado | Status |
+| :--- | :--- | :--- |
+| Autenticação e cadastro de clientes | Sim | ✅ Entregue |
+| Agendamento com aprovação administrativa | Sim | ✅ Entregue |
+| Dashboard administrativo com métricas | Sim | ✅ Entregue |
+| Controle de estoque com baixa automática | Sim | ✅ Entregue |
+| Internacionalização (PT, EN, ES) | Sim | ✅ Entregue |
+| Conformidade LGPD (anonimização + logs) | Sim | ✅ Entregue |
+| Descarte automático de logs (Cloud Function) | Trabalho futuro | ✅ Entregue |
+| Notificações push (FCM + triggers) | Trabalho futuro | ✅ Entregue |
+| Lembretes automáticos 24h antes | Trabalho futuro | ✅ Entregue |
+| Exportação de relatório financeiro em PDF | Trabalho futuro | ✅ Entregue |
+| Botão WhatsApp de aprovação rápida (admin) | Trabalho futuro | ✅ Entregue |
+| Regras Firestore completas (todas as coleções) | Parcial | ✅ Entregue |
+| Pagamento online integrado | Trabalho futuro | ⏳ Não entregue |
+| Sincronização com Google Calendar | Trabalho futuro | ⏳ Não entregue |
+
+**Plataformas validadas:** Web (Firebase Hosting), Android (APK)  
+**Projeto Firebase:** `horario-agenda` (showase/demonstração)  
+**Próxima etapa:** Migração para conta Firebase dedicada à Andréia Girodo (produção real)
+
+## 7. Referências Bibliográficas
 
 * PRESSMAN, R. S. Engenharia de Software. McGraw-Hill, 2016.
 * SADALAGE, P. J.; FOWLER, M. NoSQL Essencial. Novatec, 2013.

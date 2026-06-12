@@ -74,12 +74,19 @@ class FirestoreStructureHelper {
     Map<String, dynamic> defaultData,
   ) async {
     final docRef = _db.doc(path);
-    final docSnap = await docRef.get();
 
-    if (docSnap.exists && docSnap.data() != null) {
+    DocumentSnapshot<Map<String, dynamic>>? docSnap;
+    try {
+      docSnap = await docRef.get();
+    } on FirebaseException catch (e) {
+      // Durante bootstrap o usuário pode não estar autenticado.
+      // Se a leitura for negada, prossegue direto para o set (bootstrap permite).
+      if (e.code != 'permission-denied') rethrow;
+    }
+
+    if (docSnap != null && docSnap.exists && docSnap.data() != null) {
       final existingData = docSnap.data()!;
 
-      // Identifica campos que faltam
       final missingFields = <String, dynamic>{};
       defaultData.forEach((key, value) {
         if (!existingData.containsKey(key)) {
@@ -87,7 +94,6 @@ class FirestoreStructureHelper {
         }
       });
 
-      // Se há campos faltando, adiciona com merge
       if (missingFields.isNotEmpty) {
         await docRef.set(missingFields, SetOptions(merge: true));
         return {...existingData, ...missingFields};
@@ -96,7 +102,6 @@ class FirestoreStructureHelper {
       return existingData;
     }
 
-    // Documento não existe - criar com dados padrão
     await docRef.set(defaultData, SetOptions(merge: true));
     return defaultData;
   }
@@ -268,18 +273,81 @@ class FirestoreStructureHelper {
     });
   }
 
-  /// Inicializa a estrutura completa do sistema (todas as collections).
-  /// Garante que documentos essenciais existam com valores padrão.
+  /// Inicializa a estrutura completa do sistema em um único batch atômico.
+  /// O batch garante que isBootstrap() seja avaliado no estado pré-commit
+  /// para todos os documentos simultaneamente.
   Future<void> inicializarSistemaCompleto() async {
-    // 1. Configurações
-    await inicializarEstruturaConfiguracoes();
+    final batch = _db.batch();
 
-    // 2. Governança de versão do aplicativo
-    await inicializarGovernancaSoftware();
+    batch.set(
+      _db.doc('configuracoes/geral'),
+      getConfigGeralPadrao(),
+      SetOptions(merge: true),
+    );
+    batch.set(
+      _db.doc('configuracoes/seguranca'),
+      getConfigSegurancaPadrao(),
+      SetOptions(merge: true),
+    );
+    batch.set(
+      _db.doc('configuracoes/servicos'),
+      getConfigServicosPadrao(),
+      SetOptions(merge: true),
+    );
+    batch.set(
+      _db.doc('configuracoes/notificacoes'),
+      getConfigNotificacoesPadrao(),
+      SetOptions(merge: true),
+    );
+    batch.set(
+      _db.doc('configuracoes/pagamento'),
+      getConfigPagamentoPadrao(),
+      SetOptions(merge: true),
+    );
+    batch.set(
+      _db.doc('configuracoes_gerais/$_tenantPadraoId'),
+      {
+        'id': _tenantPadraoId,
+        'nome_exibicao': _tenantPadraoNome,
+        'nome_normalizado': _tenantPadraoNome.toLowerCase(),
+        'ativo': true,
+        'atualizado_em': FieldValue.serverTimestamp(),
+      },
+      SetOptions(merge: true),
+    );
+    batch.set(
+      _db.doc('app_software/config'),
+      {
+        'current_version': '1.0.0.0',
+        'min_required_version': '1.0.0.0',
+      },
+      SetOptions(merge: true),
+    );
+    batch.set(
+      _db.doc('app_changelog/1.0.0.0'),
+      {
+        'version_number': '1.0.0.0',
+        'timestamp': FieldValue.serverTimestamp(),
+        'title': 'Lançamento inicial',
+        'modifications': [
+          'Base inicial da Agenda Massoterapia.',
+          'Fluxo de autenticação e aprovação de cadastro.',
+          'Governança de versão com changelog por release.',
+        ],
+        'is_critical': true,
+        'versao': '1.0.0.0',
+        'data': FieldValue.serverTimestamp(),
+        'mudancas': [
+          'Base inicial da Agenda Massoterapia.',
+          'Fluxo de autenticação e aprovação de cadastro.',
+          'Governança de versão com changelog por release.',
+        ],
+        'autor': 'Sistema',
+      },
+      SetOptions(merge: true),
+    );
 
-    // 3. Collections vazias (apenas para garantir que existam)
-    // Nota: Firestore cria collections automaticamente no primeiro write,
-    // este método apenas documenta a estrutura esperada
+    await batch.commit();
   }
 
   /// Retorna um mapa com todos os valores padrão de configuração geral.

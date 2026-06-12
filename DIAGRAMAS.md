@@ -408,3 +408,80 @@ Passos rápidos para reproduzir localmente:
 firebase emulators:start --only auth,firestore --config firebase.json
 flutter run -d chrome --dart-define=ENV=dev --dart-define=USE_FIREBASE_EMULATORS=true
 ```
+
+---
+
+## Fluxo de Notificações Push (FCM)
+
+Diagrama de sequência mostrando como as notificações push chegam ao admin e ao cliente.
+
+```mermaid
+sequenceDiagram
+    participant Cliente as 📱 App Cliente
+    participant Firestore
+    participant CF as ☁️ Cloud Functions
+    participant FCM as 🔔 FCM
+    participant Admin as 🖥️ App Admin
+
+    Note over Cliente,Admin: Novo agendamento solicitado
+
+    Cliente->>Firestore: cria agendamentos/{id}
+    Firestore-->>CF: trigger notificarNovoAgendamento
+    CF->>Firestore: busca usuarios (tipo=admin, aprovado=true)
+    Firestore-->>CF: lista de admins com fcm_token
+    CF->>FCM: send({token, titulo, corpo, data.tipo="novo_agendamento"})
+    FCM-->>Admin: push notification
+
+    Note over CF,Admin: Admin abre app e aprova agendamento
+
+    Admin->>Firestore: atualiza agendamentos/{id}.status = "aprovado"
+
+    Note over CF,FCM: Lembrete automático (diário 08:00)
+
+    CF->>Firestore: busca agendamentos aprovados em ±30min de 24h
+    Firestore-->>CF: lista de agendamentos
+    CF->>Firestore: busca fcm_token de cada cliente
+    CF->>FCM: send({token, titulo="Lembrete de agendamento", ...})
+    FCM-->>Cliente: push notification
+```
+
+---
+
+## Fluxo de Aprovação com WhatsApp
+
+```mermaid
+sequenceDiagram
+    participant Admin as 🖥️ Painel Admin
+    participant Firestore
+    participant WA as 💬 WhatsApp
+
+    Admin->>Firestore: aprovarUsuario(id)
+    Firestore-->>Admin: sucesso
+    Admin-->>Admin: SnackBar "Usuário aprovado" + ação "WhatsApp"
+    Admin->>WA: launchUrl(wa.me/55{telefone}?text=Aprovado...)
+    WA-->>Admin: abre conversa pré-preenchida
+```
+
+---
+
+## Fluxo de Exportação de Relatório PDF
+
+```mermaid
+sequenceDiagram
+    participant Admin as 🖥️ Painel Financeiro
+    participant Flutter as Flutter pdf package
+    participant SO as 📁 Sistema Operacional
+
+    Admin->>Flutter: _exportarPdf(faturamentoMensal, totalAnual)
+    Flutter->>Flutter: gera pw.Document (A4, tabela mensal)
+    Flutter->>Flutter: pdf.save() → bytes
+
+    alt Web
+        Flutter->>SO: SharePlus(XFile.fromData(bytes, mimeType=pdf))
+        SO-->>Admin: diálogo de download/compartilhamento
+    else Mobile (Android/iOS)
+        Flutter->>SO: salva em getTemporaryDirectory()
+        Flutter->>SO: SharePlus(XFile(path))
+        SO-->>Admin: share sheet nativo
+    end
+```

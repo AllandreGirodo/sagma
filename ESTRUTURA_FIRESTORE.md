@@ -509,31 +509,28 @@ Estado atual:
 
 Fonte de verdade: `lib/config/firestore.rules`.
 
-Resumo das regras vigentes (Março/2026):
-- `usuarios/{userId}`
-  - create: dono do auth (`request.auth.uid == request.resource.data.id`) com doc em `userId == email_normalizado`
-  - read/update: dono ou admin
-  - delete: admin
-  - subcoleção `perfil/cliente`: leitura/escrita por dono ou admin (campos validados)
-- `clientes/{clienteId}`
-  - create/update: dono (`uid`) com validações de campos ou admin
-  - read: dono ou admin
-- `agendamentos/{agendamentoId}`
-  - create: cliente autenticado (com validações) ou admin
-  - read: admin, usuário com `visualiza_todos`, ou dono do agendamento
-  - subcoleção `mensagens`: leitura por participantes, escrita controlada
-- `configuracoes/*`, `estoque`, `transacoes`, `metricas_diarias`
-  - escrita: admin
-- `configuracoes/log_clientes`
-  - leitura: autenticado
-  - create/update: autenticado com validação de incremento e horário monotônico
-  - delete: negado
-- `app_software/config`, `app_changelog/*`, `changelogs/*`
-  - leitura autenticada; escrita admin
-- `auditoria_credenciais/*`
-  - create com schema validado; leitura apenas admin
-- fallback global `match /{document=**}`
-  - tudo negado por padrão
+Resumo das regras vigentes (Junho/2026):
+
+| Coleção | Público | Cliente autenticado | Admin |
+|---|---|---|---|
+| `configuracoes/geral` | `get` (manutenção) | `get` | CRUD |
+| `configuracoes/*` (outros) | — | — | CRUD |
+| `usuarios/{email}` | — | lê/atualiza o próprio | CRUD |
+| `usuarios/{email}/perfil/{doc}` | — | lê/atualiza o próprio | CRUD |
+| `agendamentos/{id}` | — | cria/lê/atualiza os próprios | CRUD |
+| `transacoes/{id}` | — | lê os próprios (`cliente_uid`) | CRUD |
+| `estoque/{id}` | — | — | CRUD |
+| `cupons/{id}` | — | lê cupons `ativo == true` | CRUD |
+| `app_software/{doc}` | — | leitura | escrita |
+| `app_changelog/{doc}` | — | leitura | escrita |
+| `lgpd_logs/{id}` | — | cria registros | leitura |
+| `/{qualquer outro}` | negado | negado | negado |
+
+Funções auxiliares das rules:
+- `isSignedIn()` — verifica `request.auth != null`
+- `isAdmin()` — verifica `tipo_usuario == 'Administrador'` e `status_aprovacao == 'aprovado'` no documento do usuário autenticado
+
+> **Atenção:** O campo `tipo_usuario` deve ser `'Administrador'` (com letra maiúscula) e `status_aprovacao` deve ser `'aprovado'` para que `isAdmin()` retorne verdadeiro. Qualquer divergência nestes valores impede o acesso administrativo.
 
 ---
 

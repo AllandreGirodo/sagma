@@ -71,7 +71,7 @@ String _normalizeRecaptchaSiteKey(String? raw) {
 
   final lower = siteKey.toLowerCase();
   final placeholderValues = <String>{
-    'agenda-horario-recaptcha-site-key',
+    'horario-agenda-recaptcha-site-key',
     'sua_recaptcha_site_key_publica',
     'your_recaptcha_site_key_public',
     'seu_site_key_publico',
